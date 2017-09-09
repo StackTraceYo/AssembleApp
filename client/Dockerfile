@@ -1,14 +1,12 @@
-FROM alexsuch/angular-cli:1.3.2
+FROM trion/ng-cli-e2e
 
 RUN mkdir -p /usr/src/app
 
 WORKDIR /usr/src/app
 
-COPY package.json /usr/src/app
-
-RUN npm install
-
 COPY . /usr/src/app
+
+RUN yarn install
 
 EXPOSE 4200
 
