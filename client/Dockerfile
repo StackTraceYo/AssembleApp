@@ -1,4 +1,4 @@
-FROM trion/ng-cli-e2e
+FROM trion/ng-cli-e2e:1.4.1
 
 RUN mkdir -p /usr/src/app
 

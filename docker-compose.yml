@@ -7,3 +7,10 @@ services:
       - "9876:9876"
     volumes:
       - ./client:/usr/src/app
+  web:
+    build: web
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./web:/usr/src/app
+    stdin_open: true
