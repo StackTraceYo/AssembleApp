@@ -11,14 +11,21 @@ object Dependencies {
     "org.scalatestplus.play" % "scalatestplus-play_2.11" % "3.1.1" % "test"
   )
 
+  val test = Seq(
+    "org.mockito" % "mockito-core" % "2.10.0" % "test",
+    "org.scalatest" % "scalatest_2.11" % "2.2.5" % "test"
+  )
+
   val userDependencies: Seq[ModuleID] =
     json ++
+      test ++
       playTest ++
       Seq(guice)
 
   val webDependencies: Seq[ModuleID] =
     json ++
       playTest ++
+      test ++
       Seq(
         ehcache,
         guice
