@@ -1,11 +1,14 @@
 package org.stacktrace.yo.user.auth.store.impl
 
+import javax.inject.Singleton
+
 import org.stacktrace.yo.user.auth.model.{AssembleUser, LoginData}
 import org.stacktrace.yo.user.auth.store.UserStore
 
 import scala.collection.mutable
 import scala.concurrent.{ExecutionContext, Future}
 
+@Singleton
 class AssembleUserStore(implicit ec: ExecutionContext) extends UserStore {
 
   val users: mutable.HashMap[String, AssembleUser] = mutable.HashMap[String, AssembleUser]()

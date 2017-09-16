@@ -2,7 +2,7 @@ package org.stacktrace.yo.user.auth.service.impl
 
 import java.time.Instant
 import java.util.UUID
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
 import org.stacktrace.yo.user.auth.model.AuthToken
 import org.stacktrace.yo.user.auth.service.AuthTokenService
@@ -12,6 +12,7 @@ import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.postfixOps
 
+@Singleton
 class AssembleAuthTokenService @Inject()(tokenStore: AuthTokenStore)(implicit ec: ExecutionContext) extends AuthTokenService {
   /**
     * Creates a new auth token and saves it in the backing store.

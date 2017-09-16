@@ -1,6 +1,6 @@
 package org.stacktrace.yo.user.auth.service.impl
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
 import org.stacktrace.yo.user.auth.model.AssembleUser
 import org.stacktrace.yo.user.auth.service.UserService
@@ -8,6 +8,7 @@ import org.stacktrace.yo.user.auth.store.UserStore
 
 import scala.concurrent.{ExecutionContext, Future}
 
+@Singleton
 class AssembleUserService @Inject()(userStore: UserStore)(implicit ec: ExecutionContext) extends UserService {
   /**
     * Retrieves a user that matches the specified ID.

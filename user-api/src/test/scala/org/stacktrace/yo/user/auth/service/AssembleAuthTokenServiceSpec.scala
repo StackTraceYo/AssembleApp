@@ -26,6 +26,8 @@ class AssembleAuthTokenServiceSpec extends PlaySpec {
       token._2.userID mustBe user.id
       //5 min = 300 seconds
       clock.instant().plusSeconds(301).isAfter(token._2.expiry) mustBe true
+
+      Await.result(store.find(token._1), 5 seconds) mustBe Some(token._2)
     }
 
     "validate a new token" in new Context {
@@ -33,6 +35,8 @@ class AssembleAuthTokenServiceSpec extends PlaySpec {
       val user: AssembleUser = AssembleUser("testid", Option("Ahmad"), Option("Email"))
       val token: (UUID, AuthToken) = Await.result(service.create(user.id), 5 seconds)
       val valid = Await.result(service.validate(token._1), 5 seconds)
+
+      Await.result(store.find(token._1), 5 seconds) mustBe Some(token._2)
 
       valid mustBe Some(token._2)
       valid.get.userID mustBe user.id
@@ -46,6 +50,9 @@ class AssembleAuthTokenServiceSpec extends PlaySpec {
 
       expired.size mustBe 1
       expired.head mustBe token._2
+
+      Await.result(store.find(token._1), 5 seconds) mustBe Option.empty
+
     }
 
 
