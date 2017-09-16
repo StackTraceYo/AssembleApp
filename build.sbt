@@ -14,7 +14,10 @@ lazy val client = project.
   settings(Common.settings: _*)
 
 lazy val `user-api` = project.
-  settings(Common.settings: _*)
+  settings(Common.settings: _*).
+  settings(
+    libraryDependencies ++= Dependencies.userDependencies
+  )
 
 lazy val web = project.
   dependsOn(`user-api`).

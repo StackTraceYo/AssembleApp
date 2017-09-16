@@ -1,6 +1,5 @@
-import sbt._
-import sbt.Keys._
 import play.sbt.PlayImport._
+import sbt._
 
 object Dependencies {
 
@@ -12,11 +11,16 @@ object Dependencies {
     "org.scalatestplus.play" % "scalatestplus-play_2.11" % "3.1.1" % "test"
   )
 
-  val webDependencies =
+  val userDependencies: Seq[ModuleID] =
     json ++
-    playTest ++
-    Seq(
-      ehcache,
-      guice
-    )
+      playTest ++
+      Seq(guice)
+
+  val webDependencies: Seq[ModuleID] =
+    json ++
+      playTest ++
+      Seq(
+        ehcache,
+        guice
+      )
 }
