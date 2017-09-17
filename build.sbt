@@ -19,8 +19,14 @@ lazy val `user-api` = project.
     libraryDependencies ++= Dependencies.userDependencies
   )
 
+lazy val `assemble-group` = project.
+  settings(Common.settings: _*).
+  settings(
+    libraryDependencies ++= Dependencies.groupDeps
+  )
+
 lazy val web = project.
-  dependsOn(`user-api`).
+  dependsOn(`user-api`,`assemble-group`).
   enablePlugins(PlayScala).
   settings(Common.settings: _*).
   settings(

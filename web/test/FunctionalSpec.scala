@@ -28,7 +28,7 @@ class FunctionalSpec extends PlaySpec with GuiceOneAppPerSuite {
       val home = route(app, FakeRequest(GET, "/")).get
 
       status(home) mustBe Status.OK
-      contentType(home) mustBe Some("text/html")
+      contentType(home) mustBe Some("text/plain")
       contentAsString(home) must include ("Your new application is ready.")
     }
 

@@ -2,7 +2,7 @@ package org.stacktrace.yo.user.auth.store.impl
 
 import java.time.Instant
 import java.util.UUID
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 
 import org.stacktrace.yo.user.auth.model.AuthToken
 import org.stacktrace.yo.user.auth.store.AuthTokenStore
@@ -11,7 +11,7 @@ import scala.collection.mutable
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AssembleAuthTokenStore(implicit ec : ExecutionContext) extends AuthTokenStore {
+class AssembleAuthTokenStore @Inject() (implicit ec : ExecutionContext) extends AuthTokenStore {
 
   val tokens: mutable.HashMap[UUID, AuthToken] = mutable.HashMap[UUID, AuthToken]()
 

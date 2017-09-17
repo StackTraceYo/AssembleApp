@@ -3,4 +3,12 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.HomeController.index
+GET         /                              controllers.HomeController.index
+
+#Routes for User/Auth Api
+GET         /api/auth/user/up              api.auth.controller.UserController.index
+POST        /api/auth/user/create          api.auth.controller.UserController.createUser
+POST        /api/auth/user/retrieve        api.auth.controller.UserController.retrieveUser
+
+GET         /api/auth/token/up             api.auth.controller.AuthController.index
+GET         /api/auth/token/create         api.auth.controller.AuthController.index
