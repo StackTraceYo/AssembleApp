@@ -12,6 +12,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AssembleUserStore @Inject()(implicit ec: ExecutionContext) extends UserStore {
 
   val users: mutable.HashMap[String, AssembleUser] = mutable.HashMap[String, AssembleUser]()
+  val userEmails: mutable.HashMap[String, AssembleUser] = mutable.HashMap[String, AssembleUser]()
 
 
   /**
@@ -44,9 +45,24 @@ class AssembleUserStore @Inject()(implicit ec: ExecutionContext) extends UserSto
     * @return The saved user.
     */
   override def save(user: AssembleUser): Future[AssembleUser] = {
-    Future {
-      users.put(user.id, user)
-      user
+
+    users.get(user.id) match {
+      case Some(found) =>
+        userAlreadyExists
+      case None =>
+        userEmails.get(user.emailAddress) match {
+          case Some(found) =>
+            userAlreadyExists
+          case None =>
+            users.put(user.id, user)
+            userEmails.put(user.emailAddress, user)
+            Future {
+              user
+            }
+        }
     }
   }
+
+  val userAlreadyExists: Future[Nothing] = Future.failed(new RuntimeException("User Already Exists"))
+
 }

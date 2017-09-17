@@ -20,7 +20,7 @@ class AssembleAuthTokenServiceSpec extends PlaySpec {
 
     "create a new token" in new Context {
 
-      val user: AssembleUser = AssembleUser("testid", Option("Ahmad"), Option("Email"))
+      val user: AssembleUser = AssembleUser("testid", "Email", Option("Ahmad"))
       val token: (UUID, AuthToken) = Await.result(service.create(user.id), 5 seconds)
 
       token._2.userID mustBe user.id
@@ -32,7 +32,7 @@ class AssembleAuthTokenServiceSpec extends PlaySpec {
 
     "validate a new token" in new Context {
 
-      val user: AssembleUser = AssembleUser("testid", Option("Ahmad"), Option("Email"))
+      val user: AssembleUser = AssembleUser("testid", "Email", Option("Ahmad"))
       val token: (UUID, AuthToken) = Await.result(service.create(user.id), 5 seconds)
       val valid = Await.result(service.validate(token._1), 5 seconds)
 
@@ -44,7 +44,7 @@ class AssembleAuthTokenServiceSpec extends PlaySpec {
 
     "cleans expired tokens" in new Context {
 
-      val user: AssembleUser = AssembleUser("testid", Option("Ahmad"), Option("Email"))
+      val user: AssembleUser = AssembleUser("testid", "Email", Option("Ahmad"))
       val token: (UUID, AuthToken) = Await.result(service.create(user.id, -10 seconds), 5 seconds)
       val expired: Seq[AuthToken] = Await.result(service.clean, 1 seconds)
 
@@ -58,7 +58,7 @@ class AssembleAuthTokenServiceSpec extends PlaySpec {
 
     "expired tokens give empty option" in new Context {
 
-      val user: AssembleUser = AssembleUser("testid", Option("Ahmad"), Option("Email"))
+      val user: AssembleUser = AssembleUser("testid", "Email", Option("Ahmad"))
       val token: (UUID, AuthToken) = Await.result(service.create(user.id, -10 seconds), 5 seconds)
       Await.result(service.clean, 1 seconds)
       val valid: Option[AuthToken] = Await.result(service.validate(token._1), 5 seconds)

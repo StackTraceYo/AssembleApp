@@ -4,7 +4,7 @@ import java.util.UUID
 import javax.inject.{Inject, Singleton}
 
 import api.auth.Request.{CreateUser, RetrieveUser}
-import api.auth.Response.{FailedToRetrieve, UserCreated, UserRetrieved}
+import api.auth.Response.{FailedToCreate, FailedToRetrieve, UserCreated, UserRetrieved}
 import org.stacktrace.yo.user.auth.model.AssembleUser
 import org.stacktrace.yo.user.auth.service.UserService
 import play.api.libs.json.Json
@@ -26,6 +26,10 @@ class UserController @Inject()(cc: ControllerComponents, userService: UserServic
       .map(user => {
         Ok(Json.toJson(UserCreated(user.id, success = true)))
       })
+      .recover {
+        case e =>
+          Ok(Json.toJson(FailedToCreate(request.body, e.getMessage, success = false)))
+      }
   }
 
   def retrieveUser: Action[RetrieveUser] = Action.async(parse.json[RetrieveUser]) { request =>
@@ -35,15 +39,15 @@ class UserController @Inject()(cc: ControllerComponents, userService: UserServic
         case Some(user) =>
           Ok(Json.toJson(UserRetrieved(user, success = true)))
         case None =>
-          Ok(Json.toJson(FailedToRetrieve(retrieval, success = false)))
+          Ok(Json.toJson(FailedToRetrieve(retrieval, "No User Found", success = false)))
       }
   }
 
   private def createAssembleUserFromRequest(request: CreateUser) = {
     AssembleUser(
       UUID.randomUUID().toString,
-      Option(request.username),
-      Option(request.email)
+      request.email,
+      Option(request.username)
     )
   }
 }

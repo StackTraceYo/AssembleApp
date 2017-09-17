@@ -8,11 +8,11 @@ object Response {
 
   case class UserCreated(id: String, success: Boolean)
 
-  case class FailedToCreate(request: CreateUser, success: Boolean)
+  case class FailedToCreate(request: CreateUser, msg: String, success: Boolean)
 
   case class UserRetrieved(user: AssembleUser, success: Boolean)
 
-  case class FailedToRetrieve(request: RetrieveUser, success: Boolean)
+  case class FailedToRetrieve(request: RetrieveUser, msg: String, success: Boolean)
 
   implicit val userCreatedFormats: OFormat[UserCreated] = Json.format[UserCreated]
   implicit val failUserCreatedFormats: OFormat[FailedToCreate] = Json.format[FailedToCreate]
