@@ -13,7 +13,8 @@ To Run application in Dev Mode without Docker:
 * do something for client
 
 
-## multi-project
+## AssembleApp Sub-Projects
+Splitting projects up to decouple them from one another as much as possible
 * <b>client</b> project houses the client tier
     * currently outside of the sbt run task (have to bring up manually)
     * later we can have scripts that bring up the client stuff along with the web tier
@@ -21,4 +22,11 @@ To Run application in Dev Mode without Docker:
 
 * <b>user-api</b> project is a placeholder for the interface for user services
     * authentication ect..
-    * we will build interfaces for this project so we can swap out implementations later
+    * built against interfaces for this project so we can swap out implementations later
+    
+   
+* <b>assemble-group</b> is the project that houses the main system of the app
+
+    * Project is separate to decouple it from Play/ the Web
+    * Actor based system that the web will interact with via a rest interface
+    * will handle the user groups
