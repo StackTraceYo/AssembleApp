@@ -25,6 +25,12 @@ lazy val `assemble-group` = project.
     libraryDependencies ++= Dependencies.groupDeps
   )
 
+lazy val `assemble-geo` = project.
+  settings(Common.settings: _*).
+  settings(
+    libraryDependencies ++= Dependencies.groupDeps
+  )
+
 lazy val web = project.
   dependsOn(`user-api`,`assemble-group`).
   enablePlugins(PlayScala).
@@ -52,7 +58,7 @@ lazy val web = project.
 //  settings(libraryDependencies ++= Dependencies.chainDependencies)
 
 lazy val root = (project in file(".")).
-  aggregate(web, `user-api`)
+  aggregate(web, `user-api`, `assemble-geo`)
   .settings(
     sbt.Keys.test in assembly := {}
   )

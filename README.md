@@ -19,6 +19,8 @@ Splitting projects up to decouple them from one another as much as possible
     * currently outside of the sbt run task (have to bring up manually)
     * later we can have scripts that bring up the client stuff along with the web tier
 * <b>web</b> project is the REST API
+    * Houses the rest interface for the app
+    * dependent on below projects.
 
 * <b>user-api</b> project is a placeholder for the interface for user services
     * authentication ect..
@@ -30,3 +32,7 @@ Splitting projects up to decouple them from one another as much as possible
     * Project is separate to decouple it from Play/ the Web
     * Actor based system that the web will interact with via a rest interface
     * will handle the user groups
+    
+* <b>assemble-geo</b> is the project that houses the geospatial components of groups
+    * Interface for geospatial querys and group handling
+    * Planned implementations include an in memory and a database backed implementation (database tbd)

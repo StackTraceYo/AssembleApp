@@ -1,0 +1,1 @@
+name := AssembleBuild.NamePrefix + "geo"
