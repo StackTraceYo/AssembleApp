@@ -23,7 +23,14 @@ class AssembleUserStore @Inject()(implicit ec: ExecutionContext) extends UserSto
     */
   override def find(loginData: LoginData): Future[Option[AssembleUser]] = {
     //
-    throw new UnsupportedOperationException
+    Future {
+      userEmails.get(loginData.email) match {
+        case Some(found) =>
+          Option(found)
+        case _ =>
+          Option.empty
+      }
+    }
   }
 
   /**

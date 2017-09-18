@@ -1,7 +1,7 @@
 package api.auth
 
-import api.auth.Request.{CreateUser, RetrieveUser}
-import api.auth.Response.{FailedToRetrieve, UserCreated, UserRetrieved}
+import api.auth.Request.{CreateUser, RetrieveUser, SignIn}
+import api.auth.Response.{FailedToRetrieve, FailedToSignIn, UserCreated, UserRetrieved}
 import org.scalatest.Matchers._
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
@@ -50,6 +50,21 @@ class AuthApiSpec extends PlaySpec with GuiceOneAppPerTest {
       retrieved.user.id mustBe created.id
     }
 
+    "user service can retrieve user by email" in {
+      val create = route(app, FakeRequest(POST, "/api/auth/user/create").withBody(Json.toJson(CreateUser("ahmadEmail", "test")))).get
+      val created = Json.fromJson[UserCreated](contentAsJson(create)).get
+
+      val retrieve = route(app, FakeRequest(POST, "/api/auth/user/authenticate").withBody(Json.toJson(SignIn("ahmadEmail")))).get
+
+      status(retrieve) mustBe Status.OK
+      contentType(retrieve) mustBe Some("application/json")
+      val retrieved = Json.fromJson[UserRetrieved](contentAsJson(retrieve)).get
+
+      retrieved shouldBe a[UserRetrieved]
+      retrieved.success mustBe true
+      retrieved.user.id mustBe created.id
+    }
+
     "no user is returned on failed user" in {
       val retrieve = route(app, FakeRequest(POST, "/api/auth/user/retrieve").withBody(Json.toJson(RetrieveUser("123")))).get
 
@@ -60,6 +75,18 @@ class AuthApiSpec extends PlaySpec with GuiceOneAppPerTest {
       retrieved shouldBe a[FailedToRetrieve]
       retrieved.success mustBe false
       retrieved.request.id mustBe "123"
+    }
+
+    "no user is returned on failed signin" in {
+      val retrieve = route(app, FakeRequest(POST, "/api/auth/user/authenticate").withBody(Json.toJson(SignIn("ahmadEmail")))).get
+
+      status(retrieve) mustBe Status.OK
+      contentType(retrieve) mustBe Some("application/json")
+      val retrieved = Json.fromJson[FailedToSignIn](contentAsJson(retrieve)).get
+
+      retrieved shouldBe a[FailedToSignIn]
+      retrieved.success mustBe false
+      retrieved.request.email mustBe "ahmadEmail"
     }
 
   }

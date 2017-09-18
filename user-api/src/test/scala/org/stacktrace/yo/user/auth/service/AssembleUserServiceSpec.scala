@@ -2,12 +2,13 @@ package org.stacktrace.yo.user.auth.service
 
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.PlaySpec
-import org.stacktrace.yo.user.auth.model.AssembleUser
+import org.stacktrace.yo.user.auth.model.{AssembleUser, LoginData}
 import org.stacktrace.yo.user.auth.service.impl.AssembleUserService
 import org.stacktrace.yo.user.auth.store.impl.AssembleUserStore
 
 import scala.concurrent.duration._
 import org.scalatest.Matchers._
+
 import scala.concurrent.{Await, ExecutionContext, ExecutionContextExecutor}
 import scala.language.postfixOps
 
@@ -53,6 +54,14 @@ class AssembleUserServiceSpec extends PlaySpec {
       Await.result(service.save(user2), 5 seconds)
 
       Await.result(service.retrieve("testid2"), 5 seconds) mustBe Some(user2)
+
+    }
+
+    "retrieve a user by email" in new Context {
+      val user: AssembleUser = AssembleUser("testid", "Email", Option("Ahmad"))
+      Await.result(service.save(user), 5 seconds)
+
+      Await.result(service.retrieve(LoginData("Email", "")), 5 seconds) mustBe Some(user)
 
     }
 

@@ -1,6 +1,6 @@
 package api.auth
 
-import api.auth.Request.{CreateUser, RetrieveUser}
+import api.auth.Request.{CreateUser, RetrieveUser, SignIn}
 import org.stacktrace.yo.user.auth.model.AssembleUser
 import play.api.libs.json.{Json, OFormat}
 
@@ -14,10 +14,13 @@ object Response {
 
   case class FailedToRetrieve(request: RetrieveUser, msg: String, success: Boolean)
 
+  case class FailedToSignIn(request: SignIn, msg: String, success: Boolean)
+
   implicit val userCreatedFormats: OFormat[UserCreated] = Json.format[UserCreated]
   implicit val failUserCreatedFormats: OFormat[FailedToCreate] = Json.format[FailedToCreate]
   implicit val userRetrievedFormats: OFormat[UserRetrieved] = Json.format[UserRetrieved]
   implicit val failUserRetrievedFormats: OFormat[FailedToRetrieve] = Json.format[FailedToRetrieve]
+  implicit val failedToSignInFormats: OFormat[FailedToSignIn] = Json.format[FailedToSignIn]
 
 
 }

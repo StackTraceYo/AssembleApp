@@ -8,6 +8,9 @@ object Request {
 
   case class RetrieveUser(id: String)
 
+  case class SignIn(email: String)
+
   implicit val createUserFormats: OFormat[CreateUser] = Json.format[CreateUser]
+  implicit val signIn: OFormat[SignIn] = Json.format[SignIn]
   implicit val retrieveUserFormats: OFormat[RetrieveUser] = Json.format[RetrieveUser]
 }

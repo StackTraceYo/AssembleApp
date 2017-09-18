@@ -3,9 +3,9 @@ package api.auth.controller
 import java.util.UUID
 import javax.inject.{Inject, Singleton}
 
-import api.auth.Request.{CreateUser, RetrieveUser}
-import api.auth.Response.{FailedToCreate, FailedToRetrieve, UserCreated, UserRetrieved}
-import org.stacktrace.yo.user.auth.model.AssembleUser
+import api.auth.Request.{CreateUser, RetrieveUser, SignIn}
+import api.auth.Response.{FailedToCreate, FailedToRetrieve, FailedToSignIn, UserCreated, UserRetrieved}
+import org.stacktrace.yo.user.auth.model.{AssembleUser, LoginData}
 import org.stacktrace.yo.user.auth.service.UserService
 import play.api.libs.json.Json
 import play.api.mvc._
@@ -43,11 +43,29 @@ class UserController @Inject()(cc: ControllerComponents, userService: UserServic
       }
   }
 
+  def authenticate: Action[SignIn] = Action.async(parse.json[SignIn]) { request =>
+    val retrieval = request.body
+    userService.retrieve(LoginData(retrieval.email, ""))
+      .map {
+        case Some(user) =>
+          Ok(Json.toJson(UserRetrieved(user, success = true)))
+        case None =>
+          Ok(Json.toJson(FailedToSignIn(retrieval, "No User Found", success = false)))
+      }
+  }
+
   private def createAssembleUserFromRequest(request: CreateUser) = {
     AssembleUser(
       UUID.randomUUID().toString,
       request.email,
       Option(request.username)
+    )
+  }
+
+  private def createLoginDataFromRequest(request: SignIn) = {
+    LoginData(
+      request.email,
+      ""
     )
   }
 }
