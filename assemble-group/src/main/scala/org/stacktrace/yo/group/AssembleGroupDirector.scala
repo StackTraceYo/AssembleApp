@@ -5,7 +5,7 @@ import java.util.UUID
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import akka.event.LoggingReceive
 import org.stacktrace.yo.group.core.AssembleGroupSupervisor
-import org.stacktrace.yo.group.core.AssembleProtocol.Creation.{CreateGroup, GroupCreated}
+import org.stacktrace.yo.group.core.AssembleProtocol.Creation.{CreateGroup, GroupCreatedRef}
 import org.stacktrace.yo.group.handler.GroupResponseHandler
 
 import scala.collection.mutable
@@ -16,11 +16,17 @@ class AssembleGroupDirector extends Actor with ActorLogging {
 
   override def receive: Receive = LoggingReceive {
     case msg@CreateGroup() =>
+      //get a reference to the original sender
       val ogSender = sender()
+      //generate a name for the new supervisor
       val name = generateName()
+      //create supervisor for this new group
       val supervisor = context.actorOf(AssembleGroupDirector.supervisionProps(self, name))
+      //create a new response handler for this request which will deal with sending back a response to the sender
+      //forward the message
       supervisor.tell(msg, context.actorOf(AssembleGroupDirector.responseHandlerProps(ogSender)))
-    case GroupCreated(groupName) =>
+    case GroupCreatedRef(groupName, actorRef) =>
+      groupRefs.put(groupName, actorRef)
 
   }
 

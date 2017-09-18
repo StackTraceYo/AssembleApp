@@ -16,8 +16,11 @@ object Dependencies {
     "org.scalatest" % "scalatest_2.11" % "2.2.5" % "test"
   )
 
-  val groupDeps = Seq(
-    "com.typesafe.akka" % "akka-actor_2.11" % "2.5.4"
+  val groupDeps: Seq[ModuleID] =
+    test ++
+    Seq(
+    "com.typesafe.akka" % "akka-actor_2.11" % "2.5.4",
+    "com.typesafe.akka" % "akka-testkit_2.11" % "2.5.4"
   )
 
   val userDependencies: Seq[ModuleID] =
