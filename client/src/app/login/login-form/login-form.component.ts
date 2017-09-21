@@ -5,7 +5,8 @@ import {Observable} from "rxjs/Observable";
 @Component({
   selector: 'asm-login-form',
   templateUrl: './login-form.component.html',
-  styleUrls: ['./login-form.component.css']
+  styleUrls: ['./login-form.component.css'],
+  providers: [LoginApiService]
 })
 export class LoginFormComponent implements OnInit {
 
