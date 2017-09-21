@@ -71,6 +71,7 @@ assembly() {
 start() {
     cd $CMD_DIR
     sbt ";project web;~run"
+    # for debug uncomment -jvm-debug 9999
 }
 
 # Parse command line options (odd formatting to simplify show_help() above)

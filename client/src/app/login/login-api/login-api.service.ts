@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Http, Response} from '@angular/http';
-import 'rxjs/add/operator/map'
+import {Headers, Http, RequestOptions, Response} from '@angular/http';
+import {Observable} from 'rxjs/Rx';
+
 
 @Injectable()
 export class LoginApiService {
@@ -9,15 +10,14 @@ export class LoginApiService {
   }
 
   login(email: string, password: string) {
-    return this.http.post('localhost:9000/api/auth/user/authenticate', JSON.stringify({email: email}))
-      .map((response: Response) => {
-        // login successful if there's a jwt token in the response
-        let user = response.json();
-        if (user && user.success) {
-          // store user details and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify(user));
-        }
-      });
+
+    let headers = new Headers({'Content-Type': 'application/json'});
+    let options = new RequestOptions({headers: headers});
+
+    return this.http.post('http://localhost:9000/api/auth/user/authenticate', JSON.stringify({email: email}), options)
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+
   }
 
 }

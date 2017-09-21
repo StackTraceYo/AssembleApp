@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {LoginApiService} from "../login-api/login-api.service";
+import {Observable} from "rxjs/Observable";
 
 @Component({
   selector: 'asm-login-form',
@@ -18,7 +19,17 @@ export class LoginFormComponent implements OnInit {
   }
 
   login() {
-    this.loginService.login(this.user.email, "")
-  }
 
+    let loginOp: Observable<any[]> =
+      this.loginService
+        .login(this.user.email, "");
+
+    loginOp.subscribe(
+      comments => {
+      },
+      err => {
+        // Log errors if any
+        console.log(err);
+      });
+  }
 }
