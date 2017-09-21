@@ -1,4 +1,4 @@
-package org.stacktrace.yo.group.core
+package org.stacktrace.yo.group.core.group.supervisor
 
 import akka.actor.SupervisorStrategy.{Escalate, Restart, Stop}
 import akka.actor.{Actor, OneForOneStrategy}

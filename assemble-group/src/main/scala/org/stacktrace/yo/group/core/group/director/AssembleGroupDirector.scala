@@ -1,12 +1,12 @@
-package org.stacktrace.yo.group
+package org.stacktrace.yo.group.core.group.director
 
 import java.util.UUID
 
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import akka.event.LoggingReceive
-import org.stacktrace.yo.group.core.AssembleGroupSupervisor
-import org.stacktrace.yo.group.core.AssembleProtocol.Creation.{CreateGroup, GroupCreatedRef}
-import org.stacktrace.yo.group.handler.GroupResponseHandler
+import org.stacktrace.yo.group.core.api.handler.GroupAPIResponseHandler
+import org.stacktrace.yo.group.core.group.AssembleGroupProtocol.Creation.{CreateGroup, GroupCreatedRef}
+import org.stacktrace.yo.group.core.group.supervisor.AssembleGroupSupervisor
 
 import scala.collection.mutable
 
@@ -46,6 +46,6 @@ object AssembleGroupDirector {
   }
 
   def responseHandlerProps(sender: ActorRef): Props = {
-    Props(new GroupResponseHandler(sender))
+    Props(new GroupAPIResponseHandler(sender))
   }
 }

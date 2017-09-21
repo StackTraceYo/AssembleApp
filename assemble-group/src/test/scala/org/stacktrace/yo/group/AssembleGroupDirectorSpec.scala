@@ -4,7 +4,8 @@ import akka.actor.ActorSystem
 import akka.testkit.{ImplicitSender, TestActorRef, TestKit}
 import org.scalatest.MustMatchers._
 import org.scalatest.WordSpecLike
-import org.stacktrace.yo.group.core.AssembleProtocol.Creation.{CreateGroup, GroupCreated}
+import org.stacktrace.yo.group.core.group.AssembleGroupProtocol.Creation.{CreateGroup, GroupCreated}
+import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector
 
 class AssembleGroupDirectorSpec extends TestKit(ActorSystem("testSystem"))
   with ImplicitSender

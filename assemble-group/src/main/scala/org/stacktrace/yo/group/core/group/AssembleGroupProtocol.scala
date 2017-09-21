@@ -1,8 +1,8 @@
-package org.stacktrace.yo.group.core
+package org.stacktrace.yo.group.core.group
 
 import akka.actor.ActorRef
 
-object AssembleProtocol {
+object AssembleGroupProtocol {
 
   object Group {
 

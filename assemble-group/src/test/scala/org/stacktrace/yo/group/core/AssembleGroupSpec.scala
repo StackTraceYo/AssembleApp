@@ -3,7 +3,8 @@ package org.stacktrace.yo.group.core
 import akka.actor.ActorSystem
 import akka.testkit.{ImplicitSender, TestActorRef, TestKit, TestProbe}
 import org.scalatest.WordSpecLike
-import org.stacktrace.yo.group.core.AssembleProtocol.Group.{GroupReady, Init}
+import org.stacktrace.yo.group.core.group.AssembleGroupProtocol.Group.{GroupReady, Init}
+import org.stacktrace.yo.group.core.group.AssembleGroup
 
 class AssembleGroupSpec extends TestKit(ActorSystem("testSystem"))
   with ImplicitSender

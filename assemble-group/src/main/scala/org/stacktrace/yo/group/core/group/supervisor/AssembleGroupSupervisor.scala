@@ -1,8 +1,9 @@
-package org.stacktrace.yo.group.core
+package org.stacktrace.yo.group.core.group.supervisor
 
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
-import org.stacktrace.yo.group.core.AssembleProtocol.Creation.{CreateGroup, GroupCreated, GroupCreatedRef}
-import org.stacktrace.yo.group.core.AssembleProtocol.Group.{GroupReady, Init}
+import org.stacktrace.yo.group.core.group.AssembleGroupProtocol.Creation.{CreateGroup, GroupCreated, GroupCreatedRef}
+import org.stacktrace.yo.group.core.group.AssembleGroupProtocol.Group.{GroupReady, Init}
+import org.stacktrace.yo.group.core.group.AssembleGroup
 
 class AssembleGroupSupervisor(director: ActorRef, name: String) extends Actor with ActorLogging with GroupSupervisionStrategy {
 
