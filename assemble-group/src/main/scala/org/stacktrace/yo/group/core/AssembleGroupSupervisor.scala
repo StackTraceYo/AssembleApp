@@ -4,7 +4,7 @@ import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import org.stacktrace.yo.group.core.AssembleProtocol.Creation.{CreateGroup, GroupCreated, GroupCreatedRef}
 import org.stacktrace.yo.group.core.AssembleProtocol.Group.{GroupReady, Init}
 
-class AssembleGroupSupervisor(director: ActorRef, name: String) extends Actor with ActorLogging {
+class AssembleGroupSupervisor(director: ActorRef, name: String) extends Actor with ActorLogging with GroupSupervisionStrategy {
 
   import context._
 
