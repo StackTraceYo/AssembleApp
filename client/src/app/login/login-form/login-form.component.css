@@ -1,0 +1,14 @@
+.login-main{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form {
+  max-width: 500px;
+  width: 100%;
+}
+
+.login-form-full-width {
+  width: 100%;
+}
