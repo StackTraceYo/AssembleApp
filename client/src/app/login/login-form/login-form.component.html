@@ -6,7 +6,7 @@
       <tr>
         <td>
           <md-form-field class="login-form-full-width">
-            <input mdInput placeholder="Email">
+            <input mdInput placeholder="Email" [(ngModel)]="user.email" name="email">
           </md-form-field>
         </td>
       </tr>
@@ -25,5 +25,5 @@
 
   </form>
 </div>
-<button md-raised-button color="primary">Login</button>
+<button md-raised-button color="primary" (click)="login()">Login</button>
 <button md-button>Register</button>

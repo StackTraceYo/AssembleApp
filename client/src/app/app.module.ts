@@ -7,6 +7,8 @@ import {AppRoutingModule} from "./app-routing/app-routing.module";
 import {LoginModule} from "./login/login.module";
 import {LoginApiService} from "./login/login-api/login-api.service";
 import {NgMaterialModule} from "./ng-material/ng-material.module";
+import {HttpModule} from "@angular/http";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -16,6 +18,8 @@ import {NgMaterialModule} from "./ng-material/ng-material.module";
     NgMaterialModule,
     BrowserAnimationsModule,
     BrowserModule,
+    FormsModule,
+    HttpModule,
     AppRoutingModule,
     LoginModule
   ],

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {LoginApiService} from "../login-api/login-api.service";
 
 @Component({
   selector: 'asm-login-form',
@@ -7,9 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginFormComponent implements OnInit {
 
-  constructor() { }
+
+  user: any = {};
+
+  constructor(private loginService: LoginApiService) {
+  }
 
   ngOnInit() {
+  }
+
+  login() {
+    this.loginService.login(this.user.email, "")
   }
 
 }
