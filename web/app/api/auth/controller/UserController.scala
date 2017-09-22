@@ -39,7 +39,7 @@ class UserController @Inject()(cc: ControllerComponents, userService: UserServic
         case Some(user) =>
           Ok(Json.toJson(UserRetrieved(user, success = true)))
         case None =>
-          Ok(Json.toJson(FailedToRetrieve(retrieval, "No User Found", success = false)))
+          Ok(Json.toJson(FailedToRetrieve(retrieval, "-1", success = false)))
       }
   }
 

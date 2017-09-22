@@ -1,0 +1,14 @@
+.register-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-form {
+  max-width: 500px;
+  width: 100%;
+}
+
+.register-form-full-width {
+  width: 100%;
+}
