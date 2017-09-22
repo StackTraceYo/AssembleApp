@@ -23,8 +23,9 @@ class UserController @Inject()(cc: ControllerComponents, userService: UserServic
   def createUser: Action[CreateUser] = Action.async(parse.json[CreateUser]) { request =>
     val user = createAssembleUserFromRequest(request.body)
     userService.save(user)
-      .map(user => {
+      .map(userAndToken => {
         Ok(Json.toJson(UserCreated(user.id, success = true)))
+          .withHeaders(("X-Assemble-Auth", userAndToken._2.id.toString))
       })
       .recover {
         case e =>
@@ -47,10 +48,11 @@ class UserController @Inject()(cc: ControllerComponents, userService: UserServic
     val retrieval = request.body
     userService.retrieve(LoginData(retrieval.email, ""))
       .map {
-        case Some(user) =>
-          Ok(Json.toJson(UserRetrieved(user, success = true)))
+        case Some(userAndToken) =>
+          Ok(Json.toJson(UserRetrieved(userAndToken._1, success = true)))
+            .withHeaders(("X-Assemble-Auth", userAndToken._2.id.toString))
         case None =>
-          Ok(Json.toJson(FailedToSignIn(retrieval, "No User Found", success = false)))
+          Ok(Json.toJson(FailedToSignIn(retrieval, "-1", success = false)))
       }
   }
 

@@ -1,26 +1,31 @@
 package org.stacktrace.yo.user.auth.service
 
+import java.time.Instant
+import java.util.UUID
+
+import org.mockito.Mockito.when
+import org.scalatest.Matchers._
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
-import org.stacktrace.yo.user.auth.model.{AssembleUser, LoginData}
+import org.stacktrace.yo.user.auth.model.{AssembleUser, AuthToken, LoginData}
 import org.stacktrace.yo.user.auth.service.impl.AssembleUserService
 import org.stacktrace.yo.user.auth.store.impl.AssembleUserStore
 
 import scala.concurrent.duration._
-import org.scalatest.Matchers._
-
-import scala.concurrent.{Await, ExecutionContext, ExecutionContextExecutor}
+import scala.concurrent.{Await, ExecutionContext, ExecutionContextExecutor, Future}
 import scala.language.postfixOps
 
 
 class AssembleUserServiceSpec extends PlaySpec {
+
 
   "AssembleUserService" should {
 
     "save a user" in new Context {
 
       val user: AssembleUser = AssembleUser("testid", "Email", Option("Ahmad"))
-      Await.result(service.save(user), 5 seconds) mustBe user
+      Await.result(service.save(user), 5 seconds) mustBe(user, token)
 
     }
 
@@ -30,7 +35,7 @@ class AssembleUserServiceSpec extends PlaySpec {
       Await.result(service.save(user), 5 seconds)
 
       ScalaFutures.whenReady(service.save(user).failed) { s =>
-        s shouldBe a [RuntimeException]
+        s shouldBe a[RuntimeException]
       }
     }
 
@@ -41,7 +46,7 @@ class AssembleUserServiceSpec extends PlaySpec {
       Await.result(service.save(user), 5 seconds)
 
       ScalaFutures.whenReady(service.save(user2).failed) { s =>
-        s shouldBe a [RuntimeException]
+        s shouldBe a[RuntimeException]
       }
     }
 
@@ -61,7 +66,7 @@ class AssembleUserServiceSpec extends PlaySpec {
       val user: AssembleUser = AssembleUser("testid", "Email", Option("Ahmad"))
       Await.result(service.save(user), 5 seconds)
 
-      Await.result(service.retrieve(LoginData("Email", "")), 5 seconds) mustBe Some(user)
+      Await.result(service.retrieve(LoginData("Email", "")), 5 seconds) mustBe Some((user, token))
 
     }
 
@@ -71,13 +76,36 @@ class AssembleUserServiceSpec extends PlaySpec {
 
   }
 
-  trait Context {
+
+  trait Context extends MockitoSugar {
 
     implicit val executionContext: ExecutionContextExecutor = ExecutionContext.Implicits.global
 
     val store: AssembleUserStore = new AssembleUserStore()
+    val authService: AuthTokenService = mock[AuthTokenService]
 
-    val service: AssembleUserService = new AssembleUserService(store)
+    val token: AuthToken = AuthToken(UUID.randomUUID(), "mockUserId", Instant.now())
+
+    val service: AssembleUserService = new AssembleUserService(store, authService)
+    setup()
+
+    def setup(): Unit = {
+      when(authService.create("testid")).thenReturn(
+        Future {
+          (token.id, token)
+        }
+      )
+      when(authService.create("testid1")).thenReturn(
+        Future {
+          (token.id, token)
+        }
+      )
+      when(authService.create("testid2")).thenReturn(
+        Future {
+          (token.id, token)
+        }
+      )
+    }
 
   }
 
