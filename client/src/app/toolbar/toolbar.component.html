@@ -1,0 +1,15 @@
+<md-toolbar color="primary">
+
+  <md-menu #appMenu="mdMenu">
+    <button md-menu-item> My Account</button>
+    <button md-menu-item> Settings</button>
+    <button md-menu-item> Help</button>
+    <button md-menu-item> {{loginOrOut}}</button>
+  </md-menu>
+  <span>Assemble</span>
+  <!-- This fills the remaining space of the current row -->
+  <span class="asm-toolbar-fill"></span>
+  <button md-icon-button [mdMenuTriggerFor]="appMenu">
+    <md-icon>more_vert</md-icon>
+  </button>
+</md-toolbar>

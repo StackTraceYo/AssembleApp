@@ -11,10 +11,12 @@ import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "./http/http.client.module";
 import {HttpClient} from "./http/http-client/http-client";
 import {DashboardModule} from "./dashboard/dashboard.module";
+import {ToolbarComponent} from "./toolbar/toolbar.component";
+import {AuthGuard} from "./user-auth/auth-guard/auth.guard";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent, ToolbarComponent
   ],
   imports: [
     NgMaterialModule,
@@ -25,10 +27,10 @@ import {DashboardModule} from "./dashboard/dashboard.module";
     HttpClientModule,
     AppRoutingModule,
     UserModule,
-    DashboardModule
+    DashboardModule,
   ],
-  providers: [HttpClient],
-  bootstrap: [AppComponent]
+  providers: [HttpClient, AuthGuard],
+  bootstrap: [AppComponent],
 })
 export class AppModule {
 }

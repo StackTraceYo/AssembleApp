@@ -45,7 +45,7 @@ export class RegisterFormComponent implements OnInit {
   }
 
   goToDash = function () {
-    this.router.navigateByUrl('/home');
+    this.router.navigateByUrl('/asm');
   };
 
 }

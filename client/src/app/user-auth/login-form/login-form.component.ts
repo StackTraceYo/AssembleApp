@@ -50,6 +50,6 @@ export class LoginFormComponent implements OnInit {
   };
 
   goToDash = function () {
-    this.router.navigateByUrl('/home');
+    this.router.navigateByUrl('/asm');
   };
 }
