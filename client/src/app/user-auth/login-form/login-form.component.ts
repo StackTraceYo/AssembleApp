@@ -10,7 +10,7 @@ import {UserAuthenticationAttempt} from "../user-api/model/user-authentication-a
 @Component({
   selector: 'asm-login-form',
   templateUrl: './login-form.component.html',
-  styleUrls: ['./login-form.component.css'],
+  styleUrls: ['./login-form.component.scss'],
 })
 export class LoginFormComponent implements OnInit {
 
