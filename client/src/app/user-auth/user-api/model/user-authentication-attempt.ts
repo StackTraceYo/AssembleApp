@@ -1,21 +1,12 @@
-import {AssembleUser} from "../../assemble.user.";
+import {AssembleUser} from "../../assemble.user";
 
 export class UserAuthenticationAttempt {
 
-  private _user: AssembleUser;
-  private _authenticated: boolean;
-
-
-  constructor(success: boolean, user: AssembleUser) {
-    if (success) {
-      this._user = user;
-      this._authenticated = true;
-
-    } else {
-      this._authenticated = false;
+  constructor(private _authenticated: boolean, private _user: AssembleUser) {
+    if (!_authenticated) {
+      this._user = AssembleUser.noUser();
     }
   }
-
 
   get user(): AssembleUser {
     return this._user;

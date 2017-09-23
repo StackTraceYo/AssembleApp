@@ -57,12 +57,12 @@ class AssembleUserStore @Inject()(implicit ec: ExecutionContext) extends UserSto
       case Some(found) =>
         userAlreadyExists
       case None =>
-        userEmails.get(user.emailAddress) match {
+        userEmails.get(user.email) match {
           case Some(found) =>
             userAlreadyExists
           case None =>
             users.put(user.id, user)
-            userEmails.put(user.emailAddress, user)
+            userEmails.put(user.email, user)
             Future {
               user
             }

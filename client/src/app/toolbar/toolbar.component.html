@@ -4,7 +4,7 @@
     <button md-menu-item> My Account</button>
     <button md-menu-item> Settings</button>
     <button md-menu-item> Help</button>
-    <button md-menu-item> {{loginOrOut}}</button>
+    <button md-menu-item [(ngModel)]="loginOrOut" name="loginOrOut" ngDefaultControl>{{loginOrOut}}</button>
   </md-menu>
   <a [routerLink]="assembleLink">Assemble</a>
   <!-- This fills the remaining space of the current row -->

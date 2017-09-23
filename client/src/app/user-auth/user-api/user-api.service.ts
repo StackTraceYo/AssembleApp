@@ -5,7 +5,7 @@ import {HttpClient} from "../../http/http-client/http-client";
 import {RegisterRequest} from "./request/register-request";
 import {LoginRequest} from "./request/login-request";
 import {UserAuthenticationAttempt} from "./model/user-authentication-attempt";
-import {AssembleUser} from "../assemble.user.";
+import {AssembleUser} from "../assemble.user";
 
 
 @Injectable()
@@ -21,7 +21,11 @@ export class UserApiService {
         let response = res.json();
         //add messaging later to response for why a login failed, for now we will just pass the returned or null user
         //to handle if it worked
-        return new UserAuthenticationAttempt(response.success, response.user);
+        if (response.success) {
+          return new UserAuthenticationAttempt(response.success, new AssembleUser(response.user.email, response.user.id, response.success));
+        } else {
+          return new UserAuthenticationAttempt(response.success, AssembleUser.noUser());
+        }
       })
       .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }

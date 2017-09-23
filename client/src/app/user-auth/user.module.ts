@@ -6,6 +6,7 @@ import {FormsModule} from "@angular/forms";
 import {UserApiService} from "./user-api/user-api.service";
 import {RegisterFormComponent} from './register-form/register-form.component';
 import {RouterModule} from "@angular/router";
+import {UserService} from "./user-service";
 
 @NgModule({
   imports: [
@@ -15,7 +16,7 @@ import {RouterModule} from "@angular/router";
     RouterModule
   ],
   declarations: [LoginFormComponent, RegisterFormComponent],
-  providers: [UserApiService]
+  providers: [UserApiService, UserService]
 })
 export class UserModule {
 }

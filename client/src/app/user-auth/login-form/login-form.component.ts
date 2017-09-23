@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {LoginFormModel} from "./model/login-form-model";
 import {LoginRequest} from "../user-api/request/login-request";
 import {UserAuthenticationAttempt} from "../user-api/model/user-authentication-attempt";
+import {UserService} from "../user-service";
 
 
 @Component({
@@ -18,23 +19,24 @@ export class LoginFormComponent implements OnInit {
   user: LoginFormModel;
   appname: "Assemble";
 
-  constructor(private userService: UserApiService, private router: Router) {
+  constructor(private userApiService: UserApiService, private userService: UserService, private router: Router) {
   }
 
   ngOnInit() {
-    this.user = new LoginFormModel();
+    this.user = new LoginFormModel("","");
   }
 
   login() {
 
     let loginOp: Observable<UserAuthenticationAttempt> =
-      this.userService
+      this.userApiService
         .login(new LoginRequest(this.user));
 
     loginOp.subscribe(
       attempt => {
         if (attempt.authenticated) {
           //set token/cookie stuff
+          this.userService.storeUser(attempt.user)
           this.goToDash();
         }
         //show error
