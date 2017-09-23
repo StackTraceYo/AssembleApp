@@ -16,9 +16,8 @@ export class UserService {
     this._user.next(user);
   }
 
-  removeUser(user: AssembleUser) {
-    this._user = null;
-    this._user.next(user);
+  removeUser() {
+    this._user.next(AssembleUser.noUser());
   }
 
   getUser() {
