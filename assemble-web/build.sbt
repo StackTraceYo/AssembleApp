@@ -32,7 +32,7 @@ lazy val `assemble-geo` = project.
   )
 
 lazy val web = project.
-  dependsOn(`user-api`,`assemble-group`).
+  dependsOn(`user-api`, `assemble-group`).
   enablePlugins(PlayScala).
   settings(Common.settings: _*).
   settings(

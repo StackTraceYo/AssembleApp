@@ -70,6 +70,7 @@ assembly() {
 
 start() {
     cd $CMD_DIR
+    cd assemble-web
     sbt ";project web;~run"
     # for debug uncomment -jvm-debug 9999
 }

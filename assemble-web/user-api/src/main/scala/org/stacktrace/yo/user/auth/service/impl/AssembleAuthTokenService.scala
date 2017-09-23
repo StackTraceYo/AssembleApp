@@ -27,6 +27,7 @@ class AssembleAuthTokenService @Inject()(tokenStore: AuthTokenStore)(implicit ec
         UUID.randomUUID(),
         userID,
         Instant.now.plusSeconds(expiration.toSeconds)
+
       )
     )
   }

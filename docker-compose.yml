@@ -1,16 +1,11 @@
 version: "3"
 services:
-  client:
-    build: client
-    ports:
-      - "4200:4200"
-      - "9876:9876"
-    volumes:
-      - ./client:/usr/src/app
   web:
-    build: web
+    build:
+      context: ./
+      dockerfile: ./assemble-web/web/Dockerfile
     ports:
       - "9000:9000"
     volumes:
-      - ./web:/usr/src/app
+      - ./assemble-web:/usr/src/app
     stdin_open: true
