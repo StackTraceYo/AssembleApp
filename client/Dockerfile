@@ -6,7 +6,8 @@ WORKDIR /usr/src/app
 
 COPY . /usr/src/app
 
-RUN yarn install
+
+RUN npm install
 
 EXPOSE 4200
 
