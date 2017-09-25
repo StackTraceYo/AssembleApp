@@ -15,6 +15,7 @@ import {UserService} from "../user-service";
 export class RegisterFormComponent implements OnInit {
 
   regModel: RegistrationFormModel = new RegistrationFormModel();
+  registering = false;
 
 
   constructor(private userApiService: UserApiService, private userService: UserService, private router: Router) {
@@ -29,8 +30,10 @@ export class RegisterFormComponent implements OnInit {
       this.userApiService
         .register(new RegisterRequest(this.regModel));
 
+    this.toggleSpinner();
     registerOp.subscribe(
       attempt => {
+        this.toggleSpinner();
         if (attempt.authenticated) {
           //set tokem and stuff
           this.userService.storeUser(attempt.user);
@@ -42,6 +45,7 @@ export class RegisterFormComponent implements OnInit {
       },
       err => {
         // Log errors if any
+        this.toggleSpinner();
         console.log(err);
       });
   }
@@ -49,5 +53,9 @@ export class RegisterFormComponent implements OnInit {
   goToDash = function () {
     this.router.navigateByUrl('/asm');
   };
+
+  toggleSpinner = function () {
+    this.registering = !this.registering;
+  }
 
 }

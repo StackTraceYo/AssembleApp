@@ -4,7 +4,7 @@ import {
   MdCheckboxModule,
   MdIconModule,
   MdInputModule,
-  MdMenuModule,
+  MdMenuModule, MdProgressSpinnerModule,
   MdToolbarModule
 } from '@angular/material';
 
@@ -15,7 +15,8 @@ import {
     MdInputModule,
     MdToolbarModule,
     MdIconModule,
-    MdMenuModule
+    MdMenuModule,
+    MdProgressSpinnerModule
   ],
   exports: [
     MdButtonModule,
@@ -23,7 +24,8 @@ import {
     MdInputModule,
     MdToolbarModule,
     MdIconModule,
-    MdMenuModule
+    MdMenuModule,
+    MdProgressSpinnerModule
   ],
   declarations: []
 })

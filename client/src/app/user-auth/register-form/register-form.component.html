@@ -1,31 +1,37 @@
 <h1>
   Register
 </h1>
-<div class="register-main">
+<div *ngIf="!registering">
+  <div class="register-main">
 
-  <form class="register-form">
+    <form class="register-form">
 
-    <table class="register-form-full-width" cellspacing="0">
-      <tr>
-        <td>
-          <md-form-field class="register-form-full-width">
-            <input mdInput placeholder="Email" [(ngModel)]="regModel.email" name="email">
-          </md-form-field>
-        </td>
-      </tr>
-    </table>
+      <table class="register-form-full-width" cellspacing="0">
+        <tr>
+          <td>
+            <md-form-field class="register-form-full-width">
+              <input mdInput placeholder="Email" [(ngModel)]="regModel.email" name="email">
+            </md-form-field>
+          </td>
+        </tr>
+      </table>
 
-    <table class="register-form-full-width" cellspacing="0">
-      <tr>
-        <td>
-          <md-form-field class="register-form-full-width">
-            <input mdInput placeholder="Password" [(ngModel)]="regModel.password" name="password">
-          </md-form-field>
-        </td>
-      </tr>
-    </table>
+      <table class="register-form-full-width" cellspacing="0">
+        <tr>
+          <td>
+            <md-form-field class="register-form-full-width">
+              <input mdInput placeholder="Password" [(ngModel)]="regModel.password" name="password">
+            </md-form-field>
+          </td>
+        </tr>
+      </table>
 
-  </form>
+    </form>
+  </div>
+  <button md-raised-button color="primary" (click)="register()">Register</button>
 </div>
-<button md-raised-button color="primary" (click)="register()">Register</button>
+
+<div class="registering-spinner-holder" *ngIf="registering">
+  <md-spinner></md-spinner>
+</div>
 

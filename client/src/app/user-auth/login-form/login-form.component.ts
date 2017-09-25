@@ -16,14 +16,16 @@ import {UserService} from "../user-service";
 export class LoginFormComponent implements OnInit {
 
 
+  appname = "Assemble";
   user: LoginFormModel;
-  appname: "Assemble";
+  loggingIn: boolean;
 
   constructor(private userApiService: UserApiService, private userService: UserService, private router: Router) {
   }
 
   ngOnInit() {
-    this.user = new LoginFormModel("","");
+    this.user = new LoginFormModel("", "");
+    this.loggingIn = false;
   }
 
   login() {
@@ -31,9 +33,10 @@ export class LoginFormComponent implements OnInit {
     let loginOp: Observable<UserAuthenticationAttempt> =
       this.userApiService
         .login(new LoginRequest(this.user));
-
+    this.toggleSpinner();
     loginOp.subscribe(
       attempt => {
+        this.toggleSpinner();
         if (attempt.authenticated) {
           //set token/cookie stuff
           this.userService.storeUser(attempt.user)
@@ -43,6 +46,7 @@ export class LoginFormComponent implements OnInit {
       },
       err => {
         // Log errors if any
+        this.toggleSpinner();
         console.log(err);
       });
   }
@@ -54,4 +58,8 @@ export class LoginFormComponent implements OnInit {
   goToDash = function () {
     this.router.navigateByUrl('/asm');
   };
+
+  toggleSpinner = function () {
+    this.loggingIn = !this.loggingIn;
+  }
 }
