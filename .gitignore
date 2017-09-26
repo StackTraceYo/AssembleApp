@@ -20,6 +20,7 @@ server.pid
 */target
 target
 .idea
-
-/.idea/AssembleApp.iml
 node_modules/
+assemble-web/assemble-group-model/project/
+assemble-web/project/project/
+assemble-web/src/
