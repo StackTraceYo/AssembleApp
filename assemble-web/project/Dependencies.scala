@@ -1,7 +1,10 @@
 import play.sbt.PlayImport._
 import sbt._
+import com.trueaccord.scalapb.compiler.Version.scalapbVersion
+
 
 object Dependencies {
+
 
   val json = Seq(
     "com.typesafe.play" % "play-json_2.11" % "2.6.4"
@@ -18,10 +21,23 @@ object Dependencies {
 
   val groupDeps: Seq[ModuleID] =
     test ++
-    Seq(
-    "com.typesafe.akka" % "akka-actor_2.11" % "2.5.4",
-    "com.typesafe.akka" % "akka-testkit_2.11" % "2.5.4"
-  )
+      Seq(
+        "com.typesafe.akka" % "akka-actor_2.11" % "2.5.4",
+        "com.typesafe.akka" % "akka-testkit_2.11" % "2.5.4"
+      )
+
+  val groupModelDeps: Seq[ModuleID] =
+    test ++
+      Seq(
+        "com.trueaccord.scalapb"      %% "scalapb-runtime"  % scalapbVersion  % "protobuf"
+      )
+
+  val geoDeps: Seq[ModuleID] =
+    test ++
+      Seq(
+        "com.typesafe.akka" % "akka-actor_2.11" % "2.5.4",
+        "com.typesafe.akka" % "akka-testkit_2.11" % "2.5.4"
+      )
 
   val userDependencies: Seq[ModuleID] =
     json ++

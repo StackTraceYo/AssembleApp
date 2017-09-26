@@ -19,7 +19,19 @@ lazy val `user-api` = project.
     libraryDependencies ++= Dependencies.userDependencies
   )
 
+lazy val `assemble-group-model` = project.
+  settings(Common.settings: _*).
+  settings(
+    libraryDependencies ++= Dependencies.groupModelDeps
+  ).
+  settings(
+    PB.targets in Compile := Seq(
+      scalapb.gen() -> (sourceManaged in Compile).value
+    )
+  )
+
 lazy val `assemble-group` = project.
+  dependsOn(`assemble-group-model`).
   settings(Common.settings: _*).
   settings(
     libraryDependencies ++= Dependencies.groupDeps
@@ -32,7 +44,7 @@ lazy val `assemble-geo` = project.
   )
 
 lazy val web = project.
-  dependsOn(`user-api`, `assemble-group`).
+  dependsOn(`user-api`, `assemble-group`, `assemble-group-model`).
   enablePlugins(PlayScala).
   settings(Common.settings: _*).
   settings(

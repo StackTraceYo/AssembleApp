@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+// Brought in from scalapb-runtime
+import "scalapb/scalapb.proto";
+import "google/protobuf/wrappers.proto";
+
+package com.stacktrace.yo.assemble.group;
+option java_package = "com.stacktrace.yo.assemble.group";
+
+
+message Added {
+    option (scalapb.message).extends = "com.stacktrace.yo.assemble.group.models.Models.Event";
+    double value = 1;
+}
+
+message Subtracted {
+    option (scalapb.message).extends = "com.stacktrace.yo.assemble.group.models.Models.Event";
+    double value = 1;
+}
+
+message Multiplied {
+    option (scalapb.message).extends = "com.stacktrace.yo.assemble.group.models.Models.Event";
+    double value = 1;
+}
+
+message Divided {
+    option (scalapb.message).extends = "com.stacktrace.yo.assemble.group.models.Models.Event";
+    double value = 1;
+}
+
+message Reset {
+    option (scalapb.message).extends = "com.stacktrace.yo.assemble.group.models.Models.Event";
+}
+
+// note that models comes from the name of this proto file
+// creates com.experiments.calculator.models.CalculatorModel.Event
+// check the target folder to see the code

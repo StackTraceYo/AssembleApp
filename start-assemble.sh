@@ -35,6 +35,7 @@ CMD_DIR="$(cd "$(dirname "$CMD")" && pwd -P)"
 [ "$DEBUG" ]   ||  DEBUG=
 [ "$BUILD" ]   ||  BUILD="FALSE"
 [ "$RUN" ]   ||  RUN="FALSE"
+[ "$BMODEL" ]   ||  BMODEL="FALSE"
 
 
 #>>>> PUT YOUR ENV VAR DEFAULTS HERE <<<<
@@ -54,6 +55,12 @@ show_help() {
 	MSG=$(awk '/^NARGS=-1; while/,/^esac; done/' "$CMD" | sed -e 's/^[[:space:]]*/  /' -e 's/|/, /' -e 's/)//' | grep '^  -')
 	EMSG=$(eval "echo \"$MSG\"")
 	echo "$EMSG"
+}
+
+build_model() {
+	cd $CMD_DIR
+	cd assemble-web
+    sbt ";project assemble-group-model;compile"
 }
 
 
@@ -84,6 +91,8 @@ NARGS=-1; while [ "$#" -ne "$NARGS" ]; do NARGS=$#; case $1 in
 		BUILD="TRUE"; shift; ;;
     -r|--run)     # Run
         RUN="TRUE"; shift; ;;
+    -m|--model)     # build protobuf
+        BMODEL="TRUE"; shift; ;;
 	*)
 	    break ;;
 esac; done
@@ -99,6 +108,11 @@ esac; done
 if [[ "$BUILD" = "TRUE" ]]; then
         out "Building Assemble"
         build;
+fi
+
+if [[ "$BMODEL" = "TRUE" ]]; then
+        out "Building Assemble Group Model"
+        build_model;
 fi
 
 if [[ "$RUN" = "TRUE" ]]; then
