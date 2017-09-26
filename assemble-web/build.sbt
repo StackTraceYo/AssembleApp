@@ -10,9 +10,6 @@ scalaVersion := "2.11.8"
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
 
-lazy val client = project.
-  settings(Common.settings: _*)
-
 lazy val `user-api` = project.
   settings(Common.settings: _*).
   settings(
@@ -62,12 +59,6 @@ lazy val web = project.
     },
     sbt.Keys.test in assembly := {}
   )
-
-
-//lazy val chain = project.
-//  dependsOn(domain, common).
-//  settings(Common.settings: _*).
-//  settings(libraryDependencies ++= Dependencies.chainDependencies)
 
 lazy val root = (project in file(".")).
   aggregate(web, `user-api`, `assemble-geo`)
