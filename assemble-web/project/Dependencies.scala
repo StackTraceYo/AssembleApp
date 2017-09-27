@@ -1,9 +1,20 @@
+import com.trueaccord.scalapb.compiler.Version.scalapbVersion
 import play.sbt.PlayImport._
 import sbt._
-import com.trueaccord.scalapb.compiler.Version.scalapbVersion
 
 
 object Dependencies {
+
+  val akkaVersion = "2.5.4"
+
+  val akka =
+    Seq(
+      // Akka
+      "com.typesafe.akka" %% "akka-actor" % akkaVersion,
+      "com.typesafe.akka" %% "akka-persistence" % akkaVersion,
+      "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test",
+      "com.typesafe.akka" %% "akka-slf4j" % akkaVersion
+    )
 
 
   val json = Seq(
@@ -21,22 +32,24 @@ object Dependencies {
 
   val groupDeps: Seq[ModuleID] =
     test ++
+      akka ++
       Seq(
-        "com.typesafe.akka" % "akka-actor_2.11" % "2.5.4",
-        "com.typesafe.akka" % "akka-testkit_2.11" % "2.5.4"
+        "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
+        // Local LevelDB journal (Akka Persistence)
+        // http://doc.akka.io/docs/akka/current/scala/persistence.html#Local_LevelDB_journal
+        "org.iq80.leveldb" % "leveldb" % "0.9",
+        "commons-io" % "commons-io" % "2.4" % "test"
       )
 
   val groupModelDeps: Seq[ModuleID] =
     test ++
       Seq(
-        "com.trueaccord.scalapb"      %% "scalapb-runtime"  % scalapbVersion  % "protobuf"
+        "com.trueaccord.scalapb" %% "scalapb-runtime" % scalapbVersion % "protobuf"
       )
 
   val geoDeps: Seq[ModuleID] =
     test ++
       Seq(
-        "com.typesafe.akka" % "akka-actor_2.11" % "2.5.4",
-        "com.typesafe.akka" % "akka-testkit_2.11" % "2.5.4"
       )
 
   val userDependencies: Seq[ModuleID] =

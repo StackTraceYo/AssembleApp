@@ -1,7 +1,7 @@
 package org.stacktrace.yo.group.core.api.handler
 
 import akka.actor.{Actor, ActorLogging, ActorRef, PoisonPill}
-import org.stacktrace.yo.group.core.group.AssembleGroupProtocol.Creation.GroupCreated
+import org.stacktrace.yo.group.core.api.handler.GroupAPIResponseHandler.GroupCreated
 
 class GroupAPIResponseHandler(requester: ActorRef) extends Actor with ActorLogging {
 
@@ -12,3 +12,11 @@ class GroupAPIResponseHandler(requester: ActorRef) extends Actor with ActorLoggi
       self ! PoisonPill
   }
 }
+
+object GroupAPIResponseHandler {
+
+  case class GroupCreated(groupName: String)
+
+}
+
+
