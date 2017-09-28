@@ -20,7 +20,7 @@ class AssembleGroupController @Inject()(cc: ControllerComponents, tokenService: 
   }
 
   def createGroup: Action[CreateGroupRequest] = Action.async(parse.json[CreateGroupRequest]) { request =>
-    val retrieval = request.body
+    val creationRequest = request.body
     val auth = request.headers.get("X-Asm-Auth").getOrElse("Unauthorized")
     if (auth.equals("Unauthorized")) {
       redirectToUnauthorized
@@ -28,7 +28,7 @@ class AssembleGroupController @Inject()(cc: ControllerComponents, tokenService: 
       tokenService.findUserFromAuthToken(UUID.fromString(auth))
         .flatMap {
           case Some(user) =>
-            groupService.createGroup(user.id, retrieval.groupName)
+            groupService.createGroup(user, creationRequest)
               .map(groupAnswer => {
                 Ok(Json.toJson(GroupCreatedResponse(groupAnswer.groupId, success = true)))
               })
