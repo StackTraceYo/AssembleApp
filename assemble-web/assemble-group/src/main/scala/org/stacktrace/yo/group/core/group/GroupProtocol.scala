@@ -1,9 +1,10 @@
 package org.stacktrace.yo.group.core.group
 
-object AssembleGroupProtocol {
+object GroupProtocol {
 
   object Group {
 
+    sealed trait GroupMessage
 
     /**
       * An ack message for when the Underlying Group Is Ready.
@@ -12,7 +13,7 @@ object AssembleGroupProtocol {
       * to AssembleGroupSupervisor
       *
       */
-    case class GroupReady()
+    case class GroupReady() extends GroupMessage
 
   }
 

@@ -26,7 +26,7 @@ class AuthApiSpec extends PlaySpec with GuiceOneAppPerTest {
     "user service can create a user" in {
       val create = route(app, FakeRequest(POST, "/api/auth/user/create").withBody(Json.toJson(CreateUser("ahmad", "test")))).get
 
-      headers(create).keys should contain("X-Assemble-Auth")
+      headers(create).keys should contain("X-Asm-Auth")
       status(create) mustBe Status.OK
       contentType(create) mustBe Some("application/json")
       val created = Json.fromJson[UserCreated](contentAsJson(create)).get
@@ -57,7 +57,7 @@ class AuthApiSpec extends PlaySpec with GuiceOneAppPerTest {
 
       val retrieve = route(app, FakeRequest(POST, "/api/auth/user/authenticate").withBody(Json.toJson(SignIn("ahmadEmail")))).get
 
-      headers(create).keys should contain("X-Assemble-Auth")
+      headers(create).keys should contain("X-Asm-Auth")
       status(retrieve) mustBe Status.OK
       contentType(retrieve) mustBe Some("application/json")
       val retrieved = Json.fromJson[UserRetrieved](contentAsJson(retrieve)).get
@@ -71,7 +71,7 @@ class AuthApiSpec extends PlaySpec with GuiceOneAppPerTest {
       val retrieve = route(app, FakeRequest(POST, "/api/auth/user/retrieve").withBody(Json.toJson(RetrieveUser("123")))).get
 
       status(retrieve) mustBe Status.OK
-      headers(retrieve).keys should not contain "X-Assemble-Auth"
+      headers(retrieve).keys should not contain "X-Asm-Auth"
       contentType(retrieve) mustBe Some("application/json")
       val retrieved = Json.fromJson[FailedToRetrieve](contentAsJson(retrieve)).get
 
@@ -83,7 +83,7 @@ class AuthApiSpec extends PlaySpec with GuiceOneAppPerTest {
     "no user is returned on failed signin" in {
       val retrieve = route(app, FakeRequest(POST, "/api/auth/user/authenticate").withBody(Json.toJson(SignIn("ahmadEmail")))).get
 
-      headers(retrieve).keys should not contain "X-Assemble-Auth"
+      headers(retrieve).keys should not contain "X-Asm-Auth"
       status(retrieve) mustBe Status.OK
       contentType(retrieve) mustBe Some("application/json")
       val retrieved = Json.fromJson[FailedToSignIn](contentAsJson(retrieve)).get

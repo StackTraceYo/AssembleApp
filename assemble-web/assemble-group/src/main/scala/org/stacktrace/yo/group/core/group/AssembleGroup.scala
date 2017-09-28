@@ -4,11 +4,12 @@ import akka.actor.{ActorLogging, ActorRef}
 import akka.persistence.{PersistentActor, RecoveryCompleted, SnapshotOffer}
 import com.stacktrace.yo.assemble.group.GroupProtocol.Created
 import com.stacktrace.yo.assemble.group.Protocol.Event
-import org.stacktrace.yo.group.core.group.AssembleGroupProtocol.Group.GroupReady
+import org.stacktrace.yo.group.core.group.GroupProtocol.Group.GroupReady
 
 class AssembleGroup(supervisor: ActorRef) extends PersistentActor with ActorLogging {
 
   var groupId: String = _
+  var hostId: String = _
 
   override def receiveRecover: PartialFunction[Any, Unit] = {
     case event: Event =>
@@ -22,7 +23,7 @@ class AssembleGroup(supervisor: ActorRef) extends PersistentActor with ActorLogg
   }
 
   override def receiveCommand: PartialFunction[Any, Unit] = {
-    case evt@Created(name: String) =>
+    case evt@Created(hostid: String, groupid: String) =>
       log.debug("Group Initialization Command Recieved")
       persist(evt)(updateState)
     case _ =>
@@ -30,8 +31,9 @@ class AssembleGroup(supervisor: ActorRef) extends PersistentActor with ActorLogg
   }
 
   val updateState: Event => Unit = {
-    case Created(name) =>
-      groupId = name
+    case Created(hostid: String, groupid: String) =>
+      groupId = groupid
+      hostId = hostid
       sender() ! GroupReady()
       saveSnapshot()
   }

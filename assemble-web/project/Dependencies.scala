@@ -26,7 +26,8 @@ object Dependencies {
 
   val test = Seq(
     "org.mockito" % "mockito-core" % "2.10.0" % "test",
-    "org.scalatest" % "scalatest_2.11" % "2.2.5" % "test"
+    "org.scalatest" % "scalatest_2.11" % "2.2.5" % "test",
+    "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test"
   )
 
   val groupDeps: Seq[ModuleID] =

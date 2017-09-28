@@ -1,9 +1,9 @@
 package org.stacktrace.yo.group.core.api.handler
 
 import akka.actor.{Actor, ActorLogging, ActorRef, PoisonPill}
-import org.stacktrace.yo.group.core.api.handler.GroupAPIResponseHandler.GroupCreated
+import org.stacktrace.yo.group.core.api.GroupAPIProtocol.GroupCreated
 
-class GroupAPIResponseHandler(requester: ActorRef) extends Actor with ActorLogging {
+class GroupResponseHandler(requester: ActorRef) extends Actor with ActorLogging {
 
   override def receive: Receive = {
 
@@ -14,9 +14,8 @@ class GroupAPIResponseHandler(requester: ActorRef) extends Actor with ActorLoggi
   }
 }
 
-object GroupAPIResponseHandler {
+object GroupResponseHandler {
 
-  case class GroupCreated(groupId: String)
 
 }
 

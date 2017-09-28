@@ -1,4 +1,4 @@
-package api.group
+package api.group.controller
 
 import java.util.UUID
 

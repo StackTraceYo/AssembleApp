@@ -1,5 +1,4 @@
 import com.google.inject.AbstractModule
-import org.stacktrace.yo.group.core.api.{APIClient, AssembleAPIClient}
 
 /**
   * This class is a Guice module that tells Guice how to bind several
@@ -14,8 +13,7 @@ import org.stacktrace.yo.group.core.api.{APIClient, AssembleAPIClient}
 class Module extends AbstractModule {
 
   override def configure(): Unit = {
-    bind(classOf[APIClient])
-      .to(classOf[AssembleAPIClient])
+
   }
 
 }

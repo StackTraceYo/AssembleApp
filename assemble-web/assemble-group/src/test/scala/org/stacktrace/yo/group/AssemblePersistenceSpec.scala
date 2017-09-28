@@ -6,6 +6,8 @@ import com.typesafe.config.Config
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 import org.stacktrace.yo.PersistenceCleanup
 
+import scala.concurrent.ExecutionContextExecutor
+
 /**
   * Created by Stacktraceyo on 9/27/17.
   */
@@ -16,7 +18,10 @@ abstract class AssemblePersistenceSpec(system: ActorSystem) extends TestKit(syst
   with BeforeAndAfterAll
   with PersistenceCleanup {
 
+  implicit val ec: ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global
+
   def this(name: String, config: Config) = this(ActorSystem(name, config))
+
   override protected def beforeAll() = deleteStorageLocations()
 
   override protected def afterAll() = {

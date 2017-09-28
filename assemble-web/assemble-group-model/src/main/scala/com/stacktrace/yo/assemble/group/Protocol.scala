@@ -8,7 +8,7 @@ object Protocol {
   //Commands: Do this action
   sealed trait Command
 
-  case class CreateGroup(groupName: String) extends Command
+  case class CreateGroup(groupName: String, hostId: String) extends Command
 
   case class Join() extends Command
 
