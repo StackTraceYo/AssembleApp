@@ -25,12 +25,14 @@ class AssembleGroup(supervisor: ActorRef) extends PersistentActor with ActorLogg
     case evt@Created(name: String) =>
       log.debug("Group Initialization Command Recieved")
       persist(evt)(updateState)
+    case _ =>
+      log.debug("Got Unknown Command")
   }
 
   val updateState: Event => Unit = {
     case Created(name) =>
       groupId = name
-      supervisor ! GroupReady()
+      sender() ! GroupReady()
       saveSnapshot()
   }
 

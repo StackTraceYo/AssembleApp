@@ -1,14 +1,13 @@
 package org.stacktrace.yo.group.core
 
+import java.util.UUID
+
 import akka.actor.{ActorSystem, Props}
-import akka.testkit.{TestActorRef, TestProbe}
-import com.stacktrace.yo.assemble.group.GroupProtocol.Created
+import akka.testkit.TestProbe
 import org.scalatest.MustMatchers._
 import org.stacktrace.yo.group.AssemblePersistenceSpec
 import org.stacktrace.yo.group.core.api.handler.GroupAPIResponseHandler.GroupCreated
-import org.stacktrace.yo.group.core.group.AssembleGroup
 import org.stacktrace.yo.group.core.group.AssembleGroupProtocol.Creation.CreateGroup
-import org.stacktrace.yo.group.core.group.AssembleGroupProtocol.Group.GroupReady
 import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector.GroupCreatedRef
 import org.stacktrace.yo.group.core.group.supervisor.AssembleGroupSupervisor
 
@@ -19,17 +18,11 @@ class AssembleGroupSupervisorSpec extends AssemblePersistenceSpec(ActorSystem("t
     "sends back a group created message" in {
       val director = TestProbe()
       val actorRef = system.actorOf(Props(new AssembleGroupSupervisor(director.ref)))
-      actorRef ! CreateGroup("testactorname")
-      Thread.sleep(5000)
-      expectMsg(GroupCreated("testactorname")) //sender gets the name
+      val id = UUID.randomUUID().toString
+      actorRef ! CreateGroup(id)
+      expectMsg(GroupCreated(id)) //sender gets the name
       val message = director.expectMsgType[GroupCreatedRef] //director gets the name and ref
-      message.groupName mustBe "testactorname"
+      message.groupName mustBe id
     }
-
   }
-
-//  val testProbe = TestProbe()
-//  val groupActor = system.actorOf(Props(new AssembleGroup(testProbe.ref)))
-//  groupActor ! Created("test-actor-name")
-//  expectMsg(GroupReady())
 }

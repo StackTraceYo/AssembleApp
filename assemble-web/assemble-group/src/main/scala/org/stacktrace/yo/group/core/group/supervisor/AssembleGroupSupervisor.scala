@@ -36,7 +36,7 @@ class AssembleGroupSupervisor(director: ActorRef) extends PersistentActor with A
 
   override def receiveCommand: PartialFunction[Any, Unit] = {
     case msg@CreateGroup(groupName: String) =>
-      val event = Created(name)
+      val event = Created(groupName)
       persist(event)(updateState)
   }
 
@@ -44,20 +44,20 @@ class AssembleGroupSupervisor(director: ActorRef) extends PersistentActor with A
     case evt@Created(groupName) =>
       name = groupName
       responseHandler = Option(sender())
-      group ! Created(groupName)
+      log.debug("Created Group State {}", name)
+      group ! evt
       become(waitForInit)
   }
 
 
   def waitForInit: Receive = {
     case GroupReady() =>
-      log.info("Group Ready")
       director ! GroupCreatedRef(name, group) //tell director the group is ready
       responseHandler match {
         case Some(handler) =>
           handler ! GroupCreated(name) // tell response handler to go
           ready = true
-          log.info("Group Ready to Recieve Messages")
+          log.info("Supervisor {} Ready to Recieve Messages", name)
           become(initializedReceiveCommand)
         case None =>
           log.error("No Handler For Response")
