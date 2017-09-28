@@ -17,12 +17,13 @@ class AssembleGroupDirector extends Actor with ActorLogging {
   val groupRefs: mutable.HashMap[String, ActorRef] = scala.collection.mutable.HashMap[String, ActorRef]()
 
   override def receive: Receive = LoggingReceive {
-    case msg@CreateAssembleGroup() =>
+    case msg@CreateAssembleGroup(host: String) =>
       //get a reference to the original sender
       val api = sender()
       //generate a name for the new supervisor
       val name = generateName()
       //create supervisor for this new group
+      log.debug("Creating Supervisor {}", name)
       val supervisor = context.actorOf(AssembleGroupDirector.supervisionProps(self))
       //create a new response handler for this request which will deal with sending back a response to the sender
       //forward the message

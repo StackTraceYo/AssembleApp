@@ -45,6 +45,7 @@ class GroupApiSpec extends PlaySpec with GuiceOneAppPerSuite {
 
       created shouldBe a[GroupCreatedResponse]
       created.success shouldBe true
+      created.groupId should not be empty
     }
 
     "not authorized user can not create a group" in {

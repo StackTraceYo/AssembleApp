@@ -1,4 +1,3 @@
-import sbt.Level
 import sbtassembly.Log4j2MergeStrategy
 
 name := AssembleBuild.NamePrefix + "root"

@@ -5,6 +5,6 @@ package org.stacktrace.yo.group.core.api
   */
 object AssembleGroupAPIProtocol {
 
-  case class CreateAssembleGroup()
+  case class CreateAssembleGroup(id: String)
 
 }

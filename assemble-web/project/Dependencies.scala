@@ -16,7 +16,6 @@ object Dependencies {
       "com.typesafe.akka" %% "akka-slf4j" % akkaVersion
     )
 
-
   val json = Seq(
     "com.typesafe.play" % "play-json_2.11" % "2.6.4"
   )
@@ -34,6 +33,7 @@ object Dependencies {
     test ++
       akka ++
       Seq(
+        guice,
         "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
         // Local LevelDB journal (Akka Persistence)
         // http://doc.akka.io/docs/akka/current/scala/persistence.html#Local_LevelDB_journal

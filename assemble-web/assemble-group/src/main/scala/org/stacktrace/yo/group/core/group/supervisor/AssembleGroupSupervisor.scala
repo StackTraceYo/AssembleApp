@@ -19,7 +19,7 @@ class AssembleGroupSupervisor(director: ActorRef) extends PersistentActor with A
 
   val group: ActorRef = context.actorOf(AssembleGroupSupervisor.groupProps(self))
   var ready: Boolean = false
-  var name: String = _
+  var groupid: String = _
 
 
   override def receiveRecover: PartialFunction[Any, Unit] = {
@@ -41,9 +41,9 @@ class AssembleGroupSupervisor(director: ActorRef) extends PersistentActor with A
 
   val updateState: Event => Unit = {
     case evt@Created(groupName) =>
-      name = groupName
+      groupid = groupName
       responseHandler = Option(sender())
-      log.debug("Created Group State {}", name)
+      log.debug("Created Group State {}", groupid)
       group ! evt
       become(waitForInit)
   }
@@ -51,12 +51,12 @@ class AssembleGroupSupervisor(director: ActorRef) extends PersistentActor with A
 
   def waitForInit: Receive = {
     case GroupReady() =>
-      director ! GroupCreatedRef(name, group) //tell director the group is ready
+      director ! GroupCreatedRef(groupid, group) //tell director the group is ready
       responseHandler match {
         case Some(handler) =>
-          handler ! GroupCreated(name) // tell response handler to go
+          handler ! GroupCreated(groupid) // tell response handler to go
           ready = true
-          log.info("Supervisor {} Ready to Recieve Messages", name)
+          log.info("Supervisor {} Ready to Recieve Messages", groupid)
           become(initializedReceiveCommand)
         case None =>
           log.error("No Handler For Response")
