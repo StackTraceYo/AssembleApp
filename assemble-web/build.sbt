@@ -37,7 +37,7 @@ lazy val `assemble-group` = project.
 lazy val `assemble-geo` = project.
   settings(Common.settings: _*).
   settings(
-    libraryDependencies ++= Dependencies.groupDeps
+    libraryDependencies ++= Dependencies.geoDeps
   )
 
 lazy val web = project.

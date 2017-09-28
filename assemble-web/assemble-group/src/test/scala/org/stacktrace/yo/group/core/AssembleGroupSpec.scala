@@ -1,21 +1,20 @@
 package org.stacktrace.yo.group.core
 
-import akka.actor.ActorSystem
-import akka.testkit.{ImplicitSender, TestActorRef, TestKit, TestProbe}
-import org.scalatest.WordSpecLike
-import org.stacktrace.yo.group.core.group.AssembleGroupProtocol.Group.{GroupReady, Init}
+import akka.actor.{ActorSystem, Props}
+import akka.testkit.TestProbe
+import com.stacktrace.yo.assemble.group.GroupProtocol.Created
+import org.stacktrace.yo.group.AssemblePersistenceSpec
 import org.stacktrace.yo.group.core.group.AssembleGroup
+import org.stacktrace.yo.group.core.group.AssembleGroupProtocol.Group.GroupReady
 
-class AssembleGroupSpec extends TestKit(ActorSystem("testSystem"))
-  with ImplicitSender
-  with WordSpecLike {
+class AssembleGroupSpec extends AssemblePersistenceSpec(ActorSystem("testSystem")) {
 
   "A Group Actor" must {
 
     "send back a ready message with it is initialized" in {
-      val testProbe = TestProbe().ref
-      val actorRef = TestActorRef(new AssembleGroup(testProbe))
-      actorRef ! Init()
+      val testProbe = TestProbe()
+      val groupActor = system.actorOf(Props(new AssembleGroup(testProbe.ref)))
+      groupActor ! Created("test-actor-name")
       expectMsg(GroupReady())
     }
 

@@ -10,7 +10,7 @@ option java_package = "com.stacktrace.yo.assemble.group";
 
 message Created {
     option (scalapb.message).extends = "com.stacktrace.yo.assemble.group.Protocol.Event";
-    string value = 1;
+    string groupname = 1;
 }
 
 message Joined {
