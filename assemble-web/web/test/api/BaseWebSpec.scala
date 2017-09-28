@@ -1,4 +1,4 @@
-package org.stacktrace.yo
+package api
 
 import java.io.File
 
@@ -10,7 +10,8 @@ import scala.util.Try
 /**
   * Created by Stacktraceyo on 9/27/17.
   */
-trait PersistenceCleanup {
+trait BaseWebSpec {
+
   def system: ActorSystem
 
   // Obtain information about the event journal and snapshot journal from the Akka configuration

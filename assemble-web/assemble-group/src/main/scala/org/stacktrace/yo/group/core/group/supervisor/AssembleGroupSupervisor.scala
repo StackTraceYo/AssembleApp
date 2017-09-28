@@ -6,7 +6,7 @@ import com.stacktrace.yo.assemble.group.GroupProtocol.Created
 import com.stacktrace.yo.assemble.group.Protocol.{CreateGroup, Event}
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.GroupCreated
 import org.stacktrace.yo.group.core.group.AssembleGroup
-import org.stacktrace.yo.group.core.group.GroupProtocol.Group.GroupReady
+import org.stacktrace.yo.group.core.group.GroupProtocol.GroupReady
 import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector.GroupCreatedRef
 
 class AssembleGroupSupervisor(director: ActorRef) extends PersistentActor with ActorLogging with GroupSupervisionStrategy {
@@ -35,7 +35,7 @@ class AssembleGroupSupervisor(director: ActorRef) extends PersistentActor with A
 
   override def receiveCommand: PartialFunction[Any, Unit] = {
     case msg@CreateGroup(groupId: String, hostId: String) =>
-      val event = Created(groupId)
+      val event = Created(hostId,groupId)
       persist(event)(updateState)
   }
 

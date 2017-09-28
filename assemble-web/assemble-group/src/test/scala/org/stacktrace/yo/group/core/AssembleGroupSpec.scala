@@ -5,7 +5,7 @@ import akka.testkit.TestProbe
 import com.stacktrace.yo.assemble.group.GroupProtocol.Created
 import org.stacktrace.yo.group.AssemblePersistenceSpec
 import org.stacktrace.yo.group.core.group.AssembleGroup
-import org.stacktrace.yo.group.core.group.GroupProtocol.Group.GroupReady
+import org.stacktrace.yo.group.core.group.GroupProtocol.GroupReady
 
 class AssembleGroupSpec extends AssemblePersistenceSpec(ActorSystem("testSystem")) {
 

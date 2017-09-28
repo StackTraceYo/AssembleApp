@@ -4,7 +4,9 @@ import play.api.libs.json.{Json, OFormat}
 
 object Response {
 
-  case class GroupCreatedResponse(groupId: String, success : Boolean)
+  sealed trait AssembleResponse
+
+  case class GroupCreatedResponse(groupId: String, success: Boolean) extends AssembleResponse
 
   implicit val createGroupResponseFormats: OFormat[GroupCreatedResponse] = Json.format[GroupCreatedResponse]
 

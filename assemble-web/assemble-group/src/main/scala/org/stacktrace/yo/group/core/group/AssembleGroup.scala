@@ -4,7 +4,7 @@ import akka.actor.{ActorLogging, ActorRef}
 import akka.persistence.{PersistentActor, RecoveryCompleted, SnapshotOffer}
 import com.stacktrace.yo.assemble.group.GroupProtocol.Created
 import com.stacktrace.yo.assemble.group.Protocol.Event
-import org.stacktrace.yo.group.core.group.GroupProtocol.Group.GroupReady
+import org.stacktrace.yo.group.core.group.GroupProtocol.GroupReady
 
 class AssembleGroup(supervisor: ActorRef) extends PersistentActor with ActorLogging {
 
