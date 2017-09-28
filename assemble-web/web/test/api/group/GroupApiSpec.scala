@@ -1,17 +1,24 @@
 package api.group
 
+import java.util.UUID
+
+import api.auth.Request.CreateUser
 import api.group.Request.CreateGroupRequest
 import api.group.Response.GroupCreatedResponse
 import org.scalatest.Matchers._
 import org.scalatestplus.play.PlaySpec
-import org.scalatestplus.play.guice.GuiceOneAppPerTest
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
+import scala.concurrent.Await
+import scala.concurrent.duration._
+import scala.language.postfixOps
 
-class GroupApiSpec extends PlaySpec with GuiceOneAppPerTest {
+
+class GroupApiSpec extends PlaySpec with GuiceOneAppPerSuite {
 
   "AssembleGroupController" should {
 
@@ -23,73 +30,39 @@ class GroupApiSpec extends PlaySpec with GuiceOneAppPerTest {
       contentAsString(home) must include("Group Service Ready.")
     }
 
-    "user service can create a group" in {
-      val create = route(app, FakeRequest(POST, "/api/group/create").withBody(Json.toJson(CreateGroupRequest("test-group-name")))).get
+    "authorized user can create a group" in {
+      val user = route(app, FakeRequest(POST, "/api/auth/user/create").withBody(Json.toJson(CreateUser(UUID.randomUUID().toString, UUID.randomUUID().toString)))).get
+      val res = Await.result(user, 5 seconds)
+
+      val headerVal = res.header.headers("X-Asm-Auth")
+
+      val create = route(app, FakeRequest(POST, "/api/group/create")
+        .withBody(Json.toJson(CreateGroupRequest("test-group-name")))
+        .withHeaders("X-Asm-Auth" -> headerVal))
+        .get
 
       val created = Json.fromJson[GroupCreatedResponse](contentAsJson(create)).get
 
       created shouldBe a[GroupCreatedResponse]
-      created.groupId shouldBe "test"
-
+      created.success shouldBe true
     }
-    //
-    //    "user service can retrieve user" in {
-    //      val create = route(app, FakeRequest(POST, "/api/auth/user/create").withBody(Json.toJson(CreateUser("ahmad", "test")))).get
-    //      val created = Json.fromJson[UserCreated](contentAsJson(create)).get
-    //
-    //      val retrieve = route(app, FakeRequest(POST, "/api/auth/user/retrieve").withBody(Json.toJson(RetrieveUser(created.id)))).get
-    //
-    //      status(retrieve) mustBe Status.OK
-    //      contentType(retrieve) mustBe Some("application/json")
-    //      val retrieved = Json.fromJson[UserRetrieved](contentAsJson(retrieve)).get
-    //
-    //      retrieved shouldBe a[UserRetrieved]
-    //      retrieved.success mustBe true
-    //      retrieved.user.id mustBe created.id
-    //    }
-    //
-    //    "user service can retrieve user by email" in {
-    //      val create = route(app, FakeRequest(POST, "/api/auth/user/create").withBody(Json.toJson(CreateUser("ahmadEmail", "test")))).get
-    //      val created = Json.fromJson[UserCreated](contentAsJson(create)).get
-    //
-    //      val retrieve = route(app, FakeRequest(POST, "/api/auth/user/authenticate").withBody(Json.toJson(SignIn("ahmadEmail")))).get
-    //
-    //      headers(create).keys should contain("X-Assemble-Auth")
-    //      status(retrieve) mustBe Status.OK
-    //      contentType(retrieve) mustBe Some("application/json")
-    //      val retrieved = Json.fromJson[UserRetrieved](contentAsJson(retrieve)).get
-    //
-    //      retrieved shouldBe a[UserRetrieved]
-    //      retrieved.success mustBe true
-    //      retrieved.user.id mustBe created.id
-    //    }
-    //
-    //    "no user is returned on failed user" in {
-    //      val retrieve = route(app, FakeRequest(POST, "/api/auth/user/retrieve").withBody(Json.toJson(RetrieveUser("123")))).get
-    //
-    //      status(retrieve) mustBe Status.OK
-    //      headers(retrieve).keys should not contain "X-Assemble-Auth"
-    //      contentType(retrieve) mustBe Some("application/json")
-    //      val retrieved = Json.fromJson[FailedToRetrieve](contentAsJson(retrieve)).get
-    //
-    //      retrieved shouldBe a[FailedToRetrieve]
-    //      retrieved.success mustBe false
-    //      retrieved.request.id mustBe "123"
-    //    }
-    //
-    //    "no user is returned on failed signin" in {
-    //      val retrieve = route(app, FakeRequest(POST, "/api/auth/user/authenticate").withBody(Json.toJson(SignIn("ahmadEmail")))).get
-    //
-    //      headers(retrieve).keys should not contain "X-Assemble-Auth"
-    //      status(retrieve) mustBe Status.OK
-    //      contentType(retrieve) mustBe Some("application/json")
-    //      val retrieved = Json.fromJson[FailedToSignIn](contentAsJson(retrieve)).get
-    //
-    //      retrieved shouldBe a[FailedToSignIn]
-    //      retrieved.success mustBe false
-    //      retrieved.request.email mustBe "ahmadEmail"
-    //    }
 
+    "not authorized user can not create a group" in {
+      val create = route(app, FakeRequest(POST, "/api/group/create")
+        .withBody(Json.toJson(CreateGroupRequest("test-group-name")))
+        .withHeaders("X-Asm-Auth" -> UUID.randomUUID().toString))
+        .get
+
+      status(create) mustBe Status.UNAUTHORIZED
+    }
+
+    "not authorized user can not create a group without header" in {
+      val create = route(app, FakeRequest(POST, "/api/group/create")
+        .withBody(Json.toJson(CreateGroupRequest("test-group-name"))))
+        .get
+
+      status(create) mustBe Status.UNAUTHORIZED
+    }
   }
 
 }
