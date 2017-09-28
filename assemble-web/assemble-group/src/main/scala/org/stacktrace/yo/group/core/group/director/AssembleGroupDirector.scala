@@ -4,9 +4,9 @@ import java.util.UUID
 
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import akka.event.LoggingReceive
+import com.stacktrace.yo.assemble.group.Protocol.CreateGroup
 import org.stacktrace.yo.group.core.api.AssembleGroupAPIProtocol.CreateAssembleGroup
 import org.stacktrace.yo.group.core.api.handler.GroupAPIResponseHandler
-import org.stacktrace.yo.group.core.group.AssembleGroupProtocol.Creation.CreateGroup
 import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector.GroupCreatedRef
 import org.stacktrace.yo.group.core.group.supervisor.AssembleGroupSupervisor
 

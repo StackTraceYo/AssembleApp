@@ -3,10 +3,9 @@ package org.stacktrace.yo.group.core.group.supervisor
 import akka.actor.{ActorLogging, ActorRef, Props}
 import akka.persistence.{PersistentActor, RecoveryCompleted, SnapshotOffer}
 import com.stacktrace.yo.assemble.group.GroupProtocol.Created
-import com.stacktrace.yo.assemble.group.Protocol.Event
+import com.stacktrace.yo.assemble.group.Protocol.{CreateGroup, Event}
 import org.stacktrace.yo.group.core.api.handler.GroupAPIResponseHandler.GroupCreated
 import org.stacktrace.yo.group.core.group.AssembleGroup
-import org.stacktrace.yo.group.core.group.AssembleGroupProtocol.Creation.CreateGroup
 import org.stacktrace.yo.group.core.group.AssembleGroupProtocol.Group.GroupReady
 import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector.GroupCreatedRef
 

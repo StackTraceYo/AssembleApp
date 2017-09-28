@@ -5,7 +5,6 @@ import akka.testkit.TestActorRef
 import org.scalatest.MustMatchers._
 import org.stacktrace.yo.group.core.api.AssembleGroupAPIProtocol.CreateAssembleGroup
 import org.stacktrace.yo.group.core.api.handler.GroupAPIResponseHandler.GroupCreated
-import org.stacktrace.yo.group.core.group.AssembleGroupProtocol.Creation.CreateGroup
 import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector
 
 class AssembleGroupDirectorSpec extends AssemblePersistenceSpec(ActorSystem("testSystem")) {

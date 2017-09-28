@@ -13,3 +13,7 @@ POST        /api/auth/user/authenticate        api.auth.controller.UserControlle
 
 GET         /api/auth/token/up                 api.auth.controller.AuthController.index
 GET         /api/auth/token/create             api.auth.controller.AuthController.index
+
+#Routes for the group api
+GET         /api/group/up                      api.group.controller.AssembleGroupController.index
+POST        /api/group/create                  api.group.controller.AssembleGroupController.createGroup
