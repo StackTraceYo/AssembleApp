@@ -7,7 +7,7 @@ class GroupResponseHandler(requester: ActorRef) extends Actor with ActorLogging 
 
   override def receive: Receive = {
 
-    case msg@GroupCreated(id) =>
+    case msg@GroupCreated(hostidid) =>
       log.debug("Replying with : {}", msg)
       requester ! msg
       self ! PoisonPill

@@ -7,6 +7,12 @@ import "google/protobuf/wrappers.proto";
 package com.stacktrace.yo.assemble.group;
 option java_package = "com.stacktrace.yo.assemble.group";
 
+message AssembleGroupState {
+    option (scalapb.message).extends = "com.stacktrace.yo.assemble.group.Protocol.GroupState";
+    string hostid = 1;
+    string groupid = 2;
+}
+
 
 message Created {
     option (scalapb.message).extends = "com.stacktrace.yo.assemble.group.Protocol.Event";

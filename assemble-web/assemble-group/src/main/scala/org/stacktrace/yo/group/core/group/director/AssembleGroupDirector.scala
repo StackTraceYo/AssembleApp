@@ -24,10 +24,10 @@ class AssembleGroupDirector extends Actor with ActorLogging {
       val supervisorId = generateName()
       //create supervisor for this new group
       log.debug("Creating Supervisor {}", supervisorId)
-      val supervisor = context.actorOf(AssembleGroupDirector.supervisionProps(self))
+      val supervisor = context.actorOf(AssembleGroupDirector.supervisionProps(self, supervisorId))
       //create a new response handler for this request which will deal with sending back a response to the sender
       //forward the message
-      supervisor.tell(CreateGroup(supervisorId, hostId), createGroupHandler(api))
+      supervisor.tell(CreateGroup(hostId), createGroupHandler(api))
     case GroupCreatedRef(groupName, actorRef) =>
       groupRefs.put(groupName, actorRef)
 
@@ -44,8 +44,8 @@ class AssembleGroupDirector extends Actor with ActorLogging {
 
 object AssembleGroupDirector {
 
-  def supervisionProps(director: ActorRef): Props = {
-    Props(new AssembleGroupSupervisor(director))
+  def supervisionProps(director: ActorRef, id: String): Props = {
+    Props(new AssembleGroupSupervisor(director, id))
   }
 
   def responseHandlerProps(sender: ActorRef): Props = {
