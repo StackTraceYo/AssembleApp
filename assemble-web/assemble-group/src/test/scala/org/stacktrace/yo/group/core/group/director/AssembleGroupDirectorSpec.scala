@@ -1,10 +1,10 @@
-package org.stacktrace.yo.group
+package org.stacktrace.yo.group.core.group.director
 
 import akka.actor.ActorSystem
 import akka.testkit.TestActorRef
 import org.scalatest.MustMatchers._
+import org.stacktrace.yo.group.AssemblePersistenceSpec
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, GroupCreated}
-import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector
 
 class AssembleGroupDirectorSpec extends AssemblePersistenceSpec(ActorSystem("testSystem")) {
 

@@ -1,4 +1,4 @@
-package org.stacktrace.yo.group.core
+package org.stacktrace.yo.group.core.group.core
 
 import java.util.UUID
 
@@ -9,7 +9,6 @@ import com.stacktrace.yo.assemble.group.Protocol.{CreateGroup, GetState}
 import org.scalatest.MustMatchers._
 import org.stacktrace.yo.group.AssemblePersistenceSpec
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.GroupCreated
-import org.stacktrace.yo.group.core.group.core.AssembleGroupActor
 import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector.GroupCreatedRef
 
 class AssembleGroupActorSpec extends AssemblePersistenceSpec(ActorSystem("testSystem")) {

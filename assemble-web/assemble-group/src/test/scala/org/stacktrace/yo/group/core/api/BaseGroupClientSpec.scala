@@ -1,7 +1,7 @@
-package org.stacktrace.yo.group
+package org.stacktrace.yo.group.core.api
 
 import akka.actor.ActorSystem
-import org.stacktrace.yo.group.core.api.BaseGroupClient
+import org.stacktrace.yo.group.AssemblePersistenceSpec
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.CreateAssembleGroup
 
 import scala.concurrent.Await

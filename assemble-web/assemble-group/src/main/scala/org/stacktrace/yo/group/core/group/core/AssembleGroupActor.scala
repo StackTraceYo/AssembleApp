@@ -7,7 +7,7 @@ import com.stacktrace.yo.assemble.group.Protocol._
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.GroupCreated
 import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector.GroupCreatedRef
 
-class AssembleGroupActor(director: ActorRef, groupId: String) extends PersistentActor with ActorLogging {
+class AssembleGroupActor(supervisor: ActorRef, groupId: String) extends PersistentActor with ActorLogging {
 
   import context._
 
@@ -17,6 +17,7 @@ class AssembleGroupActor(director: ActorRef, groupId: String) extends Persistent
 
   var state: AssembleGroupState = AssembleGroupState()
   var ready: Boolean = false
+
 
   override def receiveRecover: PartialFunction[Any, Unit] = {
     case event: Event =>
@@ -46,13 +47,12 @@ class AssembleGroupActor(director: ActorRef, groupId: String) extends Persistent
       log.debug("Created Group State {}", groupid)
       state = state.update(_.groupid := groupid, _.hostid := hostId)
 
-      director ! GroupCreatedRef(groupId, self)
-
       responseHandler match {
         case Some(handler) =>
           handler ! GroupCreated(groupId) // tell response handler to go
           ready = true
           log.info("Group {} Ready to Recieve Messages", groupId)
+          supervisor ! Ready()
           become(readyToRecieve)
         case None =>
           log.error("No Handler For Response")

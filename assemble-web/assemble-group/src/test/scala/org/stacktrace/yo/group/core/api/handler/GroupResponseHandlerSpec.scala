@@ -1,4 +1,4 @@
-package org.stacktrace.yo.group.handler
+package org.stacktrace.yo.group.core.api.handler
 
 import akka.actor.ActorSystem
 import akka.testkit.{ImplicitSender, TestActorRef, TestKit, TestProbe}
