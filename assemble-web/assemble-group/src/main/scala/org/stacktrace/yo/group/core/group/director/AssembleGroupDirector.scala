@@ -7,8 +7,8 @@ import akka.event.LoggingReceive
 import com.stacktrace.yo.assemble.group.Protocol.CreateGroup
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.CreateAssembleGroup
 import org.stacktrace.yo.group.core.api.handler.GroupResponseHandler
+import org.stacktrace.yo.group.core.group.core.AssembleGroupActor
 import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector.GroupCreatedRef
-import org.stacktrace.yo.group.core.group.supervisor.AssembleGroupSupervisor
 
 import scala.collection.mutable
 
@@ -21,10 +21,10 @@ class AssembleGroupDirector extends Actor with ActorLogging {
       //get a reference to the original sender
       val api = sender()
       //generate a name for the new supervisor
-      val supervisorId = generateName()
-      //create supervisor for this new group
-      log.debug("Creating Supervisor {}", supervisorId)
-      val supervisor = context.actorOf(AssembleGroupDirector.supervisionProps(self, supervisorId))
+      val groupActorId = generateName()
+      //create this new group
+      log.debug("Creating Group Actor {}", groupActorId)
+      val supervisor = context.actorOf(AssembleGroupDirector.groupActor(self, groupActorId))
       //create a new response handler for this request which will deal with sending back a response to the sender
       //forward the message
       supervisor.tell(CreateGroup(hostId), createGroupHandler(api))
@@ -44,8 +44,8 @@ class AssembleGroupDirector extends Actor with ActorLogging {
 
 object AssembleGroupDirector {
 
-  def supervisionProps(director: ActorRef, id: String): Props = {
-    Props(new AssembleGroupSupervisor(director, id))
+  def groupActor(director: ActorRef, id: String): Props = {
+    Props(new AssembleGroupActor(director, id))
   }
 
   def responseHandlerProps(sender: ActorRef): Props = {

@@ -1,4 +1,4 @@
-package org.stacktrace.yo.group.core.group.supervisor
+package org.stacktrace.yo.group.core.group.core
 
 import akka.actor.{ActorLogging, ActorRef}
 import akka.persistence.{PersistentActor, RecoveryCompleted, SnapshotOffer}
@@ -7,13 +7,13 @@ import com.stacktrace.yo.assemble.group.Protocol._
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.GroupCreated
 import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector.GroupCreatedRef
 
-class AssembleGroupSupervisor(director: ActorRef, groupId: String) extends PersistentActor with ActorLogging with GroupSupervisionStrategy {
+class AssembleGroupActor(director: ActorRef, groupId: String) extends PersistentActor with ActorLogging {
 
   import context._
 
   private var responseHandler: Option[ActorRef] = None
 
-  override def persistenceId: String = "assemble-group-supervisor-" + groupId
+  override def persistenceId: String = "assemble-group-actor-" + groupId
 
   var state: AssembleGroupState = AssembleGroupState()
   var ready: Boolean = false
@@ -52,7 +52,7 @@ class AssembleGroupSupervisor(director: ActorRef, groupId: String) extends Persi
         case Some(handler) =>
           handler ! GroupCreated(groupId) // tell response handler to go
           ready = true
-          log.info("Supervisor {} Ready to Recieve Messages", groupId)
+          log.info("Group {} Ready to Recieve Messages", groupId)
           become(readyToRecieve)
         case None =>
           log.error("No Handler For Response")
