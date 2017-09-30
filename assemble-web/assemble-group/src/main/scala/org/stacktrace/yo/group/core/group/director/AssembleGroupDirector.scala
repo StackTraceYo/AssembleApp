@@ -5,7 +5,7 @@ import java.util.UUID
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import akka.event.LoggingReceive
 import com.stacktrace.yo.assemble.group.Protocol.CreateGroup
-import org.stacktrace.yo.group.core.api.GroupAPIProtocol.CreateAssembleGroup
+import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, FindAssembleGroup, GroupRetrieved}
 import org.stacktrace.yo.group.core.api.handler.GroupResponseHandler
 import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector.GroupCreatedRef
 import org.stacktrace.yo.group.core.group.supervisor.AssembleGroupSupervisor
@@ -28,9 +28,21 @@ class AssembleGroupDirector extends Actor with ActorLogging {
       //create a new response handler for this request which will deal with sending back a response to the sender
       //forward the message
       supervisor.tell(CreateGroup(hostId), createGroupHandler(api))
-    case GroupCreatedRef(groupName, actorRef) =>
-      groupRefs.put(groupName, actorRef)
+    case GroupCreatedRef(groupid, actorRef) =>
+      groupRefs.put(groupid, actorRef)
 
+    case FindAssembleGroup(groupID: String) =>
+      val api = sender()
+      api ! lookup(groupID)
+  }
+
+  private def lookup(groupId: String): Option[GroupRetrieved] = {
+    groupRefs.get(groupId) match {
+      case Some(group) =>
+        Some(GroupRetrieved(groupId))
+      case None =>
+        Option.empty
+    }
   }
 
   private def generateName() = {

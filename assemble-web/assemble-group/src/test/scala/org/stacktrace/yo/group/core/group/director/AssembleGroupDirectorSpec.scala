@@ -1,20 +1,31 @@
 package org.stacktrace.yo.group.core.group.director
 
-import akka.actor.ActorSystem
-import akka.testkit.TestActorRef
+import akka.actor.{ActorSystem, Props}
+import akka.testkit.{TestActorRef, TestProbe}
 import org.scalatest.MustMatchers._
 import org.stacktrace.yo.group.AssemblePersistenceSpec
-import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, GroupCreated}
+import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, FindAssembleGroup, GroupCreated, GroupRetrieved}
+import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector.GroupCreatedRef
 
 class AssembleGroupDirectorSpec extends AssemblePersistenceSpec(ActorSystem("testSystem")) {
 
   "An AssembleGroupDirector Actor" must {
 
-    "creates a group and gets back a reference to it" in {
-      val director = TestActorRef(new AssembleGroupDirector())
+    "create a group" in {
+      val director = system.actorOf(Props[AssembleGroupDirector])
       director ! CreateAssembleGroup("test-group-name", "test-user-id")
       val message = expectMsgType[GroupCreated] //sender gets a group created back
-      director.underlyingActor.groupRefs.get(message.groupId).isDefined mustBe true //director has ref to the group
+    }
+
+    "retrieve a group that was created" in {
+      val director = system.actorOf(Props[AssembleGroupDirector])
+      val probe = TestProbe()
+
+      director ! GroupCreatedRef("test-group-id", probe.ref)
+      director ! FindAssembleGroup("test-group-id")
+
+      val message2 = expectMsgType[Option[GroupRetrieved]]
+      message2 mustBe Some(GroupRetrieved("test-group-id"))
     }
 
   }
