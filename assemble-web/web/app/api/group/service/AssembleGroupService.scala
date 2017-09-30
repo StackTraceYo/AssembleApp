@@ -5,7 +5,7 @@ import javax.inject.{Inject, Singleton}
 import akka.actor.ActorSystem
 import api.group.Request
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.CreateAssembleGroup
-import org.stacktrace.yo.group.core.api.{BaseGroupClient, GroupAPIProtocol}
+import org.stacktrace.yo.group.core.api.{BaseGroupClient, GroupAPIModel, GroupAPIProtocol}
 import org.stacktrace.yo.user.auth.model.AssembleUser
 
 import scala.concurrent.{ExecutionContext, Future}

@@ -4,6 +4,7 @@ import akka.actor.{ActorSystem, Props}
 import akka.testkit.TestProbe
 import org.scalatest.MustMatchers._
 import org.stacktrace.yo.group.AssemblePersistenceSpec
+import org.stacktrace.yo.group.core.api.GroupAPIModel.AssembledGroup
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, FindAssembleGroup, GroupCreated, GroupRetrieved}
 import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector.GroupCreatedRef
 
@@ -25,7 +26,7 @@ class AssembleGroupDirectorSpec extends AssemblePersistenceSpec(ActorSystem("tes
       director ! FindAssembleGroup("test-group-id")
 
       val message2 = expectMsgType[Option[GroupRetrieved]]
-      message2 mustBe Some(GroupRetrieved("test-group-id"))
+      message2 mustBe Some(GroupRetrieved(AssembledGroup("test-group-id")))
     }
 
   }

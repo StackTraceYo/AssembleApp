@@ -2,7 +2,8 @@ package org.stacktrace.yo.group.core.api
 
 import akka.actor.ActorSystem
 import org.stacktrace.yo.group.AssemblePersistenceSpec
-import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, FindAssembleGroup}
+import org.stacktrace.yo.group.core.api.GroupAPIModel.AssembledGroup
+import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, FindAssembleGroup, GroupRetrieved}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -26,9 +27,10 @@ class BaseGroupClientSpec extends AssemblePersistenceSpec(ActorSystem("testSyste
       response.groupId should not be empty
 
       val fResponse2 = classUnderTest.getGroupInformation(FindAssembleGroup(response.groupId))
-      val response2 = Await.result(fResponse, 2 seconds)
-      response2.groupId should not be empty
-      response2.groupId shouldEqual response.groupId
+      val response2 = Await.result(fResponse2, 2 seconds)
+
+      response2 shouldEqual Some(GroupRetrieved(AssembledGroup(response.groupId)))
+//      response2.groupId shouldEqual response.groupId
     }
   }
 }

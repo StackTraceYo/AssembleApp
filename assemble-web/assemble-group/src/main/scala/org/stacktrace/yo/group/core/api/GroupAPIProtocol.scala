@@ -1,5 +1,7 @@
 package org.stacktrace.yo.group.core.api
 
+import org.stacktrace.yo.group.core.api.GroupAPIModel.AssembledGroup
+
 /**
   * Created by Stacktraceyo on 9/27/17.
   *
@@ -29,6 +31,6 @@ object GroupAPIProtocol {
   /**
     * Message used to respond that a group has been retrieved
     */
-  case class GroupRetrieved(groupID: String) extends APIMessage
+  case class GroupRetrieved(groupInformation: AssembledGroup) extends APIMessage
 
 }

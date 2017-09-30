@@ -5,6 +5,7 @@ import java.util.UUID
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import akka.event.LoggingReceive
 import com.stacktrace.yo.assemble.group.Protocol.CreateGroup
+import org.stacktrace.yo.group.core.api.GroupAPIModel.AssembledGroup
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, FindAssembleGroup, GroupRetrieved}
 import org.stacktrace.yo.group.core.api.handler.GroupResponseHandler
 import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector.GroupCreatedRef
@@ -39,7 +40,9 @@ class AssembleGroupDirector extends Actor with ActorLogging {
   private def lookup(groupId: String): Option[GroupRetrieved] = {
     groupRefs.get(groupId) match {
       case Some(group) =>
-        Some(GroupRetrieved(groupId))
+        Some(GroupRetrieved(
+          AssembledGroup(groupId))
+        )
       case None =>
         Option.empty
     }

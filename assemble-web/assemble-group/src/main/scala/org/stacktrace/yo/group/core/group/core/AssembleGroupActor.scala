@@ -5,7 +5,6 @@ import akka.persistence.{PersistentActor, RecoveryCompleted, SnapshotOffer}
 import com.stacktrace.yo.assemble.group.GroupProtocol.{AssembleGroupState, Created}
 import com.stacktrace.yo.assemble.group.Protocol._
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.GroupCreated
-import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector.GroupCreatedRef
 
 class AssembleGroupActor(supervisor: ActorRef, groupId: String) extends PersistentActor with ActorLogging {
 

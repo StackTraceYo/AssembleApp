@@ -4,7 +4,6 @@ import akka.actor.ActorSystem
 import akka.testkit.{ImplicitSender, TestActorRef, TestKit, TestProbe}
 import org.scalatest.WordSpecLike
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.GroupCreated
-import org.stacktrace.yo.group.core.api.handler.GroupResponseHandler
 
 class GroupResponseHandlerSpec extends TestKit(ActorSystem("testSystem"))
   with ImplicitSender
