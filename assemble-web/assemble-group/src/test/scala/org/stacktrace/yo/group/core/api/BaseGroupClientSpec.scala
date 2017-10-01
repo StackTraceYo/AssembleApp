@@ -27,10 +27,10 @@ class BaseGroupClientSpec extends AssemblePersistenceSpec(ActorSystem("testSyste
       response.groupId should not be empty
 
       val fResponse2 = classUnderTest.getGroupInformation(FindAssembleGroup(response.groupId))
-      val response2 = Await.result(fResponse2, 2 seconds)
+      val response2 = Await.result(fResponse2, 5 seconds)
 
       response2 shouldEqual Some(GroupRetrieved(AssembledGroup(response.groupId)))
-//      response2.groupId shouldEqual response.groupId
+      response2.get.groupInformation.groupId shouldEqual response.groupId
     }
   }
 }

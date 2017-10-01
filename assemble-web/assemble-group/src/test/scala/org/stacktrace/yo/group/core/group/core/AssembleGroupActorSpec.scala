@@ -5,7 +5,7 @@ import java.util.UUID
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.TestProbe
 import com.stacktrace.yo.assemble.group.GroupProtocol.AssembleGroupState
-import com.stacktrace.yo.assemble.group.Protocol.{CreateGroup, GetState}
+import com.stacktrace.yo.assemble.group.Protocol.{CreateGroup, GetState, Ready}
 import org.scalatest.MustMatchers._
 import org.stacktrace.yo.group.AssemblePersistenceSpec
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.GroupCreated
@@ -16,36 +16,38 @@ class AssembleGroupActorSpec extends AssemblePersistenceSpec(ActorSystem("testSy
   "An AssembleGroupSupervisor Actor" must {
 
     "sends back a group created message" in {
-      val director = TestProbe()
+      val supervisor = TestProbe()
       val id = UUID.randomUUID().toString
       val hostId = UUID.randomUUID().toString
-      val actorRef = system.actorOf(Props(new AssembleGroupActor(director.ref, id)))
+
+      val actorRef = system.actorOf(Props(new AssembleGroupActor(supervisor.ref, id)))
       actorRef ! CreateGroup(hostId)
-      expectMsg(GroupCreated(id)) //sender gets the name
-      val message = director.expectMsgType[GroupCreatedRef] //director gets the name and ref
-      message.groupName mustBe id
+
+      val message = expectMsg(GroupCreated(id)) //sender gets the name
+      message.groupId mustBe id
+      supervisor.expectMsgType[Ready] //supervisor gets the name and ref
     }
 
     "supervisor state is persisted" in {
-      val director = TestProbe()
+      val supervisor = TestProbe()
       val id = UUID.randomUUID().toString
       val hostId = UUID.randomUUID().toString
-      val supervisor = system.actorOf(Props(new AssembleGroupActor(director.ref, id)))
-      supervisor ! CreateGroup(hostId)
+      val actorUnderTest = system.actorOf(Props(new AssembleGroupActor(supervisor.ref, id)))
+      actorUnderTest ! CreateGroup(hostId)
       expectMsg(GroupCreated(id)) //sender gets the name
-      val message = director.expectMsgType[GroupCreatedRef] //director gets the name and ref
+      val message = supervisor.expectMsgType[Ready] //supervisor gets a ready
 
-      killActors(supervisor)
+      killActors(actorUnderTest)
 
-      var resurrection = system.actorOf(Props(new AssembleGroupActor(director.ref, id)))
+      var resurrection = system.actorOf(Props(new AssembleGroupActor(supervisor.ref, id)))
       resurrection ! GetState()
       var state = expectMsgType[AssembleGroupState]
       state.groupid mustBe id
       state.hostid mustBe hostId
 
-      killActors(supervisor)
+      killActors(actorUnderTest)
 
-      resurrection = system.actorOf(Props(new AssembleGroupActor(director.ref, id)))
+      resurrection = system.actorOf(Props(new AssembleGroupActor(supervisor.ref, id)))
       resurrection ! GetState()
       state = expectMsgType[AssembleGroupState]
       state.groupid mustBe id

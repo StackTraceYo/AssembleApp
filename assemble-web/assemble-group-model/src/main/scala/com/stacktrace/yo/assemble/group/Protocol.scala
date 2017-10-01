@@ -1,7 +1,5 @@
 package com.stacktrace.yo.assemble.group
 
-import com.stacktrace.yo.assemble.group.GroupProtocol.AssembleGroupState
-
 /**
   * Created by Stacktraceyo on 9/26/17.
   */

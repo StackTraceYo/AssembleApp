@@ -29,5 +29,13 @@ class AssembleGroupDirectorSpec extends AssemblePersistenceSpec(ActorSystem("tes
       message2 mustBe Some(GroupRetrieved(AssembledGroup("test-group-id")))
     }
 
+    "return an empty option when no group is found" in {
+      val director = system.actorOf(Props[AssembleGroupDirector])
+      director ! FindAssembleGroup("test-group-id2")
+
+      val message2 = expectMsgType[Option[GroupRetrieved]]
+      message2 mustBe Option.empty
+    }
+
   }
 }

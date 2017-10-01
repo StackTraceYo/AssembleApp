@@ -9,6 +9,8 @@ import org.stacktrace.yo.group.core.api.GroupAPIModel.AssembledGroup
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, FindAssembleGroup, GroupRetrieved}
 import org.stacktrace.yo.group.core.api.handler.GroupResponseHandler
 import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector.GroupCreatedRef
+import org.stacktrace.yo.group.core.group.lookup.AssembleLookupActor
+import org.stacktrace.yo.group.core.group.lookup.AssembleLookupActor.LookupGroup
 import org.stacktrace.yo.group.core.group.supervisor.AssembleGroupSupervisor
 
 import scala.collection.mutable
@@ -34,18 +36,8 @@ class AssembleGroupDirector extends Actor with ActorLogging {
 
     case FindAssembleGroup(groupID: String) =>
       val api = sender()
-      api ! lookup(groupID)
-  }
-
-  private def lookup(groupId: String): Option[GroupRetrieved] = {
-    groupRefs.get(groupId) match {
-      case Some(group) =>
-        Some(GroupRetrieved(
-          AssembledGroup(groupId))
-        )
-      case None =>
-        Option.empty
-    }
+      val lookup = createLookupHandler(groupID, "")
+      lookup.tell(LookupGroup(), createGroupHandler(api))
   }
 
   private def generateName() = {
@@ -54,6 +46,10 @@ class AssembleGroupDirector extends Actor with ActorLogging {
 
   private def createGroupHandler(respondTo: ActorRef): ActorRef = {
     context.actorOf(AssembleGroupDirector.responseHandlerProps(respondTo))
+  }
+
+  private def createLookupHandler(groupId: String, hostId: String): ActorRef = {
+    context.actorOf(AssembleGroupDirector.lookupProps(groupRefs.toMap, groupId, hostId))
   }
 }
 
@@ -65,6 +61,10 @@ object AssembleGroupDirector {
 
   def responseHandlerProps(sender: ActorRef): Props = {
     Props(new GroupResponseHandler(sender))
+  }
+
+  def lookupProps(groupRefs: Map[String, ActorRef], groupId: String, hostId: String): Props = {
+    Props(new AssembleLookupActor(groupRefs, groupId, hostId))
   }
 
   case class GroupCreatedRef(groupName: String, ref: ActorRef)
