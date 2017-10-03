@@ -1,4 +1,3 @@
-import sbt.Level
 import sbtassembly.Log4j2MergeStrategy
 
 name := AssembleBuild.NamePrefix + "root"
@@ -61,7 +60,7 @@ lazy val web = project.
   )
 
 lazy val root = (project in file(".")).
-  aggregate(web, `user-api`, `assemble-geo`)
+  aggregate(web, `user-api`, `assemble-group`)
   .settings(
     sbt.Keys.test in assembly := {}
   )

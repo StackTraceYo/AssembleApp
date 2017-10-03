@@ -7,10 +7,34 @@ import "google/protobuf/wrappers.proto";
 package com.stacktrace.yo.assemble.group;
 option java_package = "com.stacktrace.yo.assemble.group";
 
+message AssembleGroupState {
+    option (scalapb.message).extends = "com.stacktrace.yo.assemble.group.Protocol.GroupState";
+    string hostid = 1;
+    string groupid = 2;
+}
+
+
+message DirectorReferenceState {
+    option (scalapb.message).extends = "com.stacktrace.yo.assemble.group.Protocol.DirectorState";
+    map<string,GroupReference> reference = 1;
+}
+
+message GroupReference {
+    string name = 1;
+    string path = 2;
+}
+
+message GroupReferenceCreated {
+    option (scalapb.message).extends = "com.stacktrace.yo.assemble.group.Protocol.Event";
+    string id = 1;
+    string name = 2;
+    string path = 3;
+}
 
 message Created {
     option (scalapb.message).extends = "com.stacktrace.yo.assemble.group.Protocol.Event";
-    string groupname = 1;
+    string hostid = 1;
+    string groupid = 2;
 }
 
 message Joined {

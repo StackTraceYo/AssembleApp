@@ -16,7 +16,6 @@ object Dependencies {
       "com.typesafe.akka" %% "akka-slf4j" % akkaVersion
     )
 
-
   val json = Seq(
     "com.typesafe.play" % "play-json_2.11" % "2.6.4"
   )
@@ -27,13 +26,15 @@ object Dependencies {
 
   val test = Seq(
     "org.mockito" % "mockito-core" % "2.10.0" % "test",
-    "org.scalatest" % "scalatest_2.11" % "2.2.5" % "test"
+    "org.scalatest" % "scalatest_2.11" % "2.2.5" % "test",
+    "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test"
   )
 
   val groupDeps: Seq[ModuleID] =
     test ++
       akka ++
       Seq(
+        guice,
         "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
         // Local LevelDB journal (Akka Persistence)
         // http://doc.akka.io/docs/akka/current/scala/persistence.html#Local_LevelDB_journal
@@ -44,6 +45,7 @@ object Dependencies {
   val groupModelDeps: Seq[ModuleID] =
     test ++
       Seq(
+        "com.typesafe.akka" %% "akka-actor" % akkaVersion,
         "com.trueaccord.scalapb" %% "scalapb-runtime" % scalapbVersion % "protobuf"
       )
 

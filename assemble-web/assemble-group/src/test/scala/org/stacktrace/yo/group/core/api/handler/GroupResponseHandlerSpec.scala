@@ -1,10 +1,9 @@
-package org.stacktrace.yo.group.handler
+package org.stacktrace.yo.group.core.api.handler
 
 import akka.actor.ActorSystem
 import akka.testkit.{ImplicitSender, TestActorRef, TestKit, TestProbe}
 import org.scalatest.WordSpecLike
-import org.stacktrace.yo.group.core.api.handler.GroupAPIResponseHandler
-import org.stacktrace.yo.group.core.api.handler.GroupAPIResponseHandler.GroupCreated
+import org.stacktrace.yo.group.core.api.GroupAPIProtocol.GroupCreated
 
 class GroupResponseHandlerSpec extends TestKit(ActorSystem("testSystem"))
   with ImplicitSender
@@ -15,7 +14,7 @@ class GroupResponseHandlerSpec extends TestKit(ActorSystem("testSystem"))
     "sends back a group created message" in {
 
       val probe = TestProbe() // requester ( rest api)
-      val handler = TestActorRef(new GroupAPIResponseHandler(probe.ref))
+      val handler = TestActorRef(new GroupResponseHandler(probe.ref))
 
       handler ! GroupCreated("group created yay")
       probe.expectMsg(GroupCreated("group created yay"))

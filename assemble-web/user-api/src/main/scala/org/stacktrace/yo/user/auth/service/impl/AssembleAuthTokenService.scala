@@ -4,16 +4,16 @@ import java.time.Instant
 import java.util.UUID
 import javax.inject.{Inject, Singleton}
 
-import org.stacktrace.yo.user.auth.model.AuthToken
+import org.stacktrace.yo.user.auth.model.{AssembleUser, AuthToken}
 import org.stacktrace.yo.user.auth.service.AuthTokenService
-import org.stacktrace.yo.user.auth.store.AuthTokenStore
+import org.stacktrace.yo.user.auth.store.{AuthTokenStore, UserStore}
 
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.postfixOps
 
 @Singleton
-class AssembleAuthTokenService @Inject()(tokenStore: AuthTokenStore)(implicit ec: ExecutionContext) extends AuthTokenService {
+class AssembleAuthTokenService @Inject()(tokenStore: AuthTokenStore, userStore: UserStore)(implicit ec: ExecutionContext) extends AuthTokenService {
   /**
     * Creates a new auth token and saves it in the backing store.
     *
@@ -55,5 +55,23 @@ class AssembleAuthTokenService @Inject()(tokenStore: AuthTokenStore)(implicit ec
           tokenPair._2
         })
       })
+  }
+
+  /**
+    * Finds a user from an auth token.
+    *
+    * @return The User
+    */
+  override def findUserFromAuthToken(id: UUID): Future[Option[AssembleUser]] = {
+    tokenStore.find(id)
+      .flatMap {
+        case Some(token) =>
+          userStore.find(token.userID)
+        case None =>
+          Future {
+            Option.empty
+          }
+      }
+
   }
 }

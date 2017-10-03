@@ -2,7 +2,7 @@ package org.stacktrace.yo.user.auth.service
 
 import java.util.UUID
 
-import org.stacktrace.yo.user.auth.model.AuthToken
+import org.stacktrace.yo.user.auth.model.{AssembleUser, AuthToken}
 
 import scala.concurrent.Future
 import scala.concurrent.duration.{FiniteDuration, _}
@@ -33,5 +33,13 @@ trait AuthTokenService {
     * @return The list of deleted tokens.
     */
   def clean: Future[Seq[AuthToken]]
+
+  /**
+    * Finds a user from an auth token.
+    *
+    * @return The User
+    */
+  def findUserFromAuthToken(id: UUID): Future[Option[AssembleUser]]
+
 
 }

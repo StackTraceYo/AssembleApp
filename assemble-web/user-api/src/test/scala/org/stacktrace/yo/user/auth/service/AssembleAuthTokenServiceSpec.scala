@@ -6,8 +6,8 @@ import java.util.UUID
 import org.scalatestplus.play.PlaySpec
 import org.stacktrace.yo.user.auth.model.{AssembleUser, AuthToken}
 import org.stacktrace.yo.user.auth.service.impl.AssembleAuthTokenService
-import org.stacktrace.yo.user.auth.store.AuthTokenStore
-import org.stacktrace.yo.user.auth.store.impl.AssembleAuthTokenStore
+import org.stacktrace.yo.user.auth.store.impl.{AssembleAuthTokenStore, AssembleUserStore}
+import org.stacktrace.yo.user.auth.store.{AuthTokenStore, UserStore}
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, ExecutionContextExecutor}
@@ -64,6 +64,15 @@ class AssembleAuthTokenServiceSpec extends PlaySpec {
       val valid: Option[AuthToken] = Await.result(service.validate(token._1), 5 seconds)
       valid mustBe Option.empty
     }
+
+    "retrieve a user from a token" in new Context {
+
+      val user: AssembleUser = AssembleUser("testid", "Email", Option("Ahmad"))
+      userStore.save(user)
+      val token: (UUID, AuthToken) = Await.result(service.create(user.id), 5 seconds)
+
+      Await.result(service.findUserFromAuthToken(token._1), 5 seconds) mustBe Some(user)
+    }
   }
 
   trait Context {
@@ -72,8 +81,9 @@ class AssembleAuthTokenServiceSpec extends PlaySpec {
     val clock: Clock = Clock.fixed(Instant.now(), ZoneId.of("UTC"))
 
     val store: AuthTokenStore = new AssembleAuthTokenStore()
+    val userStore: UserStore = new AssembleUserStore()
 
-    val service = new AssembleAuthTokenService(store)
+    val service = new AssembleAuthTokenService(store, userStore)
 
   }
 

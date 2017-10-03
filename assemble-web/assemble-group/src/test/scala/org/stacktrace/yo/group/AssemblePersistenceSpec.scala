@@ -1,10 +1,12 @@
 package org.stacktrace.yo.group
 
-import akka.actor.{ActorRef, ActorSystem}
+import akka.actor.{ActorRef, ActorSystem, PoisonPill}
 import akka.testkit.{ImplicitSender, TestKit}
 import com.typesafe.config.Config
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 import org.stacktrace.yo.PersistenceCleanup
+
+import scala.concurrent.ExecutionContextExecutor
 
 /**
   * Created by Stacktraceyo on 9/27/17.
@@ -16,18 +18,22 @@ abstract class AssemblePersistenceSpec(system: ActorSystem) extends TestKit(syst
   with BeforeAndAfterAll
   with PersistenceCleanup {
 
-  def this(name: String, config: Config) = this(ActorSystem(name, config))
-  override protected def beforeAll() = deleteStorageLocations()
+  implicit val ec: ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global
 
-  override protected def afterAll() = {
+  def this(name: String, config: Config) = this(ActorSystem(name, config))
+
+  override protected def beforeAll(): Unit = deleteStorageLocations()
+
+  override protected def afterAll(): Unit = {
     deleteStorageLocations()
     TestKit.shutdownActorSystem(system)
   }
 
-  def killActors(actors: ActorRef*) = {
+  def killActors(actors: ActorRef*): Unit = {
+    Thread.sleep(1000) //todo find better way
     actors.foreach { actor =>
       watch(actor)
-      system.stop(actor)
+      actor ! PoisonPill
       expectTerminated(actor)
     }
   }
