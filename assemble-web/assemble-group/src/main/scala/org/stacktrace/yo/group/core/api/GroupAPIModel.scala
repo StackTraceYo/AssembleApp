@@ -1,5 +1,7 @@
 package org.stacktrace.yo.group.core.api
 
+import play.api.libs.json.{Json, OFormat}
+
 /**
   * Created by Stacktraceyo on 9/27/17.
   *
@@ -9,5 +11,8 @@ package org.stacktrace.yo.group.core.api
 object GroupAPIModel {
 
   case class AssembledGroup(groupId: String)
+
+  implicit val assembleGroupResponse: OFormat[AssembledGroup] = Json.format[AssembledGroup]
+
 
 }

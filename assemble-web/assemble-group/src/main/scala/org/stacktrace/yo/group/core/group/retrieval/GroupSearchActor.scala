@@ -28,7 +28,7 @@ class GroupSearchActor(searchContext: ActorContext, refs: Map[String, ActorRef])
           AssembledGroup(idRef._1)
         }
       ).toList
-      val retrieved = Some(GroupsRetrieved(answer))
+      val retrieved = GroupsRetrieved(answer)
       sender() ! retrieved
   }
 }

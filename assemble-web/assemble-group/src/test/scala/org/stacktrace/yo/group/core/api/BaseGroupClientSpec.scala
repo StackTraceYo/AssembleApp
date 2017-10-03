@@ -49,11 +49,14 @@ class BaseGroupClientSpec extends AssemblePersistenceSpec(ActorSystem("testSyste
       response3.groupId should not be empty
 
 
+      //TODO
+      Thread.sleep(1000)
+
       val fResponse4 = classUnderTest.getGroupList(ListAssembleGroup())
       val response4 = Await.result(fResponse4, 5 seconds)
 
 
-      response4.get.groupsInformation should contain theSameElementsAs
+      response4.groupsInformation should contain theSameElementsAs
         List(
           AssembledGroup(response.groupId),
           AssembledGroup(response2.groupId),
