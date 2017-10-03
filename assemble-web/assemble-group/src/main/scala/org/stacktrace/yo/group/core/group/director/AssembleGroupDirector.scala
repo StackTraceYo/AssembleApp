@@ -2,20 +2,36 @@ package org.stacktrace.yo.group.core.group.director
 
 import java.util.UUID
 
-import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import akka.actor.{ActorLogging, ActorRef, Props}
 import akka.event.LoggingReceive
-import com.stacktrace.yo.assemble.group.Protocol.CreateGroup
+import akka.persistence.{PersistentActor, SaveSnapshotFailure, SaveSnapshotSuccess}
+import com.stacktrace.yo.assemble.group.GroupProtocol.{DirectorReferenceState, GroupReference, GroupReferenceCreated}
+import com.stacktrace.yo.assemble.group.Protocol
+import com.stacktrace.yo.assemble.group.Protocol.{Command, CreateGroup, GetState}
 import org.stacktrace.yo.group.core.api.GroupAPIModel.AssembledGroup
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, FindAssembleGroup, GroupRetrieved}
 import org.stacktrace.yo.group.core.api.handler.GroupResponseHandler
 import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector.GroupCreatedRef
-import org.stacktrace.yo.group.core.group.lookup.{ActorLookup, AssembleLookupActor}
+import org.stacktrace.yo.group.core.group.lookup.{AssembleLookupActor, PersistentActorLookup}
 import org.stacktrace.yo.group.core.group.supervisor.AssembleGroupSupervisor
 
-class AssembleGroupDirector extends Actor with ActorLogging with ActorLookup {
+import scala.concurrent.ExecutionContext
 
+class AssembleGroupDirector(directorId: String = "1")(implicit ec: ExecutionContext) extends PersistentActor with ActorLogging with PersistentActorLookup {
+
+
+  override implicit val executionContext: ExecutionContext = ec
+
+  override def receiveCommand: Receive = receive
+
+  override def persistenceId = s"assemble-group-director-$directorId"
 
   override def receive: Receive = LoggingReceive {
+
+    case SaveSnapshotSuccess(metadata) =>
+      log.debug("SnapShot Saved")
+    case SaveSnapshotFailure(metadata, reason) =>
+      log.debug("SnapShot Failed: {}", reason.getMessage)
 
     case msg@CreateAssembleGroup(hostId: String, groupName: String) =>
       //get a reference to the original sender
@@ -30,7 +46,7 @@ class AssembleGroupDirector extends Actor with ActorLogging with ActorLookup {
       supervisor.tell(CreateGroup(hostId), createGroupHandler(api))
 
     case GroupCreatedRef(groupId, actorRef) =>
-      storeReference(supervisorName(groupId), actorRef)
+      storeReference(groupId, actorRef)
 
     case FindAssembleGroup(groupId: String) =>
       val api = sender()
@@ -43,16 +59,38 @@ class AssembleGroupDirector extends Actor with ActorLogging with ActorLookup {
           Option.empty
       }
       sender() ! answer
+    case GetState() =>
+      sender() ! referenceState
   }
 
   def supervisorName: String => String = { x => s"assemble-group-supervisor-$x" }
 
-  private def getSupervisor(groupId: String) = {
-    findChild(s"assemble-group-supervisor-$groupId")
+
+  override def rebuild(event: Protocol.Event): Unit = {
+    event match {
+      case evt@GroupReferenceCreated(id, name, path) =>
+        val supervisor = createGroupSupervisor(self, id)
+        val newRef = id -> GroupReference(supervisor.path.name, supervisor.path.toSerializationFormat)
+        referenceState = referenceState.update(_.reference := referenceState.reference + newRef)
+        references.put(id, supervisor)
+        saveSnapshot(referenceState)
+    }
   }
 
-  private def findChild(name: String) = {
-    resolveActorByNameOrId(context, name)
+  override def rebuild(snapshot: DirectorReferenceState): Unit = {
+    referenceState = snapshot
+    referenceState.reference.foreach(
+      ref => {
+        //rebuild each id
+        val id = ref._1
+        //rebuild supervisor
+        //each supervisor should rebuild the persisted group
+        val supervisor = createGroupSupervisor(self, id)
+      })
+  }
+
+  private def getSupervisor(groupId: String) = {
+    resolveActorById(groupId)
   }
 
   private def generateName() = {
@@ -66,7 +104,6 @@ class AssembleGroupDirector extends Actor with ActorLogging with ActorLookup {
   private def createGroupSupervisor(director: ActorRef, id: String): ActorRef = {
     context.actorOf(AssembleGroupDirector.supervisorActor(self, id), supervisorName(id))
   }
-
 
   private def createLookupHandler(groupId: String, hostId: String): ActorRef = {
     context.actorOf(AssembleGroupDirector.lookupProps(references.toMap, groupId, hostId))
@@ -87,6 +124,6 @@ object AssembleGroupDirector {
     Props(new AssembleLookupActor(groupRefs, groupId, hostId))
   }
 
-  case class GroupCreatedRef(groupName: String, ref: ActorRef)
+  case class GroupCreatedRef(groupName: String, ref: ActorRef) extends Command
 
 }

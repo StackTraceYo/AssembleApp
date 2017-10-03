@@ -13,7 +13,7 @@ import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector.GroupCr
 
 class AssembleGroupActorSpec extends AssemblePersistenceSpec(ActorSystem("testSystem")) {
 
-  "An AssembleGroupSupervisor Actor" must {
+  "An AssembleGroup Actor" must {
 
     "sends back a group created message" in {
       val supervisor = TestProbe()

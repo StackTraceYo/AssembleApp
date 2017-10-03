@@ -38,7 +38,7 @@ trait GroupBridge {
 
 object BaseGroupClient {
 
-  def directorProp(): Props = {
-    Props[AssembleGroupDirector]
+  def directorProp()(implicit executionContext: ExecutionContext): Props = {
+    Props(new AssembleGroupDirector())
   }
 }

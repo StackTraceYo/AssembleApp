@@ -27,10 +27,20 @@ object GroupAPIProtocol {
     */
   case class FindAssembleGroup(groupID: String) extends APIMessage
 
+  /**
+    * Message used to request to list groups
+    */
+  case class ListAssembleGroup() extends APIMessage
+
 
   /**
     * Message used to respond that a group has been retrieved
     */
   case class GroupRetrieved(groupInformation: AssembledGroup) extends APIMessage
+
+  /**
+    * Message used to respond that a group has been retrieved
+    */
+  case class GroupsRetrieved(groupsInformation: List[AssembledGroup]) extends APIMessage
 
 }

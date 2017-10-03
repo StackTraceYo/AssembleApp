@@ -1,6 +1,6 @@
 package org.stacktrace.yo.group
 
-import akka.actor.{ActorRef, ActorSystem}
+import akka.actor.{ActorRef, ActorSystem, PoisonPill}
 import akka.testkit.{ImplicitSender, TestKit}
 import com.typesafe.config.Config
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
@@ -32,7 +32,7 @@ abstract class AssemblePersistenceSpec(system: ActorSystem) extends TestKit(syst
   def killActors(actors: ActorRef*) = {
     actors.foreach { actor =>
       watch(actor)
-      system.stop(actor)
+      actor ! PoisonPill
       expectTerminated(actor)
     }
   }
