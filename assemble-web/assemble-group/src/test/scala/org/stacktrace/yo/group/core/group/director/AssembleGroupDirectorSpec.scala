@@ -20,7 +20,7 @@ class AssembleGroupDirectorSpec extends AssemblePersistenceSpec(ActorSystem("tes
 
     "create a group" in {
       val director = newDirector("1")
-      director ! CreateAssembleGroup("test-group-name", "test-user-id")
+      director ! CreateAssembleGroup("test-user-id", "test-group-name")
       val message = expectMsgType[GroupCreated] //sender gets a group created back
     }
 
@@ -71,11 +71,14 @@ class AssembleGroupDirectorSpec extends AssemblePersistenceSpec(ActorSystem("tes
   "director state is persisted as is transient to its children" in {
     val director = newDirector("5")
 
-    director ! CreateAssembleGroup("test-id", "test-name")
-    director ! CreateAssembleGroup("test-id2", "test-name2")
-    director ! CreateAssembleGroup("test-id3", "test-name3")
-    director ! CreateAssembleGroup("test-id4", "test-name4")
-    receiveN(4, 1 seconds)
+    director ! CreateAssembleGroup("test-host-id", "test-name")
+    val id1 = expectMsgType[GroupCreated].groupId
+    director ! CreateAssembleGroup("test-host-id2", "test-name2")
+    val id2 = expectMsgType[GroupCreated].groupId
+    director ! CreateAssembleGroup("test-host-id3", "test-name3")
+    val id3 = expectMsgType[GroupCreated].groupId
+    director ! CreateAssembleGroup("test-host-id4", "test-name4")
+    val id4 = expectMsgType[GroupCreated].groupId
 
     def pollForState(): Boolean = {
       println("Polling..")
@@ -85,6 +88,7 @@ class AssembleGroupDirectorSpec extends AssemblePersistenceSpec(ActorSystem("tes
 
     awaitAssert(pollForState(), 5 seconds, 1 seconds)
 
+
     killActors(director)
 
     val resurrection = newDirector("5")
@@ -92,10 +96,23 @@ class AssembleGroupDirectorSpec extends AssemblePersistenceSpec(ActorSystem("tes
     def pollForResState(): Boolean = {
       println("Polling..")
       resurrection ! GetState()
-      expectMsgType[DirectorReferenceState].reference.size == 4
+      val size = expectMsgType[DirectorReferenceState].reference.size
+      println(s"Got Size: $size")
+      size == 4
     }
 
     awaitCond(pollForResState(), 5 seconds, 1 seconds)
+    resurrection ! FindAssembleGroup(id1)
+    expectMsgType[Option[GroupRetrieved]] mustBe Some(GroupRetrieved(AssembledGroup(id1)))
+
+    resurrection ! FindAssembleGroup(id2)
+    expectMsgType[Option[GroupRetrieved]] mustBe Some(GroupRetrieved(AssembledGroup(id2)))
+
+    resurrection ! FindAssembleGroup(id3)
+    expectMsgType[Option[GroupRetrieved]] mustBe Some(GroupRetrieved(AssembledGroup(id3)))
+
+    resurrection ! FindAssembleGroup(id4)
+    expectMsgType[Option[GroupRetrieved]] mustBe Some(GroupRetrieved(AssembledGroup(id4)))
 
 
   }

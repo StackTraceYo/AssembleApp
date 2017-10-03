@@ -22,14 +22,15 @@ abstract class AssemblePersistenceSpec(system: ActorSystem) extends TestKit(syst
 
   def this(name: String, config: Config) = this(ActorSystem(name, config))
 
-  override protected def beforeAll() = deleteStorageLocations()
+  override protected def beforeAll(): Unit = deleteStorageLocations()
 
-  override protected def afterAll() = {
+  override protected def afterAll(): Unit = {
     deleteStorageLocations()
     TestKit.shutdownActorSystem(system)
   }
 
-  def killActors(actors: ActorRef*) = {
+  def killActors(actors: ActorRef*): Unit = {
+    Thread.sleep(1000) //todo find better way
     actors.foreach { actor =>
       watch(actor)
       actor ! PoisonPill
