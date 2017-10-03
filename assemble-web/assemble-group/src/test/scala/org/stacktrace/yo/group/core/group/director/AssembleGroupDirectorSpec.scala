@@ -3,23 +3,22 @@ package org.stacktrace.yo.group.core.group.director
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.TestProbe
 import com.stacktrace.yo.assemble.group.GroupProtocol.DirectorReferenceState
-import com.stacktrace.yo.assemble.group.Protocol.GetState
+import com.stacktrace.yo.assemble.group.Protocol.{GetState, GroupCreatedRef}
 import org.scalatest.MustMatchers._
 import org.stacktrace.yo.group.AssemblePersistenceSpec
 import org.stacktrace.yo.group.core.api.GroupAPIModel.AssembledGroup
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, FindAssembleGroup, GroupCreated, GroupRetrieved}
-import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector.GroupCreatedRef
 
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
-class AssembleGroupDirectorSpec extends AssemblePersistenceSpec(ActorSystem("testSystem")) {
+class AssembleGroupDirectorSpec extends AssemblePersistenceSpec(ActorSystem("directorTestSystem")) {
 
 
   "An AssembleGroupDirector Actor" must {
 
     "create a group" in {
-      val director = newDirector("1")
+      val director = newDirector("new")
       director ! CreateAssembleGroup("test-user-id", "test-group-name")
       val message = expectMsgType[GroupCreated] //sender gets a group created back
     }
@@ -28,11 +27,11 @@ class AssembleGroupDirectorSpec extends AssemblePersistenceSpec(ActorSystem("tes
       val director = newDirector("2")
       val probe = TestProbe()
 
-      director ! GroupCreatedRef("test-group-id", probe.ref)
-      director ! FindAssembleGroup("test-group-id")
+      director ! GroupCreatedRef("tester-group-id", probe.ref)
+      director ! FindAssembleGroup("tester-group-id")
 
       val message2 = expectMsgType[Option[GroupRetrieved]]
-      message2 mustBe Some(GroupRetrieved(AssembledGroup("test-group-id")))
+      message2 mustBe Some(GroupRetrieved(AssembledGroup("tester-group-id")))
     }
 
     "return an empty option when no group is found" in {
@@ -69,7 +68,7 @@ class AssembleGroupDirectorSpec extends AssemblePersistenceSpec(ActorSystem("tes
   }
 
   "director state is persisted as is transient to its children" in {
-    val director = newDirector("5")
+    val director = newDirector("director")
 
     director ! CreateAssembleGroup("test-host-id", "test-name")
     val id1 = expectMsgType[GroupCreated].groupId
@@ -91,7 +90,7 @@ class AssembleGroupDirectorSpec extends AssemblePersistenceSpec(ActorSystem("tes
 
     killActors(director)
 
-    val resurrection = newDirector("5")
+    val resurrection = newDirector("director")
 
     def pollForResState(): Boolean = {
       println("Polling..")

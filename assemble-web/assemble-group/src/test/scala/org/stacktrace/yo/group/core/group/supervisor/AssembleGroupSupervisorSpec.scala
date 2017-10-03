@@ -5,10 +5,9 @@ import java.util.UUID
 import akka.actor.ActorSystem
 import akka.testkit.{TestActorRef, TestProbe}
 import com.stacktrace.yo.assemble.group.GroupProtocol.AssembleGroupState
-import com.stacktrace.yo.assemble.group.Protocol.{CreateGroup, GetState}
+import com.stacktrace.yo.assemble.group.Protocol.{CreateGroup, GetState, GroupCreatedRef}
 import org.stacktrace.yo.group.AssemblePersistenceSpec
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.GroupCreated
-import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector.GroupCreatedRef
 
 class AssembleGroupSupervisorSpec extends AssemblePersistenceSpec(ActorSystem("testSystem")) {
 

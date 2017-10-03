@@ -45,6 +45,7 @@ object Dependencies {
   val groupModelDeps: Seq[ModuleID] =
     test ++
       Seq(
+        "com.typesafe.akka" %% "akka-actor" % akkaVersion,
         "com.trueaccord.scalapb" %% "scalapb-runtime" % scalapbVersion % "protobuf"
       )
 

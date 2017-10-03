@@ -1,9 +1,8 @@
 package org.stacktrace.yo.group.core.group.supervisor
 
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
-import com.stacktrace.yo.assemble.group.Protocol.Ready
+import com.stacktrace.yo.assemble.group.Protocol.{GroupCreatedRef, Ready}
 import org.stacktrace.yo.group.core.group.core.AssembleGroupActor
-import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector.GroupCreatedRef
 
 /**
   * Created by Stacktraceyo on 9/29/17.

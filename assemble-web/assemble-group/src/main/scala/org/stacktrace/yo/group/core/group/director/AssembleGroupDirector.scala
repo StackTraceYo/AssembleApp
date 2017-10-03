@@ -7,11 +7,10 @@ import akka.event.LoggingReceive
 import akka.persistence.{PersistentActor, SaveSnapshotFailure, SaveSnapshotSuccess}
 import com.stacktrace.yo.assemble.group.GroupProtocol.{DirectorReferenceState, GroupReference, GroupReferenceCreated}
 import com.stacktrace.yo.assemble.group.Protocol
-import com.stacktrace.yo.assemble.group.Protocol.{Command, CreateGroup, GetState}
+import com.stacktrace.yo.assemble.group.Protocol.{CreateGroup, GetState, GroupCreatedRef}
 import org.stacktrace.yo.group.core.api.GroupAPIModel.AssembledGroup
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, FindAssembleGroup, GroupRetrieved}
 import org.stacktrace.yo.group.core.api.handler.GroupResponseHandler
-import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector.GroupCreatedRef
 import org.stacktrace.yo.group.core.group.lookup.{AssembleLookupActor, PersistentActorLookup}
 import org.stacktrace.yo.group.core.group.supervisor.AssembleGroupSupervisor
 
@@ -123,7 +122,5 @@ object AssembleGroupDirector {
   def lookupProps(groupRefs: Map[String, ActorRef], groupId: String, hostId: String): Props = {
     Props(new AssembleLookupActor(groupRefs, groupId, hostId))
   }
-
-  case class GroupCreatedRef(groupName: String, ref: ActorRef) extends Command
 
 }
