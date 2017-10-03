@@ -13,14 +13,14 @@ class BaseGroupClientSpec extends AssemblePersistenceSpec(ActorSystem("testSyste
 
   "An BaseGroupClient" must {
 
-    "forward a create a group request into the system" in {
+    "forward a create a group request into the system" in new Context {
       val classUnderTest = new BaseGroupClient(system)
       val fResponse = classUnderTest.createGroup(CreateAssembleGroup("group-name", "host-name"))
       val response = Await.result(fResponse, 2 seconds)
       response.groupId should not be empty
     }
 
-    "forward a retrieve group request into the system" in {
+    "forward a retrieve group request into the system" in new Context {
       val classUnderTest = new BaseGroupClient(system)
       val fResponse = classUnderTest.createGroup(CreateAssembleGroup("group-name", "host-name"))
       val response = Await.result(fResponse, 2 seconds)
@@ -33,7 +33,7 @@ class BaseGroupClientSpec extends AssemblePersistenceSpec(ActorSystem("testSyste
       response2.get.groupInformation.groupId shouldEqual response.groupId
     }
 
-    "forward a retrieve list group request into the system" in {
+    "forward a retrieve list group request into the system" in new Context {
       val classUnderTest = new BaseGroupClient(system)
 
       val fResponse = classUnderTest.createGroup(CreateAssembleGroup("group-name", "host-name"))
@@ -55,6 +55,7 @@ class BaseGroupClientSpec extends AssemblePersistenceSpec(ActorSystem("testSyste
       val fResponse4 = classUnderTest.getGroupList(ListAssembleGroup())
       val response4 = Await.result(fResponse4, 5 seconds)
 
+      response4.groupsInformation.size shouldBe 3
 
       response4.groupsInformation should contain theSameElementsAs
         List(
@@ -65,4 +66,9 @@ class BaseGroupClientSpec extends AssemblePersistenceSpec(ActorSystem("testSyste
 
     }
   }
+
+  trait Context {
+    implicit val system: ActorSystem = ActorSystem()
+  }
+
 }

@@ -3,7 +3,6 @@ package api.group.service
 import java.io.File
 
 import akka.actor.ActorSystem
-import api.group.Request.{CreateGroupRequest, ListGroupRequest}
 import org.apache.commons.io.FileUtils
 import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpecLike}
 import org.slf4j.{Logger, LoggerFactory}
@@ -18,13 +17,15 @@ class AssembleGroupServiceSpec extends WordSpecLike
   with Matchers
   with BeforeAndAfterEach {
 
+  import api.group.Request._
+
   val logger: Logger = LoggerFactory.getLogger("Test")
-  implicit val as: ActorSystem = ActorSystem("testing")
   implicit val ec: ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global
 
   "The AssembleGroupService" must {
 
     "create groups" in {
+      implicit val as: ActorSystem = ActorSystem("testing")
       val classUnderTest = new AssembleGroupService(as)
       val user: AssembleUser = AssembleUser("testid", "Email", Option("Ahmad"))
       val request = CreateGroupRequest("test-group-name")
@@ -34,6 +35,7 @@ class AssembleGroupServiceSpec extends WordSpecLike
     }
 
     "list groups" in {
+      implicit val as: ActorSystem = ActorSystem("testing")
       val classUnderTest = new AssembleGroupService(as)
       val user: AssembleUser = AssembleUser("testid", "Email", Option("Ahmad"))
 
@@ -59,6 +61,7 @@ class AssembleGroupServiceSpec extends WordSpecLike
   }
 
   def deleteStorageLocations(): Unit = {
-    FileUtils.deleteDirectory(new File("target"))
+    FileUtils.deleteDirectory(new File("target/journal"))
+    FileUtils.deleteDirectory(new File("target/snapshots"))
   }
 }
