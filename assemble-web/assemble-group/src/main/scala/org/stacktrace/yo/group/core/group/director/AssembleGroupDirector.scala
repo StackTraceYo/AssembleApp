@@ -8,7 +8,7 @@ import akka.persistence.{PersistentActor, SaveSnapshotFailure, SaveSnapshotSucce
 import com.stacktrace.yo.assemble.group.GroupProtocol.{DirectorReferenceState, GroupReference, GroupReferenceCreated}
 import com.stacktrace.yo.assemble.group.Protocol
 import com.stacktrace.yo.assemble.group.Protocol.{CreateGroup, GetState, GroupCreatedRef}
-import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, FindAssembleGroup}
+import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, FindAssembleGroup, ListAssembleGroup}
 import org.stacktrace.yo.group.core.api.handler.GroupResponseHandler
 import org.stacktrace.yo.group.core.group.lookup.PersistentActorLookup
 import org.stacktrace.yo.group.core.group.retrieval.GroupSearchActor
@@ -48,6 +48,11 @@ class AssembleGroupDirector(directorId: String = "1")(implicit ec: ExecutionCont
       storeReference(groupId, actorRef)
 
     case find@FindAssembleGroup(groupId: String) =>
+      val api = sender()
+      val searcher = createSearcher()
+      searcher.tell(find, createGroupHandler(api))
+
+    case find@ListAssembleGroup() =>
       val api = sender()
       val searcher = createSearcher()
       searcher.tell(find, createGroupHandler(api))
