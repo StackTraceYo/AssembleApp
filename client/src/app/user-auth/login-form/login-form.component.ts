@@ -41,6 +41,7 @@ export class LoginFormComponent implements OnInit {
                 if (attempt.authenticated) {
                     // set token/cookie stuff
                     this.userService.storeUser(attempt.user);
+                    this.userService.putToken(attempt.token);
                     this.goToDash();
                 }
                 // show error

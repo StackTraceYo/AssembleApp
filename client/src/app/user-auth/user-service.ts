@@ -1,40 +1,55 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import {AssembleUser} from './assemble.user';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {AppStorageService} from '../app-storage/app-storage.service';
 
 @Injectable()
-export class UserService {
+export class UserService implements OnInit {
 
-    private _user = new BehaviorSubject<AssembleUser>(AssembleUser.noUser());
-    private _token = new BehaviorSubject<String>('');
 
-    constructor() {
+    private _$user = new BehaviorSubject<AssembleUser>(AssembleUser.noUser());
+    private _$token = new BehaviorSubject<String>('');
+
+    private _user = AssembleUser.noUser();
+    private _token = '';
+
+    constructor(private storageService: AppStorageService) {
+    }
+
+    ngOnInit(): void {
+        // const storedUser = AppStorageService.retrieve('asm-user');
+        // if (storedUser) {
+        //   this._user = JSON.parse(storedUser);
+        // }
+        // this._token = AppStorageService.retrieve('asm-token');
     }
 
     storeUser(user: AssembleUser) {
-        const users = user;
-        this._user.next(user);
+        this._user = user;
+        this._$user.next(user);
+        // AppStorageService.store('asm-user', JSON.stringify(user));
     }
 
 
     removeUser() {
-        this._user.next(AssembleUser.noUser());
+        this._$user.next(AssembleUser.noUser());
     }
 
     getUser() {
-        return this._user.asObservable();
+        return this._$user.asObservable();
     }
 
     putToken(token: string) {
         const newToken = token;
-        this._token.next(token);
+        this._$token.next(token);
+        // AppStorageService.store('asm-token', JSON.stringify(token));
     }
 
     getToken() {
-        return this._token.asObservable();
+        return this._$token.asObservable();
     }
 
     clearToken() {
-        this._token.next('');
+        this._$token.next('');
     }
 }
