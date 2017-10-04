@@ -2,21 +2,21 @@ import {AssembleUser} from '../../assemble.user';
 
 export class UserAuthenticationAttempt {
 
-    constructor(private _authenticated: boolean, private _user: AssembleUser, private _token: string) {
-        if (!_authenticated) {
-            this._user = AssembleUser.noUser();
+    constructor(private authenticated: boolean, private user: AssembleUser, private token: string) {
+        if (!authenticated) {
+            this.user = AssembleUser.noUser();
         }
     }
 
-    get token(): string {
-        return this._token;
+    getToken(): string {
+        return this.token;
     }
 
-    get user(): AssembleUser {
-        return this._user;
+    getUser(): AssembleUser {
+        return this.user;
     }
 
-    get authenticated(): boolean {
-        return this._authenticated;
+    isAuthenticated(): boolean {
+        return this.authenticated;
     }
 }

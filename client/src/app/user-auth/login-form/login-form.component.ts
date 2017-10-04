@@ -38,10 +38,10 @@ export class LoginFormComponent implements OnInit {
         loginOp.subscribe(
             attempt => {
                 this.toggleSpinner();
-                if (attempt.authenticated) {
+                if (attempt.isAuthenticated()) {
                     // set token/cookie stuff
-                    this.userService.storeUser(attempt.user);
-                    this.userService.putToken(attempt.token);
+                    this.userService.storeUser(attempt.getUser());
+                    this.userService.putToken(attempt.getToken());
                     this.goToDash();
                 }
                 // show error

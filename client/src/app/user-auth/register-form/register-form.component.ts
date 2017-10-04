@@ -39,10 +39,10 @@ export class RegisterFormComponent implements OnInit {
         registerOp.subscribe(
             attempt => {
                 this.toggleSpinner();
-                if (attempt.authenticated) {
+                if (attempt.isAuthenticated) {
                     // set tokem and stuff
-                    this.userService.storeUser(attempt.user);
-                    this.userService.putToken(attempt.token);
+                    this.userService.storeUser(attempt.getUser());
+                    this.userService.putToken(attempt.getToken());
                     this.goToDash();
                 }
                 // else {

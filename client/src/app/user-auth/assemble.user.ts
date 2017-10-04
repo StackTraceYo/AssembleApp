@@ -1,24 +1,24 @@
 export class AssembleUser {
 
-    constructor(private _email: string, private _id: string, private _authenticated: boolean) {
-    }
-
-
-    get email(): string {
-        return this._email;
-    }
-
-    get authenticated(): boolean {
-        return this._authenticated;
-    }
-
-
-    get id(): string {
-        return this._id;
+    constructor(private email: string, private id: string, private authenticated: boolean) {
     }
 
     static noUser() {
         return new AssembleUser('', '', false);
     }
+
+    getEmail(): string {
+        return this.email;
+    }
+
+    isAuthenticated(): boolean {
+        return this.authenticated;
+    }
+
+
+    getId(): string {
+        return this.id;
+    }
+
 
 }

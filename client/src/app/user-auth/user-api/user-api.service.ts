@@ -33,7 +33,7 @@ export class UserApiService {
                     return new UserAuthenticationAttempt(response.success, AssembleUser.noUser(), '');
                 }
             })
-            .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+            .catch((error: any) => Observable.throw(error));
     }
 
     register(registerRequest: RegisterRequest): Observable<UserAuthenticationAttempt> {

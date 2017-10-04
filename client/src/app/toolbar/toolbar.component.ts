@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {UserService} from "../user-auth/user-service";
-import {Router} from "@angular/router";
+import {UserService} from '../user-auth/user-service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'asm-toolbar',
@@ -9,9 +9,9 @@ import {Router} from "@angular/router";
 })
 export class ToolbarComponent implements OnInit {
 
-  loginOrOut: string = "Login";
-  loggedIn: boolean = false;
-  assembleLink: string = "/login";
+  loginOrOut = 'Login';
+  loggedIn = false;
+  assembleLink = '/login';
 
   constructor(private userService: UserService, private router: Router) {
   }
@@ -20,13 +20,13 @@ export class ToolbarComponent implements OnInit {
 
     this.userService.getUser()
       .subscribe(user => {
-          if (user.authenticated) {
-            this.loginOrOut = "Logout";
+          if (user.isAuthenticated()) {
+            this.loginOrOut = 'Logout';
             this.loggedIn = true;
           }
         },
         err => {
-          this.loginOrOut = "Logout";
+          this.loginOrOut = 'Logout';
           this.loggedIn = false;
           console.log(err);
         });
@@ -37,12 +37,12 @@ export class ToolbarComponent implements OnInit {
   }
 
   logout() {
-    this.userService.removeUser()
-    this.gotoLogin()
+    this.userService.removeUser();
+    this.gotoLogin();
   }
 
   login() {
-    this.gotoLogin()
+    this.gotoLogin();
   }
 
   gotoLogin() {

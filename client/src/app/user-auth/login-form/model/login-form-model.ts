@@ -1,21 +1,21 @@
 export class LoginFormModel {
 
-  constructor(private _email: string, private _password: string) {
+  constructor(private email: string, private password: string) {
   }
 
-  get email(): string {
-    return this._email;
+  getEmail(): string {
+    return this.email;
   }
 
-  set email(value: string) {
-    this._email = value;
+  setEmail(value: string) {
+    this.email = value;
   }
 
-  get password(): string {
-    return this._password;
+  getPassword(): string {
+    return this.password;
   }
 
-  set password(value: string) {
-    this._password = value;
+  setPassword(value: string) {
+    this.password = value;
   }
 }
