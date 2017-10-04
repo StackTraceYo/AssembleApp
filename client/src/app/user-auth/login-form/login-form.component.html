@@ -12,8 +12,8 @@
       <table class="login-form-full-width" cellspacing="0">
         <tr>
           <td>
-            <md-form-field class="login-form-full-width">
-              <input mdInput placeholder="Email" [(ngModel)]="user.getEmail()" name="email">
+            <md-form-field class="login-form-full-width-email">
+              <input mdInput placeholder="Email" [(ngModel)]="user.email" name="email" class="login-form-full-width-email-input">
             </md-form-field>
           </td>
         </tr>
@@ -23,7 +23,7 @@
       <table class="login-form-full-width" cellspacing="0">
         <tr>
           <td>
-            <md-form-field class="login-form-full-width">
+            <md-form-field class="login-form-full-width-password">
               <input mdInput placeholder="Password">
             </md-form-field>
           </td>

@@ -12,7 +12,7 @@ class GroupSearchActor(searchContext: ActorContext, refs: Map[String, ActorRef])
 
       val responseHandler = sender()
       val answer = refs.get(groupId) match {
-        case Some(group) =>
+        case Some(group) =>``
           Some(GroupRetrieved(
             AssembledGroup(groupId))
           )

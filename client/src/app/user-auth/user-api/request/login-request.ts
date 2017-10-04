@@ -5,7 +5,7 @@ export class LoginRequest {
   email: string;
 
   constructor(formModel: LoginFormModel) {
-    this.email = formModel.getEmail();
+    this.email = formModel.email;
   }
 
 }

@@ -13,6 +13,7 @@ import {HttpClient} from './http/http-client/http-client';
 import {DashboardModule} from './dashboard/dashboard.module';
 import {ToolbarComponent} from './toolbar/toolbar.component';
 import {AuthGuard} from './user-auth/auth-guard/auth.guard';
+import {AppStorageService} from './app-storage/app-storage.service';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,7 @@ import {AuthGuard} from './user-auth/auth-guard/auth.guard';
     UserModule,
     DashboardModule,
   ],
-  providers: [HttpClient, AuthGuard],
+  providers: [HttpClient, AuthGuard, AppStorageService],
   bootstrap: [AppComponent],
 })
 export class AppModule {
