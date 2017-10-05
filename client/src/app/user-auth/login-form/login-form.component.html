@@ -32,8 +32,8 @@
 
     </form>
   </div>
-  <button md-raised-button color="primary" (click)="login()">Login</button>
-  <button md-button (click)="goToRegistration()">Register</button>
+  <button md-raised-button color="primary" (click)="login()" class="login-form-login-button">Login</button>
+  <button md-button (click)="goToRegistration()" class="login-form-register-button">Register</button>
 </div>
 <div *ngIf="loggingIn" class="login-spinner-holder">
   <md-spinner></md-spinner>

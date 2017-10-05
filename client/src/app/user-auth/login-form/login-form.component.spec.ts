@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {async, ComponentFixture, inject, TestBed} from '@angular/core/testing';
 
 import {LoginFormComponent} from './login-form.component';
 import {NgMaterialModule} from '../../ng-material/ng-material.module';
@@ -16,6 +16,7 @@ import {DashboardModule} from '../../dashboard/dashboard.module';
 import {By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DebugElement} from '@angular/core';
+import {LoginRequest} from '../user-api/request/login-request';
 
 fdescribe('LoginFormComponent', () => {
     let component: LoginFormComponent;
@@ -45,7 +46,7 @@ fdescribe('LoginFormComponent', () => {
                         return new Http(backendInstance, defaultOptions);
                     },
                     deps: [MockBackend, BaseRequestOptions]
-                },]
+                }, ]
         })
             .compileComponents();
     }));
@@ -66,9 +67,41 @@ fdescribe('LoginFormComponent', () => {
 
     it('should represent the form model', () => {
         component.user.email = 'test@gmail.com';
-        de = fixture.debugElement.query(By.css('h1'));
-        el = de.nativeElement;
-        expect(el.textContent).toContain('test@gmail.com');
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
+            de = fixture.debugElement.query(By.css('.login-form-full-width-email-input'));
+            el = de.nativeElement;
 
+            // make sure ui changes based on model
+            expect(el.value).toContain('test@gmail.com');
+
+            // change ui value and fire event for input
+            el.value = 'change@email.com';
+            el.dispatchEvent(new Event('input'));
+
+            // make sure model is updated
+            expect(fixture.componentInstance.user.email).toBe('change@email.com');
+        });
     });
+
+    it('should make login request call with model input', inject([UserApiService], (service: UserApiService) => {
+
+        const spy = spyOn(service, 'login');
+
+        component.user.email = 'test@gmail.com';
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
+            de = fixture.debugElement.query(By.css('.login-form-login-button'));
+            el = de.nativeElement;
+
+            // make sure ui changes based on model
+            expect(el.textContent).toContain('Login');
+            el.click();
+
+            // make sure login was called with the model
+            expect(spy.calls.count()).toBe(1, 'login was called');
+            expect(service.login).toHaveBeenCalled();
+            expect(service.login).toHaveBeenCalledWith(new LoginRequest(component.user));
+        });
+    }));
 });
