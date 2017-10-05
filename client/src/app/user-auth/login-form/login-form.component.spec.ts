@@ -18,35 +18,41 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DebugElement} from '@angular/core';
 import {LoginRequest} from '../user-api/request/login-request';
 
-fdescribe('LoginFormComponent', () => {
+describe('LoginFormComponent', () => {
     let component: LoginFormComponent;
     let fixture: ComponentFixture<LoginFormComponent>;
     let de: DebugElement;
     let el: any;
 
+    const mockRouter = {
+        navigateByUrl: jasmine.createSpy('navigateByUrl')
+    };
+
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [NgMaterialModule, FormsModule, AppRoutingModule, CommonModule, DashboardModule, BrowserAnimationsModule],
-            providers: [
-                {
-                    provide: Router,
-                    useClass: class {
-                        navigate = jasmine.createSpy('navigate');
-                    }
-                },
-                AppStorageService,
-                UserApiService,
-                UserService,
-                HttpClient,
-                MockBackend,
-                BaseRequestOptions,
-                {
-                    provide: Http,
-                    useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
-                        return new Http(backendInstance, defaultOptions);
-                    },
-                    deps: [MockBackend, BaseRequestOptions]
-                }, ]
+            imports: [NgMaterialModule,
+                FormsModule,
+                AppRoutingModule,
+                CommonModule,
+                DashboardModule,
+                BrowserAnimationsModule,
+            ],
+            providers:
+                [
+                    {provide: Router, useValue: mockRouter},
+                    AppStorageService,
+                    UserApiService,
+                    UserService,
+                    HttpClient,
+                    MockBackend,
+                    BaseRequestOptions,
+                    {
+                        provide: Http,
+                        useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
+                            return new Http(backendInstance, defaultOptions);
+                        },
+                        deps: [MockBackend, BaseRequestOptions]
+                    }, ]
         })
             .compileComponents();
     }));
@@ -102,6 +108,22 @@ fdescribe('LoginFormComponent', () => {
             expect(spy.calls.count()).toBe(1, 'login was called');
             expect(service.login).toHaveBeenCalled();
             expect(service.login).toHaveBeenCalledWith(new LoginRequest(component.user));
+        });
+    }));
+
+    it('should navigate to the register page when register is clicked', inject([Router], (router: Router) => {
+
+        component.user.email = 'test@gmail.com';
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
+            de = fixture.debugElement.query(By.css('.login-form-register-button'));
+            el = de.nativeElement;
+
+            // make sure ui changes based on model
+            expect(el.textContent).toContain('Register');
+            el.click();
+            // make sure login was called with the model
+            expect(router.navigateByUrl).toHaveBeenCalledWith('/register');
         });
     }));
 });

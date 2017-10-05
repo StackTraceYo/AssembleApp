@@ -11,27 +11,28 @@ import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from './http/http.client.module';
 import {HttpClient} from './http/http-client/http-client';
 import {DashboardModule} from './dashboard/dashboard.module';
-import {ToolbarComponent} from './toolbar/toolbar.component';
 import {AuthGuard} from './user-auth/auth-guard/auth.guard';
 import {AppStorageService} from './app-storage/app-storage.service';
+import {ToolbarModule} from './toolbar/toolbar.module';
 
 @NgModule({
-  declarations: [
-    AppComponent, ToolbarComponent
-  ],
-  imports: [
-    NgMaterialModule,
-    BrowserAnimationsModule,
-    BrowserModule,
-    FormsModule,
-    HttpModule,
-    HttpClientModule,
-    AppRoutingModule,
-    UserModule,
-    DashboardModule,
-  ],
-  providers: [HttpClient, AuthGuard, AppStorageService],
-  bootstrap: [AppComponent],
+    declarations: [
+        AppComponent
+    ],
+    imports: [
+        NgMaterialModule,
+        BrowserAnimationsModule,
+        BrowserModule,
+        FormsModule,
+        HttpModule,
+        HttpClientModule,
+        AppRoutingModule,
+        UserModule,
+        DashboardModule,
+        ToolbarModule
+    ],
+    providers: [HttpClient, AuthGuard, AppStorageService],
+    bootstrap: [AppComponent],
 })
 export class AppModule {
 }

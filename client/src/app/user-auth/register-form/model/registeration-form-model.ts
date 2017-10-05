@@ -1,9 +1,9 @@
 export class RegistrationFormModel {
 
-  email: string;
-  password: string = "";
-  username: string = "";
+    email = '';
+    password = '';
+    username = '';
 
-  constructor() {
-  }
+    constructor() {
+    }
 }

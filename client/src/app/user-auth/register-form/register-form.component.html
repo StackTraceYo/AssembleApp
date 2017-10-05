@@ -9,8 +9,8 @@
       <table class="register-form-full-width" cellspacing="0">
         <tr>
           <td>
-            <md-form-field class="register-form-full-width">
-              <input mdInput placeholder="Email" [(ngModel)]="regModel.email" name="email">
+            <md-form-field class="register-form-full-width-email">
+              <input mdInput placeholder="Email" [(ngModel)]="regModel.email" name="email" class="register-form-full-width-email-input">
             </md-form-field>
           </td>
         </tr>
@@ -19,8 +19,8 @@
       <table class="register-form-full-width" cellspacing="0">
         <tr>
           <td>
-            <md-form-field class="register-form-full-width">
-              <input mdInput placeholder="Password" [(ngModel)]="regModel.password" name="password">
+            <md-form-field class="register-form-full-width-password">
+              <input mdInput placeholder="Password" [(ngModel)]="regModel.password" name="password" class="register-form-full-width-password-input">
             </md-form-field>
           </td>
         </tr>
@@ -28,7 +28,7 @@
 
     </form>
   </div>
-  <button md-raised-button color="primary" (click)="register()">Register</button>
+  <button md-raised-button color="primary" (click)="register()" class="register-form-register-button">Register</button>
 </div>
 
 <div class="registering-spinner-holder" *ngIf="registering">
