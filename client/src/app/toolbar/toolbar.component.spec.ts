@@ -11,7 +11,7 @@ import {By} from '@angular/platform-browser';
 import {AssembleUser} from '../user-auth/assemble.user';
 
 
-describe('ToolbarComponent', () => {
+xdescribe('ToolbarComponent', () => {
 
     let component: ToolbarComponent;
     let fixture: ComponentFixture<ToolbarComponent>;

@@ -7,27 +7,31 @@ import {AppStorageService} from '../app-storage/app-storage.service';
 export class UserService implements OnInit {
 
 
-    private _$user = new BehaviorSubject<AssembleUser>(AssembleUser.noUser());
-    private _$token = new BehaviorSubject<String>('');
-
     private _user = AssembleUser.noUser();
     private _token = '';
 
+    private _$user: BehaviorSubject<AssembleUser>;
+    private _$token: BehaviorSubject<String>;
+
     constructor(private storageService: AppStorageService) {
+        const storedUser = this.storageService.retrieve('asm-user');
+        if (storedUser) {
+            const parsedStoredUser = JSON.parse(storedUser);
+            console.log(parsedStoredUser.email);
+            this._user = new AssembleUser(parsedStoredUser.email, parsedStoredUser.id, true);
+        }
+        this._token = this.storageService.retrieve('asm-token');
+        this._$token = new BehaviorSubject<String>(this._token);
+        this._$user = new BehaviorSubject<AssembleUser>(this._user);
     }
 
     ngOnInit(): void {
-        // const storedUser = AppStorageService.retrieve('asm-user');
-        // if (storedUser) {
-        //   this._user = JSON.parse(storedUser);
-        // }
-        // this._token = AppStorageService.retrieve('asm-token');
     }
 
     storeUser(user: AssembleUser) {
         this._user = user;
-        this._$user.next(user);
-        // AppStorageService.store('asm-user', JSON.stringify(user));
+        this._$user.next(this._user);
+        this.storageService.store('asm-user', user);
     }
 
 
@@ -40,9 +44,9 @@ export class UserService implements OnInit {
     }
 
     putToken(token: string) {
-        const newToken = token;
-        this._$token.next(token);
-        // AppStorageService.store('asm-token', JSON.stringify(token));
+        this._token = token;
+        this._$token.next(this._token);
+        this.storageService.store('asm-token', token);
     }
 
     getToken() {
