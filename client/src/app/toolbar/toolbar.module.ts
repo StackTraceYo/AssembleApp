@@ -12,7 +12,8 @@ import {AppRoutingModule} from '../app-routing/app-routing.module';
         FormsModule,
         AppRoutingModule
     ],
-    declarations: [ToolbarComponent]
+    declarations: [ToolbarComponent],
+    exports: [ToolbarComponent]
 })
 export class ToolbarModule {
 }
