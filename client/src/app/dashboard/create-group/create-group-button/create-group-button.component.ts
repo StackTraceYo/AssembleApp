@@ -1,5 +1,4 @@
-import {Component, OnInit} from '@angular/core';
-import {CreateGroupModel} from '../model/create-group-model';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 
 @Component({
     selector: 'asm-create-group-button',
@@ -8,8 +7,7 @@ import {CreateGroupModel} from '../model/create-group-model';
 })
 export class CreateGroupButtonComponent implements OnInit {
 
-    createModel = new CreateGroupModel();
-
+    @Output() onCreateClicked = new EventEmitter<string>();
 
     constructor() {
     }
@@ -17,8 +15,8 @@ export class CreateGroupButtonComponent implements OnInit {
     ngOnInit() {
     }
 
-    openDialog(): void {
-
+    create(): void {
+        this.onCreateClicked.emit('createGroup');
     }
 
 }

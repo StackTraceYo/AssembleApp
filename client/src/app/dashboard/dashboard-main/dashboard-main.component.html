@@ -1,12 +1,14 @@
 Dashboard
-<div class="dash-board-main">
-    <div class="dashboard-my-groups-wrapper">
+<div class="dash-board-main" [ngSwitch]="currentView">
+    <div *ngSwitchCase="'myGroups'" class="dashboard-my-groups-wrapper">
         <asm-dashboard-my-groups></asm-dashboard-my-groups>
+    </div>
+    <div *ngSwitchCase="'createGroup'" class="dashboard-my-groups-wrapper">
+        <asm-create-group-stepper></asm-create-group-stepper>
     </div>
 </div>
 <div class="dash-board-buttons-wrapper">
-    <asm-create-group-button></asm-create-group-button>
+    <asm-create-group-button (onCreateClicked)="onViewChange($event)"></asm-create-group-button>
     <asm-join-group-button></asm-join-group-button>
 </div>
-<!--<asm-create-group-stepper></asm-create-group-stepper>-->
 
