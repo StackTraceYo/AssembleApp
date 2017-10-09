@@ -12,9 +12,9 @@
       <table class="login-form-full-width" cellspacing="0">
         <tr>
           <td>
-            <md-form-field class="login-form-full-width-email">
-              <input mdInput placeholder="Email" [(ngModel)]="user.email" name="email" class="login-form-full-width-email-input">
-            </md-form-field>
+            <mat-form-field class="login-form-full-width-email">
+              <input matInput placeholder="Email" [(ngModel)]="user.email" name="email" class="login-form-full-width-email-input">
+            </mat-form-field>
           </td>
         </tr>
       </table>
@@ -23,19 +23,19 @@
       <table class="login-form-full-width" cellspacing="0">
         <tr>
           <td>
-            <md-form-field class="login-form-full-width-password">
-              <input mdInput placeholder="Password">
-            </md-form-field>
+            <mat-form-field class="login-form-full-width-password">
+              <input matInput placeholder="Password">
+            </mat-form-field>
           </td>
         </tr>
       </table>
 
     </form>
   </div>
-  <button md-raised-button color="primary" (click)="login()" class="login-form-login-button">Login</button>
-  <button md-button (click)="goToRegistration()" class="login-form-register-button">Register</button>
+  <button mat-raised-button color="primary" (click)="login()" class="login-form-login-button">Login</button>
+  <button mat-button (click)="goToRegistration()" class="login-form-register-button">Register</button>
 </div>
 <div *ngIf="loggingIn" class="login-spinner-holder">
-  <md-spinner></md-spinner>
+  <mat-spinner></mat-spinner>
 </div>
 

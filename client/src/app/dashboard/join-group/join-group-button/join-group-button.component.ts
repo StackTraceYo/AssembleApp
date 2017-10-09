@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 
 @Component({
     selector: 'asm-join-group-button',
-    templateUrl: './join-group.component.html',
-    styleUrls: ['./join-group.component.scss']
+    templateUrl: './join-group-button.component.html',
+    styleUrls: ['./join-group-button.component.scss']
 })
 export class JoinGroupComponent implements OnInit {
 

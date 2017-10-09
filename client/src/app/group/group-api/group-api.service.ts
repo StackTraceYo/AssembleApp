@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '../../http/http-client/http-client';
-import {CreateRequest} from "./request/create-request";
-import {CreateResponse} from "./response/create-response";
-import {Observable} from "rxjs/Observable";
-import {Response} from "@angular/http";
+import {CreateRequest} from './request/create-request';
+import {CreateResponse} from './response/create-response';
+import {Observable} from 'rxjs/Observable';
+import {Response} from '@angular/http';
 
 @Injectable()
 export class GroupApiService {

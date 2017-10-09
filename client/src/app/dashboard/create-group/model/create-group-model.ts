@@ -1,6 +1,8 @@
 export class CreateGroupModel {
 
-    constructor(private _groupName: string) {
+    private _groupName: string;
+
+    constructor() {
     }
 
     get groupName(): string {

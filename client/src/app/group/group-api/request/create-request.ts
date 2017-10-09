@@ -1,4 +1,4 @@
-import {CreateGroupModel} from '../model/create-group-model';
+import {CreateGroupModel} from '../../../dashboard/create-group/model/create-group-model';
 
 export class CreateRequest {
 
