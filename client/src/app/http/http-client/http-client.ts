@@ -13,13 +13,13 @@ export class HttpClient {
     }
 
 
-    get (url) {
-        const headers = new Headers();
+    get(url, token = '') {
+        this.options.headers.set('X-Asm-Auth', token);
         return this.http.get(this.createFullUrl(url), this.options);
     }
 
-    post(url, data) {
-        const headers = new Headers();
+    post(url, data, token = '') {
+        this.options.headers.set('X-Asm-Auth', token);
         return this.http.post(this.createFullUrl(url), data, this.options);
     }
 

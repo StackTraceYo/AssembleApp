@@ -16,7 +16,7 @@ export class CreateGroupButtonComponent implements OnInit {
     }
 
     create(): void {
-        this.onCreateClicked.emit('createGroup');
+        this.onCreateClicked.emit('Create A Group');
     }
 
 }

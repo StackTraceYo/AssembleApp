@@ -7,11 +7,20 @@ import {Component, OnInit} from '@angular/core';
 })
 export class DashboardMainComponent implements OnInit {
 
-    currentView = 'myGroups';
+    currentView = '';
+    viewName = 'Dashboard';
+    landing = true;
 
     onViewChange(viewName: string) {
-        console.log(viewName + ' recieved');
         this.currentView = viewName;
+        this.viewName = viewName;
+        this.landing = viewName === 'Dashboard';
+    }
+
+    backToDash() {
+        this.landing = true;
+        this.viewName = 'Dashboard';
+        this.currentView = 'Dashboard';
     }
 
     constructor() {

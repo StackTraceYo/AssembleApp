@@ -17,7 +17,6 @@ export class UserService implements OnInit {
         const storedUser = this.storageService.retrieve('asm-user');
         if (storedUser) {
             const parsedStoredUser = JSON.parse(storedUser);
-            console.log(parsedStoredUser.email);
             this._user = new AssembleUser(parsedStoredUser.email, parsedStoredUser.id, true);
         }
         this._token = this.storageService.retrieve('asm-token');
@@ -51,6 +50,10 @@ export class UserService implements OnInit {
 
     getToken() {
         return this._$token.asObservable();
+    }
+
+    getInstantToken() {
+        return this._token
     }
 
     clearToken() {

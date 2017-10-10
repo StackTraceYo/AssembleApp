@@ -5,8 +5,10 @@ import {DashboardMyGroupsComponent} from './dashboard-my-groups/dashboard-my-gro
 import {NgMaterialModule} from '../ng-material/ng-material.module';
 import {JoinGroupComponent} from './join-group/join-group-button/join-group-button.component';
 import {CreateGroupButtonComponent} from './create-group/create-group-button/create-group-button.component';
-import { CreateGroupStepperComponent } from './create-group/create-group-stepper/create-group-stepper.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {CreateGroupStepperComponent} from './create-group/create-group-stepper/create-group-stepper.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {GroupModule} from '../group/group.module';
+import {AppRoutingModule} from '../app-routing/app-routing.module';
 
 
 @NgModule({
@@ -14,7 +16,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         CommonModule,
         NgMaterialModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        GroupModule,
+        AppRoutingModule
     ],
     declarations: [
         DashboardMainComponent,

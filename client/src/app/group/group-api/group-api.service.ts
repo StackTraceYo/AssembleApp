@@ -4,17 +4,19 @@ import {CreateRequest} from './request/create-request';
 import {CreateResponse} from './response/create-response';
 import {Observable} from 'rxjs/Observable';
 import {Response} from '@angular/http';
+import {UserService} from '../../user-auth/user-service';
 
 @Injectable()
 export class GroupApiService {
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, private userService: UserService) {
     }
 
     create(createRequest: CreateRequest): Observable<CreateResponse> {
-        return this.http.post('/api/auth/user/create', JSON.stringify(createRequest))
+        return this.http.post('/api/group/create', JSON.stringify(createRequest), this.userService.getInstantToken())
             .map((res: Response) => {
                 const json = res.json();
+                console.log(json);
                 return new CreateResponse(json.groupId, json.success);
             })
             .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
