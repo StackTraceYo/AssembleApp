@@ -23,6 +23,9 @@ export class ToolbarComponent implements OnInit {
                     if (user.isAuthenticated()) {
                         this.loginOrOut = 'Logout';
                         this.loggedIn = true;
+                    } else {
+                        this.loginOrOut = 'Login';
+                        this.loggedIn = false;
                     }
                 },
                 err => {

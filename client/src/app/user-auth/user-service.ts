@@ -35,6 +35,7 @@ export class UserService implements OnInit {
 
 
     removeUser() {
+        this._user = AssembleUser.noUser();
         this._$user.next(AssembleUser.noUser());
     }
 
@@ -53,10 +54,11 @@ export class UserService implements OnInit {
     }
 
     getInstantToken() {
-        return this._token
+        return this._token;
     }
 
     clearToken() {
+        this._token = '';
         this._$token.next('');
     }
 }

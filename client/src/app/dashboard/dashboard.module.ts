@@ -8,6 +8,7 @@ import {CreateGroupButtonComponent} from './create-group/create-group-button/cre
 import {CreateGroupStepperComponent} from './create-group/create-group-stepper/create-group-stepper.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {GroupModule} from '../group/group.module';
+import {CreateGroupSuccessDialogComponent} from './create-group/create-group-success-dialog/create-group-success-dialog.component';
 import {AppRoutingModule} from '../app-routing/app-routing.module';
 
 
@@ -25,7 +26,10 @@ import {AppRoutingModule} from '../app-routing/app-routing.module';
         DashboardMyGroupsComponent,
         CreateGroupButtonComponent,
         JoinGroupComponent,
-        CreateGroupStepperComponent]
+        CreateGroupStepperComponent,
+        CreateGroupSuccessDialogComponent
+    ],
+    entryComponents: [CreateGroupSuccessDialogComponent]
 
 })
 export class DashboardModule {

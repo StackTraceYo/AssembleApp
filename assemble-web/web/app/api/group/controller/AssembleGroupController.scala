@@ -21,7 +21,7 @@ class AssembleGroupController @Inject()(cc: ControllerComponents, tokenService: 
 
   def createGroup: Action[CreateGroupRequest] = Action.async(parse.json[CreateGroupRequest]) { request =>
     val creationRequest = request.body
-    val auth = request.headers.get("X-Asm-Auth").getOrElse("Unauthorized")
+    val auth = request.headers.get("X-Asm-Auth").map(header=> header.replace("\"","")).getOrElse("Unauthorized")
     if (auth.equals("Unauthorized")) {
       redirectToUnauthorized
     } else {
@@ -43,7 +43,7 @@ class AssembleGroupController @Inject()(cc: ControllerComponents, tokenService: 
 
   def listGroups: Action[ListGroupRequest] = Action.async(parse.json[ListGroupRequest]) { request =>
     val listRequest = request.body
-    val auth = request.headers.get("X-Asm-Auth").getOrElse("Unauthorized")
+    val auth = request.headers.get("X-Asm-Auth").map(header=> header.replace("\"","")).getOrElse("Unauthorized")
     if (auth.equals("Unauthorized")) {
       redirectToUnauthorized
     } else {
