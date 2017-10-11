@@ -13,7 +13,6 @@ import {AppRoutingModule} from '../app-routing/app-routing.module';
 import {ContentModule} from '../content/content.module';
 import {CategorySelectionGridComponent} from './category-selection/category-selection-grid/category-selection-grid.component';
 
-
 @NgModule({
     imports: [
         CommonModule,

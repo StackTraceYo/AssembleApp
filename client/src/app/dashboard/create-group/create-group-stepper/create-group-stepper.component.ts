@@ -19,6 +19,7 @@ export class CreateGroupStepperComponent implements OnInit {
 
     isLinear = false;
     basicInfo: FormGroup;
+    category: FormGroup;
     additionalInfo: FormGroup;
 
     constructor(private _formBuilder: FormBuilder, private groupApiService: GroupApiService, public dialog: MatDialog) {
@@ -27,6 +28,9 @@ export class CreateGroupStepperComponent implements OnInit {
     ngOnInit() {
         this.basicInfo = this._formBuilder.group({
             groupName: ['', Validators.required]
+        });
+        this.category = this._formBuilder.group({
+            categoryName: ['', Validators.required]
         });
         this.additionalInfo = this._formBuilder.group({
             category: ['', Validators.required]

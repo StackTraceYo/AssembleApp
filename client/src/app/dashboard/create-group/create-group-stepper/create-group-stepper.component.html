@@ -5,7 +5,18 @@
             <mat-form-field>
                 <input matInput placeholder="Group Name" formControlName="groupName" required>
             </mat-form-field>
+            <!--<asm-category-selection-grid></asm-category-selection-grid>-->
             <div>
+                <button mat-button color="primary" matStepperNext>Next</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step [stepControl]="category">
+        <form [formGroup]="category" name="category">
+            <ng-template matStepLabel>Pick A Group Category</ng-template>
+            <asm-category-selection-grid></asm-category-selection-grid>
+            <div>
+                <button mat-button color="primary" matStepperPrevious>Back</button>
                 <button mat-button color="primary" matStepperNext>Next</button>
             </div>
         </form>
