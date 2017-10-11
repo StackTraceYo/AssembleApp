@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {GroupApiService} from '../../group/group-api/group-api.service';
-import {GroupListRequest} from '../../group/group-api/request/group-list-request';
 import {AssembleGroup} from '../../group/model/assemble-group';
+import {GroupService} from '../../group/group.service';
 
 @Component({
     selector: 'asm-dashboard-main',
@@ -10,48 +9,38 @@ import {AssembleGroup} from '../../group/model/assemble-group';
 })
 export class DashboardMainComponent implements OnInit {
 
-    currentView = '';
+    currentView = 'Dashboard';
     viewName = 'Dashboard';
-    landing = true;
+    showBackToDash = true;
     myGroups: AssembleGroup[];
 
 
-    constructor(private groupService: GroupApiService) {
+    constructor(private groupService: GroupService) {
     }
 
     onViewChange(viewName: string) {
         this.currentView = viewName;
         this.viewName = viewName;
-        this.landing = viewName === 'Dashboard';
+        this.showBackToDash = viewName === 'Dashboard';
     }
 
     onGroupCreated(name: String) {
-        this.backToDash();
+        this.onViewChange('Dashboard');
+        this.groupService.listGroups();
     }
 
     backToDash() {
-        this.landing = true;
+        this.showBackToDash = true;
         this.viewName = 'Dashboard';
         this.currentView = 'Dashboard';
     }
 
     ngOnInit() {
-        const listOp = this.groupService.list(new GroupListRequest());
-
-        listOp.subscribe(
-            groups => {
-                if (groups.list.length > 0) {
-                    this.myGroups = groups.list.map(group => {
-                        return new AssembleGroup(group.groupId);
-                    });
-                    this.onViewChange('My Groups');
-                } else {
-                    this.backToDash();
-                }
-            },
-            err => {
-                console.log(err);
+        this.groupService.getMyGroups()
+            .subscribe(groups => {
+                this.myGroups = groups;
             });
     }
+
 
 }

@@ -1,6 +1,10 @@
-<mat-grid-list cols="4" rowHeight="100px">
-  <mat-grid-tile
-          *ngFor="let group of groups">
-    {{group.groupId}}
-  </mat-grid-tile>
+<mat-grid-tile-header>
+    <h2>
+        My Groups</h2>
+</mat-grid-tile-header>
+<mat-grid-list cols="4" rowHeight="100px" gutterSize="5px">
+    <mat-grid-tile
+        *ngFor="let group of groups">
+        {{group.groupId}}
+    </mat-grid-tile>
 </mat-grid-list>

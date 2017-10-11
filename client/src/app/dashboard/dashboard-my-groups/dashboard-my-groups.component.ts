@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {AssembleGroup} from '../../group/model/assemble-group';
 
 @Component({
@@ -6,7 +6,7 @@ import {AssembleGroup} from '../../group/model/assemble-group';
     templateUrl: './dashboard-my-groups.component.html',
     styleUrls: ['./dashboard-my-groups.component.scss']
 })
-export class DashboardMyGroupsComponent implements OnInit {
+export class DashboardMyGroupsComponent {
 
     @Input() groups: AssembleGroup[];
 
@@ -19,9 +19,4 @@ export class DashboardMyGroupsComponent implements OnInit {
         {text: 'Three', cols: 1, rows: 1, color: 'lightpink'},
         {text: 'Four', cols: 2, rows: 1, color: '#DDBDF1'},
     ];
-
-    ngOnInit() {
-        
-    }
-
 }
