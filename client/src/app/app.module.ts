@@ -14,6 +14,7 @@ import {DashboardModule} from './dashboard/dashboard.module';
 import {AuthGuard} from './user-auth/auth-guard/auth.guard';
 import {AppStorageService} from './app-storage/app-storage.service';
 import {ToolbarModule} from './toolbar/toolbar.module';
+import {ContentModule} from './content/content.module';
 
 @NgModule({
     declarations: [
@@ -29,7 +30,8 @@ import {ToolbarModule} from './toolbar/toolbar.module';
         AppRoutingModule,
         UserModule,
         DashboardModule,
-        ToolbarModule
+        ToolbarModule,
+        ContentModule
     ],
     providers: [HttpClient, AuthGuard, AppStorageService],
     bootstrap: [AppComponent],

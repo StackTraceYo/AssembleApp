@@ -5,7 +5,7 @@
         <asm-dashboard-my-groups [groups]="myGroups"></asm-dashboard-my-groups>
     </div>
     <div *ngSwitchCase="'Create A Group'" class="dashboard-my-groups-wrapper">
-        <asm-create-group-stepper (onCreateFinished)="onGroupCreated($event)"></asm-create-group-stepper>
+        <asm-create-group-stepper [categories]="categories" (onCreateFinished)="onGroupCreated($event)"></asm-create-group-stepper>
     </div>
 </div>
 <div class="dash-board-back">

@@ -10,6 +10,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {GroupModule} from '../group/group.module';
 import {CreateGroupSuccessDialogComponent} from './create-group/create-group-success-dialog/create-group-success-dialog.component';
 import {AppRoutingModule} from '../app-routing/app-routing.module';
+import {ContentModule} from '../content/content.module';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import {AppRoutingModule} from '../app-routing/app-routing.module';
         FormsModule,
         ReactiveFormsModule,
         GroupModule,
-        AppRoutingModule
+        AppRoutingModule,
+        ContentModule
     ],
     declarations: [
         DashboardMainComponent,
