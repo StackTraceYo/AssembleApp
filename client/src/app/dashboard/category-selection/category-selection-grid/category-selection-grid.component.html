@@ -2,7 +2,7 @@
   Pick a Category
 </mat-grid-tile-header>
 <mat-grid-list cols="4" rowHeight="50px" gutterSize="5px">
-  <mat-grid-tile
+  <mat-grid-tile (click)="traverse(category)"
           *ngFor="let category of categories.subCategories">
     {{category.categoryName}}
   </mat-grid-tile>

@@ -1,4 +1,4 @@
-<mat-horizontal-stepper [linear]="isLinear">
+<mat-horizontal-stepper [linear]="false" #stepper>
     <mat-step [stepControl]="basicInfo">
         <form [formGroup]="basicInfo" name="basicInfo">
             <ng-template matStepLabel>Basic Information</ng-template>
@@ -14,7 +14,9 @@
     <mat-step [stepControl]="category">
         <form [formGroup]="category" name="category">
             <ng-template matStepLabel>Pick A Group Category</ng-template>
-            <asm-category-selection-grid></asm-category-selection-grid>
+            <asm-category-selection-grid [stepper]="stepper"
+                                         (onCategorySelected)="onCategorySelected($event)">
+            </asm-category-selection-grid>
             <div>
                 <button mat-button color="primary" matStepperPrevious>Back</button>
                 <button mat-button color="primary" matStepperNext>Next</button>
