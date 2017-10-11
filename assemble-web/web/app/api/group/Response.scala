@@ -1,5 +1,6 @@
 package api.group
 
+import org.stacktrace.yo.group.core.api.GroupAPIModel.AssembledGroup
 import play.api.libs.json.{Json, OFormat}
 
 object Response {
@@ -8,7 +9,11 @@ object Response {
 
   case class GroupCreatedResponse(groupId: String, success: Boolean) extends AssembleResponse
 
+  case class GroupListResponse(list : List[AssembledGroup]) extends AssembleResponse
+
   implicit val createGroupResponseFormats: OFormat[GroupCreatedResponse] = Json.format[GroupCreatedResponse]
+
+  implicit val listGroupResponseFormats: OFormat[GroupListResponse] = Json.format[GroupListResponse]
 
 
 }

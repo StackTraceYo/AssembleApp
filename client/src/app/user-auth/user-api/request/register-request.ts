@@ -1,4 +1,4 @@
-import {RegistrationFormModel} from "../../register-form/model/registeration-form-model";
+import {RegistrationFormModel} from '../../register-form/model/registeration-form-model';
 
 export class RegisterRequest {
 
@@ -9,7 +9,7 @@ export class RegisterRequest {
   constructor(formModel: RegistrationFormModel) {
     this.email = formModel.email;
     this.password = formModel.password;
-    this.username = formModel.username
+    this.username = formModel.username;
   }
 
 }

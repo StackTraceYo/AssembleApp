@@ -1,0 +1,36 @@
+<mat-horizontal-stepper [linear]="isLinear">
+    <mat-step [stepControl]="basicInfo">
+        <form [formGroup]="basicInfo" name="basicInfo">
+            <ng-template matStepLabel>Basic Information</ng-template>
+            <mat-form-field>
+                <input matInput placeholder="Group Name" formControlName="groupName" required>
+            </mat-form-field>
+            <div>
+                <button mat-button color="primary" matStepperNext>Next</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step [stepControl]="additionalInfo">
+        <form [formGroup]="additionalInfo">
+            <ng-template matStepLabel>Addl. Info</ng-template>
+            <mat-form-field>
+                <input matInput placeholder="Category" formControlName="category" required>
+            </mat-form-field>
+            <div>
+                <button mat-button color="primary" matStepperPrevious>Back</button>
+                <button mat-button color="primary" matStepperNext>Next</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Review</ng-template>
+        <div class="create-group-review-content">
+            {{basicInfo.value.groupName}}
+            {{additionalInfo.value.category}}
+        </div>
+        <div>
+            <button mat-button color="primary" matStepperPrevious>Back</button>
+            <button mat-raised-button color="primary" (click)="create()">Create!</button>
+        </div>
+    </mat-step>
+</mat-horizontal-stepper>

@@ -1,33 +1,43 @@
 import {NgModule} from '@angular/core';
 import {
-  MdButtonModule,
-  MdCheckboxModule,
-  MdIconModule,
-  MdInputModule,
-  MdMenuModule, MdProgressSpinnerModule,
-  MdToolbarModule
+    MatButtonModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatMenuModule,
+    MatProgressSpinnerModule,
+    MatStepperModule,
+    MatToolbarModule,
 } from '@angular/material';
 
 @NgModule({
-  imports: [
-    MdButtonModule,
-    MdCheckboxModule,
-    MdInputModule,
-    MdToolbarModule,
-    MdIconModule,
-    MdMenuModule,
-    MdProgressSpinnerModule
-  ],
-  exports: [
-    MdButtonModule,
-    MdCheckboxModule,
-    MdInputModule,
-    MdToolbarModule,
-    MdIconModule,
-    MdMenuModule,
-    MdProgressSpinnerModule
-  ],
-  declarations: []
+    imports: [
+        MatButtonModule,
+        MatCheckboxModule,
+        MatInputModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatMenuModule,
+        MatProgressSpinnerModule,
+        MatGridListModule,
+        MatStepperModule,
+        MatDialogModule
+    ],
+    exports: [
+        MatButtonModule,
+        MatCheckboxModule,
+        MatInputModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatMenuModule,
+        MatProgressSpinnerModule,
+        MatGridListModule,
+        MatStepperModule,
+        MatDialogModule
+    ],
+    declarations: []
 })
 export class NgMaterialModule {
 }

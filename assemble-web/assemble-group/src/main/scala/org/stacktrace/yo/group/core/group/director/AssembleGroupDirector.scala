@@ -2,16 +2,16 @@ package org.stacktrace.yo.group.core.group.director
 
 import java.util.UUID
 
-import akka.actor.{ActorLogging, ActorRef, Props}
+import akka.actor.{ActorContext, ActorLogging, ActorRef, Props}
 import akka.event.LoggingReceive
 import akka.persistence.{PersistentActor, SaveSnapshotFailure, SaveSnapshotSuccess}
 import com.stacktrace.yo.assemble.group.GroupProtocol.{DirectorReferenceState, GroupReference, GroupReferenceCreated}
 import com.stacktrace.yo.assemble.group.Protocol
 import com.stacktrace.yo.assemble.group.Protocol.{CreateGroup, GetState, GroupCreatedRef}
-import org.stacktrace.yo.group.core.api.GroupAPIModel.AssembledGroup
-import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, FindAssembleGroup, GroupRetrieved}
+import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, FindAssembleGroup, ListAssembleGroup}
 import org.stacktrace.yo.group.core.api.handler.GroupResponseHandler
-import org.stacktrace.yo.group.core.group.lookup.{AssembleLookupActor, PersistentActorLookup}
+import org.stacktrace.yo.group.core.group.lookup.PersistentActorLookup
+import org.stacktrace.yo.group.core.group.retrieval.GroupSearchActor
 import org.stacktrace.yo.group.core.group.supervisor.AssembleGroupSupervisor
 
 import scala.concurrent.ExecutionContext
@@ -47,22 +47,19 @@ class AssembleGroupDirector(directorId: String = "1")(implicit ec: ExecutionCont
     case GroupCreatedRef(groupId, actorRef) =>
       storeReference(groupId, actorRef)
 
-    case FindAssembleGroup(groupId: String) =>
+    case find@FindAssembleGroup(groupId: String) =>
       val api = sender()
-      val answer = getSupervisor(groupId) match {
-        case Some(group) =>
-          Some(GroupRetrieved(
-            AssembledGroup(groupId))
-          )
-        case None =>
-          Option.empty
-      }
-      sender() ! answer
+      val searcher = createSearcher()
+      searcher.tell(find, createGroupHandler(api))
+
+    case find@ListAssembleGroup() =>
+      val api = sender()
+      val searcher = createSearcher()
+      searcher.tell(find, createGroupHandler(api))
+
     case GetState() =>
       sender() ! referenceState
   }
-
-  def supervisorName: String => String = { x => s"assemble-group-supervisor-$x" }
 
 
   override def rebuild(event: Protocol.Event): Unit = {
@@ -88,9 +85,7 @@ class AssembleGroupDirector(directorId: String = "1")(implicit ec: ExecutionCont
       })
   }
 
-  private def getSupervisor(groupId: String) = {
-    resolveActorById(groupId)
-  }
+  private def supervisorName: String => String = { x => s"assemble-group-supervisor-$x" }
 
   private def generateName() = {
     UUID.randomUUID().toString
@@ -104,8 +99,8 @@ class AssembleGroupDirector(directorId: String = "1")(implicit ec: ExecutionCont
     context.actorOf(AssembleGroupDirector.supervisorActor(self, id), supervisorName(id))
   }
 
-  private def createLookupHandler(groupId: String, hostId: String): ActorRef = {
-    context.actorOf(AssembleGroupDirector.lookupProps(references.toMap, groupId, hostId))
+  private def createSearcher(): ActorRef = {
+    context.actorOf(AssembleGroupDirector.searchProps(context, references.toMap))
   }
 }
 
@@ -119,8 +114,8 @@ object AssembleGroupDirector {
     Props(new GroupResponseHandler(sender))
   }
 
-  def lookupProps(groupRefs: Map[String, ActorRef], groupId: String, hostId: String): Props = {
-    Props(new AssembleLookupActor(groupRefs, groupId, hostId))
+  def searchProps(searchContext: ActorContext, refs: Map[String, ActorRef]): Props = {
+    Props(new GroupSearchActor(searchContext, refs))
   }
 
 }

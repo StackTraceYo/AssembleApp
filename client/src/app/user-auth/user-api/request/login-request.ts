@@ -1,4 +1,4 @@
-import {LoginFormModel} from "../../login-form/model/login-form-model";
+import {LoginFormModel} from '../../login-form/model/login-form-model';
 
 export class LoginRequest {
 

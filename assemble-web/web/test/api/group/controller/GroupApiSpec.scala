@@ -1,16 +1,16 @@
 package api.group.controller
 
+import java.io.File
 import java.util.UUID
 
-import akka.actor.ActorSystem
-import api.BaseWebSpec
 import api.auth.Request.CreateUser
-import api.group.Request.CreateGroupRequest
-import api.group.Response.GroupCreatedResponse
-import org.scalatest.BeforeAndAfterAll
+import api.group.Request.{CreateGroupRequest, ListGroupRequest}
+import api.group.Response.{GroupCreatedResponse, GroupListResponse}
+import org.apache.commons.io.FileUtils
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.Matchers._
 import org.scalatestplus.play.PlaySpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
@@ -21,7 +21,7 @@ import scala.concurrent.duration._
 import scala.language.postfixOps
 
 
-class GroupApiSpec extends PlaySpec with GuiceOneAppPerSuite with BaseWebSpec with BeforeAndAfterAll {
+class GroupApiSpec extends PlaySpec with GuiceOneAppPerTest with BeforeAndAfterEach {
 
 
   "AssembleGroupController" should {
@@ -68,18 +68,56 @@ class GroupApiSpec extends PlaySpec with GuiceOneAppPerSuite with BaseWebSpec wi
 
       status(create) mustBe Status.UNAUTHORIZED
     }
+
+    "authorized user can see groups" in {
+      val user = route(app, FakeRequest(POST, "/api/auth/user/create").withBody(Json.toJson(CreateUser(UUID.randomUUID().toString, UUID.randomUUID().toString)))).get
+      val res = Await.result(user, 5 seconds)
+
+      val headerVal = res.header.headers("X-Asm-Auth")
+
+      val create = route(app, FakeRequest(POST, "/api/group/create")
+        .withBody(Json.toJson(CreateGroupRequest("test-group-name")))
+        .withHeaders("X-Asm-Auth" -> headerVal))
+        .get
+
+      val create2 = route(app, FakeRequest(POST, "/api/group/create")
+        .withBody(Json.toJson(CreateGroupRequest("test-group-name")))
+        .withHeaders("X-Asm-Auth" -> headerVal))
+        .get
+
+      val create3 = route(app, FakeRequest(POST, "/api/group/create")
+        .withBody(Json.toJson(CreateGroupRequest("test-group-name")))
+        .withHeaders("X-Asm-Auth" -> headerVal))
+        .get
+
+      val created = Json.fromJson[GroupCreatedResponse](contentAsJson(create)).get
+      val created2 = Json.fromJson[GroupCreatedResponse](contentAsJson(create2)).get
+      val created3 = Json.fromJson[GroupCreatedResponse](contentAsJson(create3)).get
+
+      val list = route(app, FakeRequest(POST, "/api/group/list")
+        .withBody(Json.toJson(ListGroupRequest()))
+        .withHeaders("X-Asm-Auth" -> headerVal))
+        .get
+
+      val listr = Json.fromJson[GroupListResponse](contentAsJson(list)).get
+
+      listr shouldBe a[GroupListResponse]
+      listr.list.size shouldBe 3
+      print(listr)
+
+    }
   }
 
-  override protected def beforeAll(): Unit = {
-    super.beforeAll()
+  override protected def beforeEach(): Unit = {
     deleteStorageLocations()
   }
 
-
-  override protected def afterAll(): Unit = {
-    super.afterAll()
+  override protected def afterEach(): Unit = {
     deleteStorageLocations()
   }
 
-  override def system: ActorSystem = app.actorSystem
+  def deleteStorageLocations(): Unit = {
+    FileUtils.deleteDirectory(new File("target/journal"))
+    FileUtils.deleteDirectory(new File("target/snapshots"))
+  }
 }

@@ -4,8 +4,8 @@ import javax.inject.{Inject, Singleton}
 
 import akka.actor.ActorSystem
 import api.group.Request
-import org.stacktrace.yo.group.core.api.GroupAPIProtocol.CreateAssembleGroup
-import org.stacktrace.yo.group.core.api.{BaseGroupClient, GroupAPIModel, GroupAPIProtocol}
+import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, ListAssembleGroup}
+import org.stacktrace.yo.group.core.api.{BaseGroupClient, GroupAPIProtocol}
 import org.stacktrace.yo.user.auth.model.AssembleUser
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -22,6 +22,10 @@ class AssembleGroupService @Inject()(as: ActorSystem)(implicit ec: ExecutionCont
     val groupName = creationRequest.groupName
     val request = CreateAssembleGroup(hostid, groupName)
     groupClient.createGroup(request)
+  }
+
+  def listGroups(user: AssembleUser, listRequest: Request.ListGroupRequest): Future[GroupAPIProtocol.GroupsRetrieved] = {
+    groupClient.getGroupList(ListAssembleGroup())
   }
 
 }

@@ -21,7 +21,7 @@ class AssembleAuthTokenService @Inject()(tokenStore: AuthTokenStore, userStore: 
     * @param expiration The duration a token expires.
     * @return The saved auth token.
     */
-  override def create(userID: String, expiration: FiniteDuration = 5 minutes): Future[(UUID, AuthToken)] = {
+  override def create(userID: String, expiration: FiniteDuration = 5 days): Future[(UUID, AuthToken)] = {
     tokenStore.save(
       AuthToken(
         UUID.randomUUID(),
