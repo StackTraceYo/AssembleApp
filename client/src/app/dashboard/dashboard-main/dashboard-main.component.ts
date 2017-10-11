@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AssembleGroup} from '../../group/model/assemble-group';
 import {GroupService} from '../../group/group.service';
-import {ContentService} from '../../content/content-api/content.service';
-import {Category} from '../../content/model/category';
 
 @Component({
     selector: 'asm-dashboard-main',
@@ -15,10 +13,8 @@ export class DashboardMainComponent implements OnInit {
     viewName = 'Dashboard';
     showBackToDash = true;
     myGroups: AssembleGroup[];
-    categories: Category;
 
-
-    constructor(private groupService: GroupService, private contentService: ContentService) {
+    constructor(private groupService: GroupService) {
     }
 
     onViewChange(viewName: string) {
@@ -41,10 +37,6 @@ export class DashboardMainComponent implements OnInit {
         this.groupService.getMyGroups()
             .subscribe(groups => {
                 this.myGroups = groups;
-            });
-        this.contentService.getCategories()
-            .subscribe(c => {
-                this.categories = c;
             });
     }
 

@@ -11,6 +11,7 @@ import {GroupModule} from '../group/group.module';
 import {CreateGroupSuccessDialogComponent} from './create-group/create-group-success-dialog/create-group-success-dialog.component';
 import {AppRoutingModule} from '../app-routing/app-routing.module';
 import {ContentModule} from '../content/content.module';
+import {CategorySelectionGridComponent} from './category-selection/category-selection-grid/category-selection-grid.component';
 
 
 @NgModule({
@@ -21,15 +22,15 @@ import {ContentModule} from '../content/content.module';
         ReactiveFormsModule,
         GroupModule,
         AppRoutingModule,
-        ContentModule
-    ],
+        ContentModule],
     declarations: [
         DashboardMainComponent,
         DashboardMyGroupsComponent,
         CreateGroupButtonComponent,
         JoinGroupComponent,
         CreateGroupStepperComponent,
-        CreateGroupSuccessDialogComponent
+        CreateGroupSuccessDialogComponent,
+        CategorySelectionGridComponent
     ],
     entryComponents: [CreateGroupSuccessDialogComponent]
 
