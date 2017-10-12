@@ -1,11 +1,10 @@
-<mat-horizontal-stepper [linear]="false" #stepper>
-    <mat-step [stepControl]="basicInfo">
+<mat-horizontal-stepper [linear]="true" #stepper>
+    <mat-step [stepControl]="basicInfo" class="stepper-content">
         <form [formGroup]="basicInfo" name="basicInfo">
             <ng-template matStepLabel>Basic Information</ng-template>
             <mat-form-field>
                 <input matInput placeholder="Group Name" formControlName="groupName" required>
             </mat-form-field>
-            <!--<asm-category-selection-grid></asm-category-selection-grid>-->
             <div>
                 <button mat-button color="primary" matStepperNext>Next</button>
             </div>
@@ -23,23 +22,10 @@
             </div>
         </form>
     </mat-step>
-    <mat-step [stepControl]="additionalInfo">
-        <form [formGroup]="additionalInfo">
-            <ng-template matStepLabel>Addl. Info</ng-template>
-            <mat-form-field>
-                <input matInput placeholder="Category" formControlName="category" required>
-            </mat-form-field>
-            <div>
-                <button mat-button color="primary" matStepperPrevious>Back</button>
-                <button mat-button color="primary" matStepperNext>Next</button>
-            </div>
-        </form>
-    </mat-step>
     <mat-step>
         <ng-template matStepLabel>Review</ng-template>
         <div class="create-group-review-content">
-            {{basicInfo.value.groupName}}
-            {{additionalInfo.value.category}}
+            <asm-create-group-review [review]="groupModel()"></asm-create-group-review>
         </div>
         <div>
             <button mat-button color="primary" matStepperPrevious>Back</button>

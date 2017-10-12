@@ -18,7 +18,8 @@ export class CreateGroupStepperComponent implements OnInit {
 
     basicInfo: FormGroup;
     category: FormGroup;
-    additionalInfo: FormGroup;
+
+    // additionalInfo: FormGroup;
 
     constructor(private _formBuilder: FormBuilder, private groupApiService: GroupApiService, public dialog: MatDialog) {
     }
@@ -32,11 +33,11 @@ export class CreateGroupStepperComponent implements OnInit {
             groupName: ['', Validators.required]
         });
         this.category = this._formBuilder.group({
-            categoryName: ['', Validators.required]
+            categoryName: ['']
         });
-        this.additionalInfo = this._formBuilder.group({
-            category: ['', Validators.required]
-        });
+        // this.additionalInfo = this._formBuilder.group({
+        //     category: ['', Validators.required]
+        // });
     }
 
     create() {
@@ -62,5 +63,12 @@ export class CreateGroupStepperComponent implements OnInit {
         dialogRef.afterClosed().subscribe(result => {
             this.onCreateFinished.emit('create');
         });
+    }
+
+    groupModel() {
+        return {
+            groupName: this.basicInfo.value.groupName,
+            categoryName: this.category.value.categoryName
+        };
     }
 }

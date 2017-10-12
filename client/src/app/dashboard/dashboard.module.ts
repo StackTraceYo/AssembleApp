@@ -12,6 +12,7 @@ import {CreateGroupSuccessDialogComponent} from './create-group/create-group-suc
 import {AppRoutingModule} from '../app-routing/app-routing.module';
 import {ContentModule} from '../content/content.module';
 import {CategorySelectionGridComponent} from './category-selection/category-selection-grid/category-selection-grid.component';
+import { CreateGroupReviewComponent } from './create-group/create-group-review/create-group-review.component';
 
 @NgModule({
     imports: [
@@ -29,7 +30,8 @@ import {CategorySelectionGridComponent} from './category-selection/category-sele
         JoinGroupComponent,
         CreateGroupStepperComponent,
         CreateGroupSuccessDialogComponent,
-        CategorySelectionGridComponent
+        CategorySelectionGridComponent,
+        CreateGroupReviewComponent
     ],
     entryComponents: [CreateGroupSuccessDialogComponent]
 
