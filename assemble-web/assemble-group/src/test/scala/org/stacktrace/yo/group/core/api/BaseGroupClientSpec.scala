@@ -1,15 +1,20 @@
 package org.stacktrace.yo.group.core.api
 
+import java.io.File
+
 import akka.actor.ActorSystem
-import org.stacktrace.yo.group.AssemblePersistenceSpec
+import org.apache.commons.io.FileUtils
+import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpecLike}
 import org.stacktrace.yo.group.core.api.GroupAPIModel.AssembledGroup
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol._
 
-import scala.concurrent.Await
 import scala.concurrent.duration._
+import scala.concurrent.{Await, ExecutionContextExecutor}
 import scala.language.postfixOps
+import scala.util.Try
 
-class BaseGroupClientSpec extends AssemblePersistenceSpec(ActorSystem("testSystem")) {
+class BaseGroupClientSpec extends WordSpecLike with Matchers with BeforeAndAfterEach {
+
 
   "An BaseGroupClient" must {
 
@@ -49,9 +54,6 @@ class BaseGroupClientSpec extends AssemblePersistenceSpec(ActorSystem("testSyste
       response3.groupId should not be empty
 
 
-      //TODO
-      Thread.sleep(1000)
-
       val fResponse4 = classUnderTest.getGroupList(ListAssembleGroup())
       val response4 = Await.result(fResponse4, 5 seconds)
 
@@ -67,8 +69,31 @@ class BaseGroupClientSpec extends AssemblePersistenceSpec(ActorSystem("testSyste
     }
   }
 
+  override protected def beforeEach(): Unit = {
+    super.beforeEach()
+      List(
+        "target/journal",
+        "target/snapshots"
+      ).map { s => new File(s) }
+        .foreach(dir => Try(FileUtils.deleteDirectory(dir)))
+  }
+
+
+  override protected def afterEach(): Unit = {
+    super.afterEach()
+    super.beforeEach()
+    List(
+      "target/journal",
+      "target/snapshots"
+    ).map { s => new File(s) }
+      .foreach(dir => Try(FileUtils.deleteDirectory(dir)))
+  }
+
   trait Context {
+
     implicit val system: ActorSystem = ActorSystem()
+    implicit val ec: ExecutionContextExecutor = scala.concurrent.ExecutionContext.Implicits.global
+
   }
 
 }
