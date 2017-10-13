@@ -14,7 +14,6 @@ export class DashboardMainComponent implements OnInit {
     showBackToDash = true;
     myGroups: AssembleGroup[];
 
-
     constructor(private groupService: GroupService) {
     }
 
@@ -26,7 +25,6 @@ export class DashboardMainComponent implements OnInit {
 
     onGroupCreated(name: String) {
         this.onViewChange('Dashboard');
-        this.groupService.listGroups();
     }
 
     backToDash() {

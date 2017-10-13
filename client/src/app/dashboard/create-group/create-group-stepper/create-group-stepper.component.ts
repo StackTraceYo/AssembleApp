@@ -1,10 +1,10 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CreateRequest} from '../../../group/group-api/request/create-request';
 import {GroupApiService} from '../../../group/group-api/group-api.service';
 import {MatDialog} from '@angular/material/';
 import {CreateGroupSuccessDialogComponent} from '../create-group-success-dialog/create-group-success-dialog.component';
-import {Router} from '@angular/router';
+import {Category} from '../../../content/model/category';
 
 @Component({
     selector: 'asm-create-group-stepper',
@@ -13,22 +13,31 @@ import {Router} from '@angular/router';
 })
 export class CreateGroupStepperComponent implements OnInit {
 
+    @Input() categories: Category;
     @Output() onCreateFinished = new EventEmitter<string>();
 
-    isLinear = false;
     basicInfo: FormGroup;
-    additionalInfo: FormGroup;
+    category: FormGroup;
 
-    constructor(private _formBuilder: FormBuilder, private groupApiService: GroupApiService, private router: Router, public dialog: MatDialog) {
+    // additionalInfo: FormGroup;
+
+    constructor(private _formBuilder: FormBuilder, private groupApiService: GroupApiService, public dialog: MatDialog) {
+    }
+
+    onCategorySelected(category: Category) {
+        this.category.value.categoryName = category.categoryName;
     }
 
     ngOnInit() {
         this.basicInfo = this._formBuilder.group({
             groupName: ['', Validators.required]
         });
-        this.additionalInfo = this._formBuilder.group({
-            category: ['', Validators.required]
+        this.category = this._formBuilder.group({
+            categoryName: ['']
         });
+        // this.additionalInfo = this._formBuilder.group({
+        //     category: ['', Validators.required]
+        // });
     }
 
     create() {
@@ -54,5 +63,12 @@ export class CreateGroupStepperComponent implements OnInit {
         dialogRef.afterClosed().subscribe(result => {
             this.onCreateFinished.emit('create');
         });
+    }
+
+    groupModel() {
+        return {
+            groupName: this.basicInfo.value.groupName,
+            categoryName: this.category.value.categoryName
+        };
     }
 }

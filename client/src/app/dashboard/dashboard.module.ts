@@ -10,7 +10,9 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {GroupModule} from '../group/group.module';
 import {CreateGroupSuccessDialogComponent} from './create-group/create-group-success-dialog/create-group-success-dialog.component';
 import {AppRoutingModule} from '../app-routing/app-routing.module';
-
+import {ContentModule} from '../content/content.module';
+import {CategorySelectionGridComponent} from './category-selection/category-selection-grid/category-selection-grid.component';
+import { CreateGroupReviewComponent } from './create-group/create-group-review/create-group-review.component';
 
 @NgModule({
     imports: [
@@ -19,15 +21,17 @@ import {AppRoutingModule} from '../app-routing/app-routing.module';
         FormsModule,
         ReactiveFormsModule,
         GroupModule,
-        AppRoutingModule
-    ],
+        AppRoutingModule,
+        ContentModule],
     declarations: [
         DashboardMainComponent,
         DashboardMyGroupsComponent,
         CreateGroupButtonComponent,
         JoinGroupComponent,
         CreateGroupStepperComponent,
-        CreateGroupSuccessDialogComponent
+        CreateGroupSuccessDialogComponent,
+        CategorySelectionGridComponent,
+        CreateGroupReviewComponent
     ],
     entryComponents: [CreateGroupSuccessDialogComponent]
 

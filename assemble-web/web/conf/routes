@@ -18,3 +18,7 @@ GET         /api/auth/token/create             api.auth.controller.AuthControlle
 GET         /api/group/up                      api.group.controller.AssembleGroupController.index
 POST        /api/group/create                  api.group.controller.AssembleGroupController.createGroup
 POST        /api/group/list                    api.group.controller.AssembleGroupController.listGroups
+
+#Routes for the content
+GET         /api/content/up                    api.content.controller.ContentController.index
+POST        /api/content/retrieve              api.content.controller.ContentController.retrieveContent

@@ -1,3 +1,11 @@
 .create-group-review-content {
-    margin-bottom: 50px;
+  margin-bottom: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.stepper-content {
+  display: flex;
+  justify-content: left;
+  align-items: left;
 }
