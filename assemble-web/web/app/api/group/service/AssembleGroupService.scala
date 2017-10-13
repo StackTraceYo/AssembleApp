@@ -20,7 +20,8 @@ class AssembleGroupService @Inject()(as: ActorSystem)(implicit ec: ExecutionCont
   def createGroup(user: AssembleUser, creationRequest: Request.CreateGroupRequest): Future[GroupAPIProtocol.GroupCreated] = {
     val hostid = user.id
     val groupName = creationRequest.groupName
-    val request = CreateAssembleGroup(hostid, groupName)
+    val category = creationRequest.categoryName
+    val request = CreateAssembleGroup(hostid, groupName, category)
     groupClient.createGroup(request)
   }
 

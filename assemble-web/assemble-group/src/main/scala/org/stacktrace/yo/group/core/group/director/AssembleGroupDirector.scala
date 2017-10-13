@@ -7,19 +7,19 @@ import akka.event.LoggingReceive
 import akka.persistence.{PersistentActor, SaveSnapshotFailure, SaveSnapshotSuccess}
 import com.stacktrace.yo.assemble.group.GroupProtocol.{DirectorReferenceState, GroupReference, GroupReferenceCreated}
 import com.stacktrace.yo.assemble.group.Protocol
-import com.stacktrace.yo.assemble.group.Protocol.{CreateGroup, GetState, GroupCreatedRef}
-import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, FindAssembleGroup, ListAssembleGroup}
+import com.stacktrace.yo.assemble.group.Protocol.{CreateGroup, GetState, GroupCreatedFor}
+import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, FindAssembleGroup, GroupCreated, ListAssembleGroup}
 import org.stacktrace.yo.group.core.api.handler.GroupResponseHandler
 import org.stacktrace.yo.group.core.group.lookup.PersistentActorLookup
 import org.stacktrace.yo.group.core.group.retrieval.GroupSearchActor
 import org.stacktrace.yo.group.core.group.supervisor.AssembleGroupSupervisor
+import org.stacktrace.yo.group.core.group.supervisor.AssembleGroupSupervisor.CreateGroupAndReturnTo
 
 import scala.concurrent.ExecutionContext
+import scala.util.{Failure, Success}
 
 class AssembleGroupDirector(directorId: String = "1")(implicit ec: ExecutionContext) extends PersistentActor with ActorLogging with PersistentActorLookup {
 
-
-  override implicit val executionContext: ExecutionContext = ec
 
   override def receiveCommand: Receive = receive
 
@@ -32,7 +32,7 @@ class AssembleGroupDirector(directorId: String = "1")(implicit ec: ExecutionCont
     case SaveSnapshotFailure(metadata, reason) =>
       log.debug("SnapShot Failed: {}", reason.getMessage)
 
-    case msg@CreateAssembleGroup(hostId: String, groupName: String) =>
+    case msg@CreateAssembleGroup(hostId, groupName, groupCategory) =>
       //get a reference to the original sender
       val api = sender()
       //generate a name for the new supervisor
@@ -40,12 +40,19 @@ class AssembleGroupDirector(directorId: String = "1")(implicit ec: ExecutionCont
       //create this new group
       log.debug("Creating Group Actor Supervisor {}", groupActorId)
       val supervisor = createGroupSupervisor(self, groupActorId)
-      //create a new response handler for this request which will deal with sending back a response to the sender
-      //forward the message
-      supervisor.tell(CreateGroup(hostId), createGroupHandler(api))
+      supervisor ! CreateGroupAndReturnTo(CreateGroup(hostId, groupName, groupCategory), createGroupHandler(api))
 
-    case GroupCreatedRef(groupId, actorRef) =>
-      storeReference(groupId, actorRef)
+    case GroupCreatedFor(groupId, respondTo) =>
+      log.info("Group {} Created: Storing Reference", groupId)
+      val reply = respondTo
+      storeReference(groupId, sender())
+        .onComplete {
+          case Success(x) =>
+            reply ! GroupCreated(groupId)
+          case Failure(e) =>
+            log.warning("Failed to Store Group")
+        }
+
 
     case find@FindAssembleGroup(groupId: String) =>
       val api = sender()
@@ -59,8 +66,8 @@ class AssembleGroupDirector(directorId: String = "1")(implicit ec: ExecutionCont
 
     case GetState() =>
       sender() ! referenceState
-  }
 
+  }
 
   override def rebuild(event: Protocol.Event): Unit = {
     event match {
@@ -96,26 +103,28 @@ class AssembleGroupDirector(directorId: String = "1")(implicit ec: ExecutionCont
   }
 
   private def createGroupSupervisor(director: ActorRef, id: String): ActorRef = {
-    context.actorOf(AssembleGroupDirector.supervisorActor(self, id), supervisorName(id))
+    context.actorOf(AssembleGroupDirector.supervisorActor(self, id, ec), supervisorName(id))
   }
 
   private def createSearcher(): ActorRef = {
-    context.actorOf(AssembleGroupDirector.searchProps(context, references.toMap))
+    context.actorOf(AssembleGroupDirector.searchProps(context, references.toMap, ec))
   }
 }
 
 object AssembleGroupDirector {
 
-  def supervisorActor(director: ActorRef, id: String): Props = {
-    Props(new AssembleGroupSupervisor(director, id))
+  case class Connect()
+
+  def supervisorActor(director: ActorRef, id: String, ec: ExecutionContext): Props = {
+    Props(new AssembleGroupSupervisor(director, id)(ec))
   }
 
   def responseHandlerProps(sender: ActorRef): Props = {
     Props(new GroupResponseHandler(sender))
   }
 
-  def searchProps(searchContext: ActorContext, refs: Map[String, ActorRef]): Props = {
-    Props(new GroupSearchActor(searchContext, refs))
+  def searchProps(searchContext: ActorContext, refs: Map[String, ActorRef], ec: ExecutionContext): Props = {
+    Props(new GroupSearchActor(searchContext, refs)(ec))
   }
 
 }

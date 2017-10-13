@@ -40,6 +40,4 @@ export class GroupService {
     getMyGroups() {
         return this.$myGroups.asObservable();
     }
-
-
 }
