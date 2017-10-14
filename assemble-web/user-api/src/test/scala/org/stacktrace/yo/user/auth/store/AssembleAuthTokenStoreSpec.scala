@@ -27,8 +27,7 @@ class AssembleAuthTokenStoreSpec extends PlaySpec with GuiceOneAppPerSuite {
     "find a token" in new Context {
       val id: UUID = UUID.randomUUID()
       val token = AuthToken(id, "testuserid", Instant.now().plusSeconds(1))
-      store.save(token)
-
+      Await.result(store.save(token), 5 seconds)
       Await.result(store.find(id), 5 seconds).get mustBe token
     }
 
@@ -50,7 +49,7 @@ class AssembleAuthTokenStoreSpec extends PlaySpec with GuiceOneAppPerSuite {
     "find expired tokens" in new Context {
       val id: UUID = UUID.randomUUID()
       val token = AuthToken(id, "testuserid", Instant.now())
-      store.save(token)
+      Await.result(store.save(token), 5 seconds)
       val expired: Seq[(UUID, AuthToken)] = Await.result(store.findExpired(Instant.now.plusSeconds(5)), 5 seconds)
 
       expired.size mustBe 1

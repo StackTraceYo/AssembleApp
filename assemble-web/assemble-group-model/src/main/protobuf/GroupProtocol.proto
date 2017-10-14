@@ -11,12 +11,14 @@ message AssembleGroupState {
     option (scalapb.message).extends = "com.stacktrace.yo.assemble.group.Protocol.GroupState";
     string hostid = 1;
     string groupid = 2;
+    string groupName = 3;
+    string category = 4;
 }
 
 
 message DirectorReferenceState {
     option (scalapb.message).extends = "com.stacktrace.yo.assemble.group.Protocol.DirectorState";
-    map<string,GroupReference> reference = 1;
+    map<string, GroupReference> reference = 1;
 }
 
 message GroupReference {
@@ -35,6 +37,8 @@ message Created {
     option (scalapb.message).extends = "com.stacktrace.yo.assemble.group.Protocol.Event";
     string hostid = 1;
     string groupid = 2;
+    string groupName = 3;
+    string category = 4;
 }
 
 message Joined {

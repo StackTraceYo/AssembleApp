@@ -15,7 +15,7 @@ trait PersistentActorLookup {
 
   this: PersistentActor with Actor with ActorLogging =>
 
-  implicit val executionContext: ExecutionContext
+  implicit val executionContext: ExecutionContext = context.dispatcher
   implicit val timeout: FiniteDuration = 3 seconds
 
   def rebuild(referenceState: DirectorReferenceState)
@@ -39,9 +39,10 @@ trait PersistentActorLookup {
       log.debug(s"Recovery has completed for $persistenceId with reference size {} :", referenceState.reference.size)
   }
 
-  def storeReference(id: String, ref: ActorRef): Unit = {
+  def storeReference(id: String, ref: ActorRef)(implicit executionContext: ExecutionContext): Future[Unit] = {
     referenceHold.put(id, ref)
     persist(GroupReferenceCreated(id, ref.path.name, ref.path.toSerializationFormat))(storeReferenceState)
+    Future.successful[Unit]()
   }
 
   val storeReferenceState: Event => Unit = {
@@ -50,6 +51,7 @@ trait PersistentActorLookup {
       referenceHold.remove(id) match {
         case Some(actorRef) =>
           referenceState = referenceState.update(_.reference := referenceState.reference + newRef)
+          log.warning(s"Stored $id")
           references.put(id, actorRef)
           saveSnapshot(referenceState)
         case None =>
@@ -66,7 +68,7 @@ trait PersistentActorLookup {
   }
 
 
-  private def resolve(id: String, name: String, path: String): Unit = {
+  private def resolve(id: String, name: String, path: String)(implicit executionContext: ExecutionContext): Unit = {
     //if reference is in temp map
     resolveActorByName(name) match {
       case Some(ref) =>

@@ -6,7 +6,7 @@ object Request {
 
   sealed trait AssembleRequest
 
-  case class CreateGroupRequest(groupName: String) extends AssembleRequest
+  case class CreateGroupRequest(groupName: String, categoryName: String) extends AssembleRequest
 
   case class ListGroupRequest(count: Int = Int.MaxValue, page: Int = 1, offset: Int = 0) extends AssembleRequest
 

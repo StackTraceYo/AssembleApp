@@ -30,7 +30,6 @@ abstract class AssemblePersistenceSpec(system: ActorSystem) extends TestKit(syst
   }
 
   def killActors(actors: ActorRef*): Unit = {
-    Thread.sleep(1000) //todo find better way
     actors.foreach { actor =>
       watch(actor)
       actor ! PoisonPill

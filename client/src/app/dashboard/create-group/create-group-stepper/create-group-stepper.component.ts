@@ -43,6 +43,7 @@ export class CreateGroupStepperComponent implements OnInit {
     create() {
         const request = new CreateRequest();
         request.groupName = this.basicInfo.value.groupName;
+        request.categoryName = this.category.value.categoryName;
         const createOp = this.groupApiService.create(request);
         createOp.subscribe(
             created => {

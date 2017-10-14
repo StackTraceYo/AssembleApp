@@ -2,6 +2,7 @@ package org.stacktrace.yo.user.auth.service
 
 import java.time.{Clock, Instant, ZoneId}
 import java.util.UUID
+import java.util.concurrent.TimeUnit
 
 import org.scalatestplus.play.PlaySpec
 import org.stacktrace.yo.user.auth.model.{AssembleUser, AuthToken}
@@ -25,7 +26,7 @@ class AssembleAuthTokenServiceSpec extends PlaySpec {
 
       token._2.userID mustBe user.id
       //5 min = 300 seconds
-      clock.instant().plusSeconds(301).isAfter(token._2.expiry) mustBe true
+      clock.instant().plusSeconds(TimeUnit.DAYS.toSeconds(5) + 1).isAfter(token._2.expiry) mustBe true
 
       Await.result(store.find(token._1), 5 seconds) mustBe Some(token._2)
     }

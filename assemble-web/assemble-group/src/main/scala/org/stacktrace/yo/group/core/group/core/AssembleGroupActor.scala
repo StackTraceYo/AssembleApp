@@ -4,7 +4,7 @@ import akka.actor.{ActorLogging, ActorRef}
 import akka.persistence.{PersistentActor, RecoveryCompleted, SnapshotOffer}
 import com.stacktrace.yo.assemble.group.GroupProtocol.{AssembleGroupState, Created}
 import com.stacktrace.yo.assemble.group.Protocol._
-import org.stacktrace.yo.group.core.api.GroupAPIProtocol.GroupCreated
+import org.stacktrace.yo.group.core.group.core.AssembleGroupActor.GroupReady
 
 class AssembleGroupActor(supervisor: ActorRef, groupId: String) extends PersistentActor with ActorLogging {
 
@@ -28,9 +28,11 @@ class AssembleGroupActor(supervisor: ActorRef, groupId: String) extends Persiste
   }
 
   override def receiveCommand: PartialFunction[Any, Unit] = {
-    case msg@CreateGroup(hostId: String) =>
-      val event = Created(hostId, groupId)
+    case msg@CreateGroup(hostId, name, category) =>
+      val event = Created(hostId, groupId, name, category)
       persist(event)(updateState)
+    case st@GetState() =>
+      sender() ! state
   }
 
   def readyToRecieve: Receive = {
@@ -41,27 +43,25 @@ class AssembleGroupActor(supervisor: ActorRef, groupId: String) extends Persiste
   }
 
   val updateState: Event => Unit = {
-    case evt@Created(hostId, groupid) =>
-      responseHandler = Option(sender())
+    case evt@Created(hostId, groupid, name, category) =>
       log.debug("Created Group State {}", groupid)
-      state = state.update(_.groupid := groupid, _.hostid := hostId)
-
-      responseHandler match {
-        case Some(handler) =>
-          handler ! GroupCreated(groupId) // tell response handler to go
-          ready = true
-          log.info("Group {} Ready to Recieve Messages", groupId)
-          supervisor ! Ready()
-          become(readyToRecieve)
-        case None =>
-          log.error("No Handler For Response")
-      }
+      state = state.update(_.groupid := groupid, _.hostid := hostId, _.groupName := name, _.category := category)
+      log.info("Group {} Ready to Recieve Messages", groupId)
+      supervisor ! GroupReady(groupId)
+      ready = true
+      become(readyToRecieve)
   }
 
 
   def updateStateWithSnapShot(snapshot: AssembleGroupState): Unit = {
     state = snapshot
   }
+
+}
+
+object AssembleGroupActor {
+
+  case class GroupReady(id: String)
 
 }
 

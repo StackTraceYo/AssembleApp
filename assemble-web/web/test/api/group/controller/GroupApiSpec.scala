@@ -41,7 +41,7 @@ class GroupApiSpec extends PlaySpec with GuiceOneAppPerTest with BeforeAndAfterE
       val headerVal = res.header.headers("X-Asm-Auth")
 
       val create = route(app, FakeRequest(POST, "/api/group/create")
-        .withBody(Json.toJson(CreateGroupRequest("test-group-name")))
+        .withBody(Json.toJson(CreateGroupRequest("test-group-name", "test-group-category")))
         .withHeaders("X-Asm-Auth" -> headerVal))
         .get
 
@@ -54,7 +54,7 @@ class GroupApiSpec extends PlaySpec with GuiceOneAppPerTest with BeforeAndAfterE
 
     "not authorized user can not create a group" in {
       val create = route(app, FakeRequest(POST, "/api/group/create")
-        .withBody(Json.toJson(CreateGroupRequest("test-group-name")))
+        .withBody(Json.toJson(CreateGroupRequest("test-group-name", "test-group-category")))
         .withHeaders("X-Asm-Auth" -> UUID.randomUUID().toString))
         .get
 
@@ -63,7 +63,7 @@ class GroupApiSpec extends PlaySpec with GuiceOneAppPerTest with BeforeAndAfterE
 
     "not authorized user can not create a group without header" in {
       val create = route(app, FakeRequest(POST, "/api/group/create")
-        .withBody(Json.toJson(CreateGroupRequest("test-group-name"))))
+        .withBody(Json.toJson(CreateGroupRequest("test-group-name", "test-group-category"))))
         .get
 
       status(create) mustBe Status.UNAUTHORIZED
@@ -76,17 +76,17 @@ class GroupApiSpec extends PlaySpec with GuiceOneAppPerTest with BeforeAndAfterE
       val headerVal = res.header.headers("X-Asm-Auth")
 
       val create = route(app, FakeRequest(POST, "/api/group/create")
-        .withBody(Json.toJson(CreateGroupRequest("test-group-name")))
+        .withBody(Json.toJson(CreateGroupRequest("test-group-name", "test-group-category")))
         .withHeaders("X-Asm-Auth" -> headerVal))
         .get
 
       val create2 = route(app, FakeRequest(POST, "/api/group/create")
-        .withBody(Json.toJson(CreateGroupRequest("test-group-name")))
+        .withBody(Json.toJson(CreateGroupRequest("test-group-name", "test-group-category")))
         .withHeaders("X-Asm-Auth" -> headerVal))
         .get
 
       val create3 = route(app, FakeRequest(POST, "/api/group/create")
-        .withBody(Json.toJson(CreateGroupRequest("test-group-name")))
+        .withBody(Json.toJson(CreateGroupRequest("test-group-name", "test-group-category")))
         .withHeaders("X-Asm-Auth" -> headerVal))
         .get
 

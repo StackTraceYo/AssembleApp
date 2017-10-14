@@ -23,7 +23,7 @@ export class GroupService {
             groups => {
                 if (groups.list.length > 0) {
                     this.myGroups = groups.list.map(group => {
-                        return new AssembleGroup(group.groupId);
+                        return new AssembleGroup(group.groupId, group.name, group.category);
                     });
                 } else {
                     this.myGroups = [];
@@ -40,6 +40,4 @@ export class GroupService {
     getMyGroups() {
         return this.$myGroups.asObservable();
     }
-
-
 }
