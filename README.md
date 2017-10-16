@@ -5,12 +5,12 @@ To Import the project
 * To Import this project import the top level build.sbt
 
 
-To Run application in Dev Mode with Docker:
-* TODO
+To Run web and client in Dev Mode with Docker:
+* use 'docker-compose up'
 
 To Run application in Dev Mode without Docker:
 * ./run-assemble.sh -r to run the web app (web project)
-* do something for client
+* go into client directory and run 'ng serve'
 
 
 ## AssembleApp Sub-Projects
