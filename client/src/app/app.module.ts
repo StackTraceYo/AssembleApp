@@ -15,6 +15,8 @@ import {AuthGuard} from './user-auth/auth-guard/auth.guard';
 import {AppStorageService} from './app-storage/app-storage.service';
 import {ToolbarModule} from './toolbar/toolbar.module';
 import {ContentModule} from './content/content.module';
+import {StoreModule} from '@ngrx/store';
+import {metaReducers, reducers} from './core/reducers/app-reducers';
 
 @NgModule({
     declarations: [
@@ -31,7 +33,11 @@ import {ContentModule} from './content/content.module';
         UserModule,
         DashboardModule,
         ToolbarModule,
-        ContentModule
+        ContentModule,
+        StoreModule,
+        StoreModule.forRoot(reducers, {metaReducers})
+
+
     ],
     providers: [HttpClient, AuthGuard, AppStorageService],
     bootstrap: [AppComponent],

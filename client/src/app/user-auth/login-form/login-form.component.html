@@ -7,13 +7,14 @@
 <div *ngIf="!loggingIn">
   <div class="login-main">
 
-    <form class="login-form">
+      <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()">
 
       <table class="login-form-full-width" cellspacing="0">
         <tr>
           <td>
             <mat-form-field class="login-form-full-width-email">
-              <input matInput placeholder="Email" [(ngModel)]="user.email" name="email" class="login-form-full-width-email-input">
+                <input matInput placeholder="Email" formControlName="email" name="email"
+                       class="login-form-full-width-email-input">
             </mat-form-field>
           </td>
         </tr>
@@ -24,7 +25,7 @@
         <tr>
           <td>
             <mat-form-field class="login-form-full-width-password">
-              <input matInput placeholder="Password">
+                <input matInput placeholder="Password" formControlName="password">
             </mat-form-field>
           </td>
         </tr>
@@ -32,7 +33,7 @@
 
     </form>
   </div>
-  <button mat-raised-button color="primary" (click)="login()" class="login-form-login-button">Login</button>
+    <button mat-raised-button color="primary" type="submit" class="login-form-login-button">Login</button>
   <button mat-button (click)="goToRegistration()" class="login-form-register-button">Register</button>
 </div>
 <div *ngIf="loggingIn" class="login-spinner-holder">
