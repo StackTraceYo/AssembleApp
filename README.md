@@ -2,8 +2,8 @@
 
 ## Importing and Running
 To Import the project
-* To Import this project import the top level build.sbt
-
+* To Import web,  import the build.sbt in '/assemble-web'
+* Client also needs imported.
 
 To Run web and client in Dev Mode with Docker:
 * use 'docker-compose up'
