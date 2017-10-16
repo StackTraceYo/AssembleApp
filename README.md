@@ -20,7 +20,7 @@ Splitting projects up to decouple them from one another as much as possible
     * currently outside of the sbt run task (have to bring up manually)
     * later we can have scripts that bring up the client stuff along with the web tier
     
-###Aasemble-web
+### Assemble-web
 * <b>web</b> project is the REST API
     * Houses the rest interface for the app
     * dependent on below projects.
