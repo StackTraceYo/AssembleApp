@@ -4,6 +4,7 @@ import akka.actor.{Actor, ActorLogging}
 import akka.persistence.{PersistentActor, RecoveryCompleted, SnapshotOffer}
 import com.stacktrace.yo.assemble.access.AccessProtocol.{AccessReference, CreatedAccess, GroupAccessState}
 import com.stacktrace.yo.assemble.group.Protocol.{AccessEvent, CreateGroupAccess, GetState}
+import org.stacktrace.yo.access.core.access.GroupAccessActor._
 
 import scala.language.postfixOps
 
@@ -30,8 +31,24 @@ trait PersistentAccess {
       val event = CreatedAccess(hostId, groupId)
       persist(event)(updateState)
       saveSnapshot(state)
+    case GetAccessForUser(id: String) =>
+      val access = getAccess(id)
+      sender() ! access
+    case GetHostAccessForUser(id: String) =>
+      sender() ! GroupTypeAccess("HOST", getAccess(id).host)
+    case GetGuestAccessForUser(id: String) =>
+      sender() ! GroupTypeAccess("GUEST", getAccess(id).guest)
     case GetState() =>
       sender() ! state
+  }
+
+  private def getAccess(id: String): GroupAccess = {
+    state.groups.get(id) match {
+      case Some(ref) =>
+        GroupAccess(ref.host, ref.guest)
+      case None =>
+        GroupAccess(Seq(), Seq())
+    }
   }
 
   val updateState: AccessEvent => Unit = {
