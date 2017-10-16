@@ -5,8 +5,9 @@ import javax.inject.{Inject, Singleton}
 
 import api.auth.Request.{CreateUser, RetrieveUser, SignIn}
 import api.auth.Response.{FailedToCreate, FailedToRetrieve, FailedToSignIn, UserCreated, UserRetrieved}
-import org.stacktrace.yo.user.auth.model.{AssembleUser, LoginData}
+import org.stacktrace.yo.user.auth.model.LoginData
 import org.stacktrace.yo.user.auth.service.UserService
+import org.stacktrace.yo.user.model.AssembleUser
 import play.api.libs.json.Json
 import play.api.mvc._
 

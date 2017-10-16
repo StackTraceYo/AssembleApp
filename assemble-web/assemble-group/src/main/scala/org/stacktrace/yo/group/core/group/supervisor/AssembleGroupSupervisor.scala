@@ -3,6 +3,7 @@ package org.stacktrace.yo.group.core.group.supervisor
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import akka.util.Timeout
 import com.stacktrace.yo.assemble.group.Protocol.{CreateGroup, GroupCreatedFor}
+import org.stacktrace.yo.access.core.group.AssembleGroupUsersActor
 import org.stacktrace.yo.group.core.group.core.AssembleGroupActor
 import org.stacktrace.yo.group.core.group.core.AssembleGroupActor.GroupReady
 import org.stacktrace.yo.group.core.group.supervisor.AssembleGroupSupervisor.CreateGroupAndReturnTo
@@ -16,7 +17,8 @@ import scala.language.postfixOps
   */
 class AssembleGroupSupervisor(director: ActorRef, groupId: String)(implicit ec: ExecutionContext) extends Actor with ActorLogging with GroupSupervisionStrategy {
   private implicit val timeout: Timeout = Timeout(3 seconds)
-  val groupActor: ActorRef = context.actorOf(AssembleGroupSupervisor.groupActorProps(self, groupId), "group-" + groupId)
+  val groupActor: ActorRef = context.actorOf(AssembleGroupSupervisor.groupActorProps(self, groupId), s"group-$groupId")
+//  val groupUsersActor: ActorRef = context.actorOf(AssembleGroupSupervisor.groupUserProps(self, groupId), s"group-user-$groupId")
   var returnTo: ActorRef = _
 
   override def receive: PartialFunction[Any, Unit] = {
@@ -42,6 +44,10 @@ object AssembleGroupSupervisor {
 
   def groupActorProps(supervisor: ActorRef, id: String): Props = {
     Props(new AssembleGroupActor(supervisor, id))
+  }
+
+  def groupUserProps(supervisor: ActorRef, id: String): Props = {
+    Props(new AssembleGroupUsersActor(supervisor, id))
   }
 
   case class CreateGroupAndReturnTo(create: CreateGroup, retTo: ActorRef)

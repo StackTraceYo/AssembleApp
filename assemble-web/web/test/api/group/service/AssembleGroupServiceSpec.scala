@@ -6,7 +6,7 @@ import akka.actor.ActorSystem
 import org.apache.commons.io.FileUtils
 import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpecLike}
 import org.slf4j.{Logger, LoggerFactory}
-import org.stacktrace.yo.user.auth.model.AssembleUser
+import org.stacktrace.yo.user.model.AssembleUser
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContextExecutor}

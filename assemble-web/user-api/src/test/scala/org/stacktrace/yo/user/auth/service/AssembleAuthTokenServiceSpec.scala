@@ -5,10 +5,11 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 import org.scalatestplus.play.PlaySpec
-import org.stacktrace.yo.user.auth.model.{AssembleUser, AuthToken}
+import org.stacktrace.yo.user.auth.model.AuthToken
 import org.stacktrace.yo.user.auth.service.impl.AssembleAuthTokenService
 import org.stacktrace.yo.user.auth.store.impl.{AssembleAuthTokenStore, AssembleUserStore}
 import org.stacktrace.yo.user.auth.store.{AuthTokenStore, UserStore}
+import org.stacktrace.yo.user.model.AssembleUser
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, ExecutionContextExecutor}

@@ -1,6 +1,7 @@
 package org.stacktrace.yo.user.auth.service
 
-import org.stacktrace.yo.user.auth.model.{AssembleUser, AuthToken, LoginData}
+import org.stacktrace.yo.user.auth.model.{AuthToken, LoginData}
+import org.stacktrace.yo.user.model.AssembleUser
 
 import scala.concurrent.Future
 

@@ -1,7 +1,7 @@
 package api.auth
 
 import api.auth.Request.{CreateUser, RetrieveUser, SignIn}
-import org.stacktrace.yo.user.auth.model.AssembleUser
+import org.stacktrace.yo.user.model.AssembleUser
 import play.api.libs.json.{Json, OFormat}
 
 object Response {

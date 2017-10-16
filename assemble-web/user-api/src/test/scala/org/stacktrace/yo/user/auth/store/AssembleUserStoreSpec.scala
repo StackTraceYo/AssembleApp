@@ -4,8 +4,8 @@ import org.scalatest.Matchers._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import org.stacktrace.yo.user.auth.model.AssembleUser
 import org.stacktrace.yo.user.auth.store.impl.AssembleUserStore
+import org.stacktrace.yo.user.model.AssembleUser
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, ExecutionContextExecutor}

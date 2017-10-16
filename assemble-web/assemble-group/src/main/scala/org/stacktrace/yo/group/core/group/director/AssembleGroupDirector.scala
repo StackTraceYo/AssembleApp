@@ -20,7 +20,6 @@ import scala.util.{Failure, Success}
 
 class AssembleGroupDirector(directorId: String = "1")(implicit ec: ExecutionContext) extends PersistentActor with ActorLogging with PersistentActorLookup {
 
-
   override def receiveCommand: Receive = receive
 
   override def persistenceId = s"assemble-group-director-$directorId"

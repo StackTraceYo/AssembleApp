@@ -4,9 +4,10 @@ import java.time.Instant
 import java.util.UUID
 import javax.inject.{Inject, Singleton}
 
-import org.stacktrace.yo.user.auth.model.{AssembleUser, AuthToken}
+import org.stacktrace.yo.user.auth.model.AuthToken
 import org.stacktrace.yo.user.auth.service.AuthTokenService
 import org.stacktrace.yo.user.auth.store.{AuthTokenStore, UserStore}
+import org.stacktrace.yo.user.model.AssembleUser
 
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
