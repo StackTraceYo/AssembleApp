@@ -12,3 +12,11 @@ class GroupAccessActor(director: ActorRef, id: String = "1") extends PersistentA
 
 
 }
+
+object GroupAccessActor {
+
+  case class GetAccessForUser(id: String)
+
+  case class GroupAccess(host: Seq[String], guest: Seq[String])
+
+}
