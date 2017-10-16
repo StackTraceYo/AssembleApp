@@ -10,15 +10,14 @@ To Run web and client in Dev Mode with Docker:
 
 To Run application in Dev Mode without Docker:
 * ./run-assemble.sh -r to run the web app (web project)
-* go into client directory and run 'ng serve'
+* go into client directory and run 'ng serve' or 'npm start'
 
 
 ## AssembleApp Sub-Projects
 Splitting projects up to decouple them from one another as much as possible
-###Client
+### Client
 * <b>client</b> project houses the client tier
-    * currently outside of the sbt run task (have to bring up manually)
-    * later we can have scripts that bring up the client stuff along with the web tier
+    * ngrx/angular application
     
 ### Assemble-web
 * <b>web</b> project is the REST API
