@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {LoginFormModel} from './model/login-form-model';
 import {LoginRequest} from '../user-api/request/login-request';
 import {Store} from '@ngrx/store';
 import * as auth from '../reducers/auth-reducer';
@@ -17,7 +16,6 @@ export class LoginFormComponent implements OnInit {
 
 
     appname = 'Assemble';
-    user: LoginFormModel;
     loggingIn: boolean;
 
     loginForm: FormGroup = new FormGroup({
@@ -29,12 +27,10 @@ export class LoginFormComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.user = new LoginFormModel('', '');
         this.loggingIn = false;
     }
 
     login() {
-
         this.store.dispatch(new Login(new LoginRequest(this.loginForm.value)));
 
 
