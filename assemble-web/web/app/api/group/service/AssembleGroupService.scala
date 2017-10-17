@@ -26,7 +26,7 @@ class AssembleGroupService @Inject()(as: ActorSystem)(implicit ec: ExecutionCont
   }
 
   def listGroups(user: AssembleUser, listRequest: Request.ListGroupRequest): Future[GroupAPIProtocol.GroupsRetrieved] = {
-    groupClient.getGroupList(ListAssembleGroup())
+    groupClient.getGroupList(ListAssembleGroup(Seq()))
   }
 
 }

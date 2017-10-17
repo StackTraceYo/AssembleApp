@@ -10,8 +10,7 @@ import com.stacktrace.yo.assemble.group.Protocol
 import com.stacktrace.yo.assemble.group.Protocol.{CreateGroup, GetState, GroupCreatedFor}
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, FindAssembleGroup, GroupCreated, ListAssembleGroup}
 import org.stacktrace.yo.group.core.api.handler.GroupResponseHandler
-import org.stacktrace.yo.group.core.group.lookup.PersistentActorLookup
-import org.stacktrace.yo.group.core.group.retrieval.GroupSearchActor
+import org.stacktrace.yo.group.core.group.retrieval.{GroupSearchActor, PersistentActorLookup}
 import org.stacktrace.yo.group.core.group.supervisor.AssembleGroupSupervisor
 import org.stacktrace.yo.group.core.group.supervisor.AssembleGroupSupervisor.CreateGroupAndReturnTo
 
@@ -58,7 +57,7 @@ class AssembleGroupDirector(directorId: String = "1")(implicit ec: ExecutionCont
       val searcher = createSearcher()
       searcher.tell(find, createGroupHandler(api))
 
-    case find@ListAssembleGroup() =>
+    case find@ListAssembleGroup(ids) =>
       val api = sender()
       val searcher = createSearcher()
       searcher.tell(find, createGroupHandler(api))

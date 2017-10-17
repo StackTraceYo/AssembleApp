@@ -54,7 +54,7 @@ class BaseGroupClientSpec extends WordSpecLike with Matchers with BeforeAndAfter
       response3.groupId should not be empty
 
 
-      val fResponse4 = classUnderTest.getGroupList(ListAssembleGroup())
+      val fResponse4 = classUnderTest.getGroupList(ListAssembleGroup(Seq("group-name", "group-name-2", "group-name-3")))
       val response4 = Await.result(fResponse4, 5 seconds)
 
       response4.groupsInformation.size shouldBe 3
@@ -71,11 +71,11 @@ class BaseGroupClientSpec extends WordSpecLike with Matchers with BeforeAndAfter
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
-      List(
-        "target/journal",
-        "target/snapshots"
-      ).map { s => new File(s) }
-        .foreach(dir => Try(FileUtils.deleteDirectory(dir)))
+    List(
+      "target/journal",
+      "target/snapshots"
+    ).map { s => new File(s) }
+      .foreach(dir => Try(FileUtils.deleteDirectory(dir)))
   }
 
 

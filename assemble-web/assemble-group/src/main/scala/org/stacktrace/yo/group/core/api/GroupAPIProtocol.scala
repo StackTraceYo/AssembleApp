@@ -30,7 +30,12 @@ object GroupAPIProtocol {
   /**
     * Message used to request to list groups
     */
-  case class ListAssembleGroup() extends APIMessage
+  case class ListAssembleGroup(ids : Seq[String]) extends APIMessage
+
+  /**
+    * Message used to request to list groups
+    */
+  case class ListUserAssembleGroup(id : String) extends APIMessage
 
 
   /**

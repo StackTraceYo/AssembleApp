@@ -48,7 +48,7 @@ class GroupSearchActor(searchContext: ActorContext, refs: Map[String, ActorRef])
           }
       }
 
-    case ListAssembleGroup() =>
+    case ListAssembleGroup(ids) =>
       respondTo = sender()
       context.become(aggregateAnswers)
       refs.foreach(

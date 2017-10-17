@@ -1,4 +1,4 @@
-package org.stacktrace.yo.group.core.group.lookup
+package org.stacktrace.yo.group.core.group.retrieval
 
 import akka.actor.{Actor, ActorLogging, ActorPath, ActorRef}
 import akka.persistence.{PersistentActor, RecoveryCompleted, SnapshotOffer}
