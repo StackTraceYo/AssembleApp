@@ -17,6 +17,7 @@ import {ToolbarModule} from './toolbar/toolbar.module';
 import {ContentModule} from './content/content.module';
 import {StoreModule} from '@ngrx/store';
 import {metaReducers, reducers} from './core/reducers/app-reducers';
+import {EffectsModule} from '@ngrx/effects';
 
 @NgModule({
     declarations: [
@@ -35,9 +36,8 @@ import {metaReducers, reducers} from './core/reducers/app-reducers';
         ToolbarModule,
         ContentModule,
         StoreModule,
-        StoreModule.forRoot(reducers, {metaReducers})
-
-
+        StoreModule.forRoot(reducers, {metaReducers}),
+        EffectsModule.forRoot([])
     ],
     providers: [HttpClient, AuthGuard, AppStorageService],
     bootstrap: [AppComponent],

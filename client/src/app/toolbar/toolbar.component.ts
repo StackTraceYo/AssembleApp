@@ -20,7 +20,7 @@ export class ToolbarComponent implements OnInit {
 
         this.userService.getUser()
             .subscribe(user => {
-                    if (user.isAuthenticated()) {
+                    if (user.authenticated) {
                         this.loginOrOut = 'Logout';
                         this.loggedIn = true;
                     } else {

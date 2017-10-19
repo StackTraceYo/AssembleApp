@@ -18,7 +18,7 @@ export class Login implements Action {
 export class LoginSuccess implements Action {
     readonly type = LOGIN_SUCCESS;
 
-    constructor(public payload: { user: AssembleUser }) {
+    constructor(public payload: { user: AssembleUser, token: string }) {
     }
 }
 
@@ -37,7 +37,7 @@ export class Logout implements Action {
     readonly type = LOGOUT;
 }
 
-export type Actions =
+export type AuthActions =
     | Login
     | LoginSuccess
     | LoginFailure

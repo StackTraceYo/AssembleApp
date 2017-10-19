@@ -8,7 +8,9 @@ import {RegisterFormComponent} from './register-form/register-form.component';
 import {RouterModule} from '@angular/router';
 import {UserService} from './user-service';
 import {StoreModule} from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 import {reducers} from './reducers/reducers';
+import {AuthEffects} from './effects/auth.effects';
 
 @NgModule({
     imports: [
@@ -19,6 +21,7 @@ import {reducers} from './reducers/reducers';
         ReactiveFormsModule,
         StoreModule,
         StoreModule.forFeature('auth', reducers),
+        EffectsModule.forFeature([AuthEffects]),
     ],
     declarations: [LoginFormComponent, RegisterFormComponent],
     providers: [UserApiService, UserService]
