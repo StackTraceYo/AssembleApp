@@ -5,7 +5,7 @@ import com.stacktrace.yo.assemble.group.GroupProtocol.{Created, Ended, GroupRefe
 
 class GroupEventSerializer extends SerializerWithStringManifest {
 
-  override def identifier = 9001
+  override def identifier = 9003
 
   // We use the manifest to determine the event (it is called for us during serializing)
   // Akka will call manifest and attach it to the message in the event journal/snapshot database
