@@ -58,6 +58,7 @@ class AssembleGroupDirector(directorId: String = "1")(implicit ec: ExecutionCont
       searcher.tell(find, createGroupHandler(api))
 
     case find@ListAssembleGroup(ids) =>
+      log.info(s"Finding $ids")
       val api = sender()
       val searcher = createSearcher()
       searcher.tell(find, createGroupHandler(api))

@@ -55,15 +55,17 @@ class GroupSearchActor(searchContext: ActorContext, refs: Map[String, ActorRef])
         tuple => {
           val key = tuple._1
           val ref = tuple._2
-          log.info(s"Found Ref $key")
-          pending += s"assemble-group-supervisor-$key"
-          ref ! GetState()
+          if (ids.contains(key)) {
+            log.info(s"Found Ref $key")
+            pending += s"assemble-group-supervisor-$key"
+            ref ! GetState()
+          }
         }
       )
       searchContext.children
         .foreach(child => {
           val name = child.path.name
-          if (name.contains("assemble-group-supervisor") && !pending.contains(name)) {
+          if (name.contains("assemble-group-supervisor") && !pending.contains(name) && ids.contains(name.replace("assemble-group-supervisor-",""))) {
             log.info(s"Found $name")
             pending += child.path.name
             child ! GetState()

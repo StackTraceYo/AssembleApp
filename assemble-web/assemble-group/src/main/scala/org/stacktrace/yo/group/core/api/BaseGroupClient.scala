@@ -37,6 +37,11 @@ class BaseGroupClient(as: ActorSystem)(implicit ec: ExecutionContext) extends Gr
     director.ask(findGroupOptions)
       .mapTo[GroupsRetrieved]
   }
+
+  def getGroupListForUser(listAllUserGroups: ListUserAssembleGroup): Future[GroupsRetrieved] = {
+    access.ask(listAllUserGroups)
+      .mapTo[GroupsRetrieved]
+  }
 }
 
 trait GroupBridge {
@@ -47,6 +52,9 @@ trait GroupBridge {
   def getGroup(findGroupOptions: FindAssembleGroup): Future[Option[GroupRetrieved]]
 
   def getGroupList(findGroupOptions: ListAssembleGroup): Future[GroupsRetrieved]
+
+  def getGroupListForUser(findGroupOptions: ListUserAssembleGroup): Future[GroupsRetrieved]
+
 
 }
 

@@ -3,7 +3,7 @@ package org.stacktrace.yo.access.core.access
 import akka.actor.{Actor, ActorLogging}
 import akka.persistence.{PersistentActor, RecoveryCompleted, SnapshotOffer}
 import com.stacktrace.yo.assemble.access.AccessProtocol.{AccessReference, CreatedAccess, GroupAccessState}
-import com.stacktrace.yo.assemble.group.Protocol.{AccessEvent, CreateGroupAccess, GetState}
+import com.stacktrace.yo.assemble.group.Protocol.AccessEvent
 import org.stacktrace.yo.access.core.access.GroupAccessActor._
 
 import scala.language.postfixOps
@@ -26,23 +26,8 @@ trait PersistentAccess {
       log.debug(s"Recovery has completed for $persistenceId with reference size {} :", state.groups.size)
   }
 
-  override def receiveCommand: Receive = {
-    case msg@CreateGroupAccess(hostId, groupId) =>
-      val event = CreatedAccess(hostId, groupId)
-      persist(event)(updateState)
-      saveSnapshot(state)
-    case GetAccessForUser(id: String) =>
-      val access = getAccess(id)
-      sender() ! access
-    case GetHostAccessForUser(id: String) =>
-      sender() ! GroupTypeAccess("HOST", getAccess(id).host)
-    case GetGuestAccessForUser(id: String) =>
-      sender() ! GroupTypeAccess("GUEST", getAccess(id).guest)
-    case GetState() =>
-      sender() ! state
-  }
-
-  private def getAccess(id: String): GroupAccess = {
+  def getAccess(id: String): GroupAccess = {
+    log.debug(s"Getting Access for $id")
     state.groups.get(id) match {
       case Some(ref) =>
         GroupAccess(ref.host, ref.guest)
