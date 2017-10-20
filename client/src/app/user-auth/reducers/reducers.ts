@@ -48,7 +48,7 @@ export const getLoginPagePending = createSelector(
 
 export const selectRegisterPageState = createSelector(
     selectAuthState,
-    (state: UserAuthState) => state.loginPage
+    (state: UserAuthState) => state.registerPage
 );
 export const getRegisterPageError = createSelector(
     selectRegisterPageState,

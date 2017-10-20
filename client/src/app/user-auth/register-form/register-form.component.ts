@@ -3,7 +3,7 @@ import {Store} from '@ngrx/store';
 import {Router} from '@angular/router';
 import {FormControl, FormGroup} from '@angular/forms';
 import * as fromAuth from '../reducers/reducers';
-import * as auth from '../reducers/auth-reducer';
+import * as registerForm from '../reducers/register-form-reducer';
 import {RegisterRequest} from '../user-api/request/register-request';
 import {Register} from '../actions/auth-actions';
 
@@ -22,7 +22,7 @@ export class RegisterFormComponent implements OnInit {
     pending$ = this.store.select(fromAuth.getRegisterPagePending);
     error$ = this.store.select(fromAuth.getRegisterPageError);
 
-    constructor(private router: Router, private store: Store<auth.State>) {
+    constructor(private router: Router, private store: Store<registerForm.State>) {
     }
 
     ngOnInit() {
