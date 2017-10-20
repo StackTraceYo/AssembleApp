@@ -29,7 +29,7 @@ class UserController @Inject()(cc: ControllerComponents, userService: UserServic
       })
       .recover {
         case e =>
-          Ok(Json.toJson(FailedToCreate(request.body, e.getMessage, success = false)))
+          Ok(Json.toJson(FailedToCreate(request.body, "Failed To Register", success = false)))
       }
   }
 

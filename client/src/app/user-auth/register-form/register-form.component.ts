@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {UserApiService} from '../user-api/user-api.service';
-import {RegisterRequest} from '../user-api/request/register-request';
-import {Observable} from 'rxjs/Observable';
-import {RegistrationFormModel} from './model/registeration-form-model';
-import {UserAuthenticationAttempt} from '../user-api/model/user-authentication-attempt';
+import {Store} from '@ngrx/store';
 import {Router} from '@angular/router';
-import {UserService} from '../user-service';
+import {FormControl, FormGroup} from '@angular/forms';
+import * as fromAuth from '../reducers/reducers';
+import * as auth from '../reducers/auth-reducer';
+import {RegisterRequest} from '../user-api/request/register-request';
+import {Register} from '../actions/auth-actions';
+
 
 @Component({
     selector: 'asm-register-form',
@@ -14,46 +15,21 @@ import {UserService} from '../user-service';
 })
 export class RegisterFormComponent implements OnInit {
 
-    regModel: RegistrationFormModel = new RegistrationFormModel();
-    registering = false;
-    toggleSpinner = function () {
-        this.registering = !this.registering;
-    };
-    goToDash = function () {
-        this.router.navigateByUrl('/asm');
-    };
+    regForm = new FormGroup({
+        email: new FormControl(''),
+        password: new FormControl(''),
+    });
+    pending$ = this.store.select(fromAuth.getRegisterPagePending);
+    error$ = this.store.select(fromAuth.getRegisterPageError);
 
-    constructor(private userApiService: UserApiService, private userService: UserService, private router: Router) {
+    constructor(private router: Router, private store: Store<auth.State>) {
     }
 
     ngOnInit() {
     }
 
     register() {
-
-        const registerOp: Observable<UserAuthenticationAttempt> =
-            this.userApiService
-                .register(new RegisterRequest(this.regModel));
-
-        this.toggleSpinner();
-        registerOp.subscribe(
-            attempt => {
-                this.toggleSpinner();
-                if (attempt.isAuthenticated) {
-                    // set tokem and stuff
-                    this.userService.storeUser(attempt.getUser());
-                    this.userService.putToken(attempt.getToken());
-                    this.goToDash();
-                }
-                // else {
-                //   // show error
-                // }
-            },
-            err => {
-                // Log errors if any
-                this.toggleSpinner();
-                console.log(err);
-            });
+        this.store.dispatch(new Register(new RegisterRequest(this.regForm.value)));
     }
 
 }

@@ -17,7 +17,6 @@ export class LoginFormComponent implements OnInit {
 
 
     appname = 'Assemble';
-    loggingIn: boolean;
     pending$ = this.store.select(fromAuth.getLoginPagePending);
     error$ = this.store.select(fromAuth.getLoginPageError);
 
@@ -30,7 +29,6 @@ export class LoginFormComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.loggingIn = false;
     }
 
     login() {
@@ -39,13 +37,5 @@ export class LoginFormComponent implements OnInit {
 
     goToRegistration = function () {
         this.router.navigateByUrl('/register');
-    };
-
-    goToDash = function () {
-        this.router.navigateByUrl('/asm');
-    };
-
-    toggleSpinner = function () {
-        this.loggingIn = !this.loggingIn;
     };
 }

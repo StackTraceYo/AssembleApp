@@ -53,6 +53,37 @@ export class AuthEffects {
             this.router.navigate(['/login']);
         });
 
+    @Effect()
+    register$ = this.actions$
+        .ofType(Auth.REGISTER)
+        .map((action: Auth.Register) => action.payload)
+        .exhaustMap(auth =>
+            this.authService.register(auth)
+                .map(resp => {
+                    const response = resp.json();
+                    if (response.success) {
+                        const token = UserApiService.extractHeader(resp);
+                        return new Auth.RegisterSuccess({
+                            user: new AssembleUser(auth.email, response.id, true),
+                            token
+                        });
+                    } else {
+                        return new Auth.RegisterFailure(response.msg);
+                    }
+                })
+                .catch(error => of(new Auth.RegisterFailure(error)))
+        );
+
+    @Effect({dispatch: false})
+    registerSuccess$ = this.actions$
+        .ofType(Auth.REGISTER_SUCCESS)
+        .map((action: Auth.RegisterSuccess) => action.payload)
+        .do(suc => {
+            this.appStorage.store('asm-token', suc.token);
+            this.appStorage.store('asm-user', suc.user.id);
+        })
+        .do(() => this.router.navigate(['/asm']));
+
     constructor(private actions$: Actions,
                 private authService: UserApiService,
                 private appStorage: AppStorageService,
