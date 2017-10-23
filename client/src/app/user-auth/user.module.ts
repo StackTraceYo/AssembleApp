@@ -6,7 +6,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {UserApiService} from './user-api/user-api.service';
 import {RegisterFormComponent} from './register-form/register-form.component';
 import {RouterModule} from '@angular/router';
-import {UserService} from './user-service';
 import {StoreModule} from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import {reducers} from './reducers/reducers';
@@ -24,7 +23,7 @@ import {AuthEffects} from './effects/auth.effects';
         EffectsModule.forFeature([AuthEffects]),
     ],
     declarations: [LoginFormComponent, RegisterFormComponent],
-    providers: [UserApiService, UserService]
+    providers: [UserApiService]
 })
 export class UserModule {
 }

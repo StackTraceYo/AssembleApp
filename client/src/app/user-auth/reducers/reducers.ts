@@ -6,7 +6,7 @@ import * as fromAuth from './auth-reducer';
 import * as fromRegisterPage from './register-form-reducer';
 
 export interface UserAuthState {
-    status: fromAuth.State;
+    auth: fromAuth.State;
     loginPage: fromLogin.State;
     registerPage: fromRegisterPage.State;
 }
@@ -25,11 +25,11 @@ export const selectAuthState = createFeatureSelector<UserAuthState>('auth');
 
 export const selectAuthStatusState = createSelector(
     selectAuthState,
-    (state: UserAuthState) => state.status
+    (state: UserAuthState) => state.auth
 );
 export const getLoggedIn = createSelector(
-    selectAuthStatusState,
-    fromAuth.isAuthenticated
+    selectAuthState,
+    (state: UserAuthState) => state.auth.authenticated
 );
 export const getUser = createSelector(selectAuthStatusState, fromAuth.getUser);
 

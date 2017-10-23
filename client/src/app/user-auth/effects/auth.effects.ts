@@ -50,6 +50,7 @@ export class AuthEffects {
     loginRedirect$ = this.actions$
         .ofType(Auth.LOGIN_REDIRECT, Auth.LOGOUT)
         .do(authed => {
+            this.appStorage.clear();
             this.router.navigate(['/login']);
         });
 

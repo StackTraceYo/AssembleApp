@@ -4,18 +4,17 @@ import {CreateRequest} from './request/create-request';
 import {CreateResponse} from './response/create-response';
 import {Observable} from 'rxjs/Observable';
 import {Response} from '@angular/http';
-import {UserService} from '../../user-auth/user-service';
 import {GroupListRequest} from './request/group-list-request';
 import {GroupListResponse} from './response/group-list-response';
 
 @Injectable()
 export class GroupApiService {
 
-    constructor(private http: HttpClient, private userService: UserService) {
+    constructor(private http: HttpClient) {
     }
 
     create(createRequest: CreateRequest): Observable<CreateResponse> {
-        return this.http.post('/api/group/create', JSON.stringify(createRequest), this.userService.getInstantToken())
+        return this.http.post('/api/group/create', JSON.stringify(createRequest))
             .map((res: Response) => {
                 const json = res.json();
                 return new CreateResponse(json.groupId, json.success);
@@ -24,7 +23,7 @@ export class GroupApiService {
     }
 
     list(listRequest: GroupListRequest): Observable<GroupListResponse> {
-        return this.http.post('/api/group/list', JSON.stringify(listRequest), this.userService.getInstantToken())
+        return this.http.post('/api/group/list', JSON.stringify(listRequest))
             .map((res: Response) => {
                 const json = res.json();
                 return new GroupListResponse(json.list);
