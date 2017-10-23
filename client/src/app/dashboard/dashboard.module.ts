@@ -13,6 +13,10 @@ import {AppRoutingModule} from '../app-routing/app-routing.module';
 import {ContentModule} from '../content/content.module';
 import {CategorySelectionGridComponent} from './category-selection/category-selection-grid/category-selection-grid.component';
 import { CreateGroupReviewComponent } from './create-group/create-group-review/create-group-review.component';
+import {reducers} from './reducers/reducers';
+import {StoreModule} from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import {DashGroupEffects} from './effects/dash.group.effects';
 
 @NgModule({
     imports: [
@@ -22,7 +26,11 @@ import { CreateGroupReviewComponent } from './create-group/create-group-review/c
         ReactiveFormsModule,
         GroupModule,
         AppRoutingModule,
-        ContentModule],
+        ContentModule,
+        StoreModule,
+        StoreModule.forFeature('dash', reducers),
+        EffectsModule.forFeature([DashGroupEffects])
+    ],
     declarations: [
         DashboardMainComponent,
         DashboardMyGroupsComponent,

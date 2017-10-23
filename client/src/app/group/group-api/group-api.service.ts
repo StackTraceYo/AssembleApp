@@ -5,7 +5,6 @@ import {CreateResponse} from './response/create-response';
 import {Observable} from 'rxjs/Observable';
 import {Response} from '@angular/http';
 import {GroupListRequest} from './request/group-list-request';
-import {GroupListResponse} from './response/group-list-response';
 
 @Injectable()
 export class GroupApiService {
@@ -22,13 +21,8 @@ export class GroupApiService {
             .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
     }
 
-    list(listRequest: GroupListRequest): Observable<GroupListResponse> {
-        return this.http.post('/api/group/list', JSON.stringify(listRequest))
-            .map((res: Response) => {
-                const json = res.json();
-                return new GroupListResponse(json.list);
-            })
-            .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+    list(listRequest: GroupListRequest, token: string = ''): any {
+        return this.http.post('/api/group/list', JSON.stringify(listRequest), token);
     }
 
     // create(createRequest: LoginRequest): Observable<UserAuthenticationAttempt> {

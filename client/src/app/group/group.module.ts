@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {GroupApiService} from './group-api/group-api.service';
 import {HttpClientModule} from '../http/http.client.module';
-import {GroupService} from "./group.service";
+import {GroupService} from './group.service';
 
 @NgModule({
     imports: [

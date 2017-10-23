@@ -1,6 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {AssembleGroup} from '../../group/model/assemble-group';
-import {GroupService} from '../../group/group.service';
+import {Store} from '@ngrx/store';
+import * as fromDash from '../reducers/reducers';
+import * as fromAuth from '../../user-auth/reducers/reducers';
+import {selectAuthStatusState} from '../../user-auth/reducers/reducers';
+import {RetrieveMyGroups} from '../actions/dashboard-actions';
+import {GroupListRequest} from '../../group/group-api/request/group-list-request';
 
 @Component({
     selector: 'asm-dashboard-main',
@@ -9,12 +13,11 @@ import {GroupService} from '../../group/group.service';
 })
 export class DashboardMainComponent implements OnInit {
 
-    currentView = 'Dashboard';
+    currentView = 'My Groups';
     viewName = 'Dashboard';
     showBackToDash = true;
-    myGroups: AssembleGroup[];
 
-    constructor(private groupService: GroupService) {
+    constructor(private store: Store<fromDash.State>, private authStore: Store<fromAuth.State>) {
     }
 
     onViewChange(viewName: string) {
@@ -34,10 +37,10 @@ export class DashboardMainComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.groupService.getMyGroups()
-            .subscribe(groups => {
-                this.myGroups = groups;
-            });
+        this.authStore.select(selectAuthStatusState).subscribe(state => {
+                this.store.dispatch(new RetrieveMyGroups({request: new GroupListRequest(), token: state.token}));
+            }
+        );
     }
 
 

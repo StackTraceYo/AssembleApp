@@ -4,11 +4,13 @@ import {AuthActions, LOGIN_SUCCESS, LOGOUT} from '../actions/auth-actions';
 export interface State {
     authenticated: boolean;
     user: AssembleUser | null;
+    token: string | null;
 }
 
 export const initialState: State = {
-    authenticated: false,
-    user: null,
+    authenticated: !!localStorage.getItem('asm-token'),
+    user: localStorage.getItem('asm-user') ? JSON.parse(localStorage.getItem('asm-user')) : null,
+    token: localStorage.getItem('asm-token')
 };
 
 export function reducer(state = initialState, action: AuthActions): State {
@@ -18,6 +20,7 @@ export function reducer(state = initialState, action: AuthActions): State {
                 ...state,
                 authenticated: true,
                 user: action.payload.user,
+                token: action.payload.token
             };
         }
 

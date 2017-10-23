@@ -42,7 +42,8 @@ export class AuthEffects {
         .map((action: Auth.LoginSuccess) => action.payload)
         .do(suc => {
             this.appStorage.store('asm-token', suc.token);
-            this.appStorage.store('asm-user', suc.user.id);
+            this.appStorage.store('asm-user-id', suc.user.id);
+            this.appStorage.store('asm-user', suc.user);
         })
         .do(() => this.router.navigate(['/asm']));
 
