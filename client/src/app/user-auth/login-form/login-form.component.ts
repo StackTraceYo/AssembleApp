@@ -6,7 +6,7 @@ import * as fromAuth from '../reducers/reducers';
 import {selectAuthStatusState} from '../reducers/reducers';
 import * as auth from '../reducers/auth-reducer';
 import {FormControl, FormGroup} from '@angular/forms';
-import {Login, PageRedirect} from '../actions/auth-actions';
+import {Login} from '../actions/auth-actions';
 
 
 @Component({
@@ -32,7 +32,7 @@ export class LoginFormComponent implements OnInit {
     ngOnInit() {
         this.store.select(selectAuthStatusState).subscribe(state => {
                 if (state.authenticated) {
-                    this.store.dispatch(new PageRedirect({to: '/asm', data: {}}));
+                    this.router.navigateByUrl('/asm');
                 }
             }
         );

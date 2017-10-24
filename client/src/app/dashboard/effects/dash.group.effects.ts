@@ -8,9 +8,7 @@ import {Actions, Effect} from '@ngrx/effects';
 import {of} from 'rxjs/observable/of';
 import * as Dash from '../actions/dashboard-actions';
 import {GroupApiService} from '../../group/group-api/group-api.service';
-import * as lo from 'lodash';
-import {AssembleGroup} from '../../group/model/assemble-group';
-import {AssembleApiGroup} from '../../group/group-api/assemble-api-group';
+// import * as lo from 'lodash';
 import {GroupListResponse} from '../../group/group-api/response/group-list-response';
 
 @Injectable()
@@ -25,10 +23,7 @@ export class DashGroupEffects {
             this.groupService.list(req.request, req.token)
                 .map(resp => {
                     const response: GroupListResponse = resp.json();
-                    const groups = response.list;
-                    return lo.map(groups, function apiToModel(apiGroup: AssembleApiGroup) {
-                        return new AssembleGroup(apiGroup);
-                    });
+                    return response.list;
                 })
                 .map(groups => {
                     return new Dash.MyGroupsRetrieved({

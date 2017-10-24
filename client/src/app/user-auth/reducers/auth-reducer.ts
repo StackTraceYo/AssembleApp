@@ -1,5 +1,5 @@
 import {AssembleUser} from '../assemble.user';
-import {AuthActions, LOGIN_SUCCESS, LOGOUT} from '../actions/auth-actions';
+import {AuthActions, LOGIN_SUCCESS, LOGOUT, REGISTER_SUCCESS} from '../actions/auth-actions';
 
 export interface State {
     authenticated: boolean;
@@ -25,7 +25,21 @@ export function reducer(state = initialState, action: AuthActions): State {
         }
 
         case LOGOUT: {
-            return initialState;
+            return {
+                ...state,
+                authenticated: false,
+                user: null,
+                token: null
+            };
+        }
+
+        case REGISTER_SUCCESS: {
+            return {
+                ...state,
+                authenticated: true,
+                user: action.payload.user,
+                token: action.payload.token
+            };
         }
 
         default: {

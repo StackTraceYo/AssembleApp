@@ -43,7 +43,7 @@ export class AuthEffects {
         .do(suc => {
             this.appStorage.store('asm-token', suc.token);
             this.appStorage.store('asm-user-id', suc.user.id);
-            this.appStorage.store('asm-user', suc.user);
+            this.appStorage.store('asm-user', JSON.stringify(suc.user));
         })
         .do(() => this.router.navigate(['/asm']));
 
@@ -88,9 +88,10 @@ export class AuthEffects {
     registerSuccess$ = this.actions$
         .ofType(Auth.REGISTER_SUCCESS)
         .map((action: Auth.RegisterSuccess) => action.payload)
-        .do(suc => {
+        .map(suc => {
             this.appStorage.store('asm-token', suc.token);
-            this.appStorage.store('asm-user', suc.user.id);
+            this.appStorage.store('asm-user-id', suc.user.id);
+            this.appStorage.store('asm-user', JSON.stringify(suc.user));
         })
         .do(() => this.router.navigate(['/asm']));
 

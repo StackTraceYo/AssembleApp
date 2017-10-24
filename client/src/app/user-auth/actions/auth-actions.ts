@@ -40,13 +40,6 @@ export class LoginRedirect implements Action {
     readonly type = LOGIN_REDIRECT;
 }
 
-export class PageRedirect implements Action {
-    readonly type = PAGE_REDIRECT;
-
-    constructor(public payload: { to: string, data: any }) {
-    }
-}
-
 export class Logout implements Action {
     readonly type = LOGOUT;
 }
@@ -86,6 +79,5 @@ export type AuthActions =
     | Register
     | RegisterSuccess
     | RegisterFailure
-    | RegisterRedirect
-    | PageRedirect;
+    | RegisterRedirect;
 

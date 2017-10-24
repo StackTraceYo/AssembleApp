@@ -24,7 +24,9 @@ export class DashboardMainComponent implements OnInit {
 
     ngOnInit() {
         this.authStore.select(selectAuthStatusState).subscribe(state => {
+            if (state.authenticated) {
                 this.store.dispatch(new RetrieveMyGroups({request: new GroupListRequest(), token: state.token}));
+            }
             }
         );
     }
