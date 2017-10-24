@@ -1,9 +1,11 @@
 import {createFeatureSelector, createSelector} from '@ngrx/store';
 import * as core from '../../core/reducers/app-reducers';
 import * as fromMyGroups from './my-group-reducers';
+import * as fromMainDash from './dash-reducers';
 
 export interface DashboardState {
     myGroups: fromMyGroups.State;
+    dashboard: fromMainDash.State;
 }
 
 export interface State extends core.State {
@@ -11,16 +13,30 @@ export interface State extends core.State {
 }
 
 export const reducers = {
-    myGroups: fromMyGroups.reducer
+    myGroups: fromMyGroups.reducer,
+    dashboard: fromMainDash.reducer
 };
 
 export const selectDashState = createFeatureSelector<DashboardState>('dash');
 
-export const selectMyGroupsState = createSelector(
+
+export const selectDashboardState = createSelector(
     selectDashState,
-    (state: DashboardState) => state.myGroups
+    (state: DashboardState) => state.dashboard
 );
-export const getLoggedIn = createSelector(
-    selectDashState,
-    (state: DashboardState) => state.myGroups.myGroups
+
+export const selectViewName = createSelector(
+    selectDashboardState,
+    fromMainDash.getViewName
+);
+
+
+export const selectCurrentView = createSelector(
+    selectDashboardState,
+    fromMainDash.getCurrentView
+);
+
+export const selectShowBack = createSelector(
+    selectDashboardState,
+    fromMainDash.getShouldShowBack
 );

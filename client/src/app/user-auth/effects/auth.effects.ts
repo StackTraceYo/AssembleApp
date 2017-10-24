@@ -55,6 +55,14 @@ export class AuthEffects {
             this.router.navigate(['/login']);
         });
 
+    @Effect({dispatch: false})
+    pageRedirect$ = this.actions$
+        .ofType(Auth.PAGE_REDIRECT)
+        .map((action: Auth.PageRedirect) => action.payload)
+        .do(authed => {
+            this.router.navigate([authed.to]);
+        });
+
     @Effect()
     register$ = this.actions$
         .ofType(Auth.REGISTER)

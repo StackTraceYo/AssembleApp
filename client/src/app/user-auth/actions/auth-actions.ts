@@ -8,6 +8,7 @@ export const LOGOUT = '[Auth] Logout';
 export const LOGIN_SUCCESS = '[Auth] Login Success';
 export const LOGIN_FAILURE = '[Auth] Login Failure';
 export const LOGIN_REDIRECT = '[Auth] Login Redirect';
+export const PAGE_REDIRECT = '[Auth] Page Redirect';
 export const REGISTER = '[Auth] Register';
 export const REGISTER_SUCCESS = '[Auth] Register Success';
 export const REGISTER_FAILURE = '[Auth] Register Failure';
@@ -37,6 +38,13 @@ export class LoginFailure implements Action {
 
 export class LoginRedirect implements Action {
     readonly type = LOGIN_REDIRECT;
+}
+
+export class PageRedirect implements Action {
+    readonly type = PAGE_REDIRECT;
+
+    constructor(public payload: { to: string, data: any }) {
+    }
 }
 
 export class Logout implements Action {
@@ -78,4 +86,6 @@ export type AuthActions =
     | Register
     | RegisterSuccess
     | RegisterFailure
-    | RegisterRedirect;
+    | RegisterRedirect
+    | PageRedirect;
+

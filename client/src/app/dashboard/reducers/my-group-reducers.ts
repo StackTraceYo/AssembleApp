@@ -2,11 +2,11 @@ import {DashActions, MY_GROUPS_RETRIEVED} from '../actions/dashboard-actions';
 import {AssembleApiGroup} from '../../group/group-api/assemble-api-group';
 
 export interface State {
-    myGroups: AssembleApiGroup[];
+    groups: AssembleApiGroup[];
 }
 
 export const initialState: State = {
-    myGroups: []
+    groups: []
 };
 
 export function reducer(state = initialState, action: DashActions): State {
@@ -14,7 +14,7 @@ export function reducer(state = initialState, action: DashActions): State {
         case MY_GROUPS_RETRIEVED: {
             return {
                 ...state,
-                myGroups: action.payload.groups,
+                groups: action.payload.groups,
             };
         }
 
@@ -24,4 +24,4 @@ export function reducer(state = initialState, action: DashActions): State {
     }
 }
 
-export const getMyGroups = (state: State) => state.myGroups;
+export const getMyGroups = (state: State) => state.groups;

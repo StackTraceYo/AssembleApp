@@ -3,9 +3,10 @@ import {Router} from '@angular/router';
 import {LoginRequest} from '../user-api/request/login-request';
 import {Store} from '@ngrx/store';
 import * as fromAuth from '../reducers/reducers';
+import {selectAuthStatusState} from '../reducers/reducers';
 import * as auth from '../reducers/auth-reducer';
 import {FormControl, FormGroup} from '@angular/forms';
-import {Login} from '../actions/auth-actions';
+import {Login, PageRedirect} from '../actions/auth-actions';
 
 
 @Component({
@@ -29,6 +30,12 @@ export class LoginFormComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.store.select(selectAuthStatusState).subscribe(state => {
+                if (state.authenticated) {
+                    this.store.dispatch(new PageRedirect({to: '/asm', data: {}}));
+                }
+            }
+        );
     }
 
     login() {
