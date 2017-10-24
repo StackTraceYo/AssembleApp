@@ -4,7 +4,7 @@ import * as fromDash from '../reducers/dash-reducers';
 import * as dash from '../reducers/reducers';
 import * as fromAuth from '../../user-auth/reducers/reducers';
 import {selectAuthStatusState} from '../../user-auth/reducers/reducers';
-import {RetrieveMyGroups} from '../actions/dashboard-actions';
+import {BackToDash, RetrieveMyGroups} from '../actions/dashboard-actions';
 import {GroupListRequest} from '../../group/group-api/request/group-list-request';
 
 @Component({
@@ -24,11 +24,15 @@ export class DashboardMainComponent implements OnInit {
 
     ngOnInit() {
         this.authStore.select(selectAuthStatusState).subscribe(state => {
-            if (state.authenticated) {
-                this.store.dispatch(new RetrieveMyGroups({request: new GroupListRequest(), token: state.token}));
-            }
+                if (state.authenticated) {
+                    this.store.dispatch(new RetrieveMyGroups({request: new GroupListRequest(), token: state.token}));
+                }
             }
         );
+    }
+
+    backToDash() {
+        this.store.dispatch(new BackToDash());
     }
 
 

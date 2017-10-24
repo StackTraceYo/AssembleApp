@@ -1,4 +1,7 @@
 import {Component, OnInit} from '@angular/core';
+import {Store} from '@ngrx/store';
+import * as fromDash from '../../reducers/dash-reducers';
+import {CreateGroupStart} from '../../actions/dashboard-actions';
 
 @Component({
     selector: 'asm-create-group-button',
@@ -8,14 +11,14 @@ import {Component, OnInit} from '@angular/core';
 export class CreateGroupButtonComponent implements OnInit {
 
 
-    constructor() {
+    constructor(private store: Store<fromDash.State>) {
     }
 
     ngOnInit() {
     }
 
     create(): void {
-        // this.onCreateClicked.emit('Create A Group');
+        this.store.dispatch(new CreateGroupStart());
     }
 
 }

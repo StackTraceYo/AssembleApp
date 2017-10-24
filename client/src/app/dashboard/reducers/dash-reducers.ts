@@ -1,4 +1,4 @@
-import {DashActions, MY_GROUPS_RETRIEVED} from '../actions/dashboard-actions';
+import {BACK_TO_DASH, CREATE_START, DashActions, MY_GROUPS_RETRIEVED} from '../actions/dashboard-actions';
 
 export interface State {
     currentView: string;
@@ -21,6 +21,19 @@ export function reducer(state = initialState, action: DashActions): State {
                 viewName: 'My Groups',
                 showBack: false
             };
+        }
+
+        case CREATE_START: {
+            return {
+                ...state,
+                currentView: 'Create A Group',
+                viewName: 'Create A Group',
+                showBack: true
+            };
+        }
+
+        case BACK_TO_DASH: {
+            return initialState;
         }
 
         default: {

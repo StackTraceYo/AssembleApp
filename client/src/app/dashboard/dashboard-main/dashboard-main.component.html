@@ -5,13 +5,12 @@
         <asm-dashboard-my-groups [groups]="myGroups"></asm-dashboard-my-groups>
     </div>
     <div *ngSwitchCase="'Create A Group'" class="dashboard-create-group-wrapper">
-        <asm-create-group-stepper [categories]="categories"
-                                  (onCreateFinished)="onGroupCreated($event)">
+        <asm-create-group-stepper (onCreateFinished)="onGroupCreated($event)">
         </asm-create-group-stepper>
     </div>
 </div>
 <div class="dash-board-back">
-    <button mat-raised-button color="accent" *ngIf="(showBackToDash$ | async)">Home</button>
+    <button mat-raised-button color="accent" *ngIf="(showBackToDash$ | async)" (click)="backToDash()">Home</button>
 </div>
 <div class="dash-board-buttons-wrapper" *ngIf="!(showBackToDash$ | async)">
     <asm-create-group-button></asm-create-group-button>

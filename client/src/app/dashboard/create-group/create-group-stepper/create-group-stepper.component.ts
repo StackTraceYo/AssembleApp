@@ -5,6 +5,9 @@ import {GroupApiService} from '../../../group/group-api/group-api.service';
 import {MatDialog} from '@angular/material/';
 import {CreateGroupSuccessDialogComponent} from '../create-group-success-dialog/create-group-success-dialog.component';
 import {Category} from '../../../content/model/category';
+import {Store} from '@ngrx/store';
+import * as fromCreate from '../../reducers/create-group-reducers';
+import * as dash from '../../reducers/reducers';
 
 @Component({
     selector: 'asm-create-group-stepper',
@@ -13,7 +16,7 @@ import {Category} from '../../../content/model/category';
 })
 export class CreateGroupStepperComponent implements OnInit {
 
-    @Input() categories: Category;
+    categories$= this.store.select(dash.selectCategories);
     @Output() onCreateFinished = new EventEmitter<string>();
 
     basicInfo: FormGroup;
@@ -21,7 +24,8 @@ export class CreateGroupStepperComponent implements OnInit {
 
     // additionalInfo: FormGroup;
 
-    constructor(private _formBuilder: FormBuilder, private groupApiService: GroupApiService, public dialog: MatDialog) {
+    constructor(private _formBuilder: FormBuilder, private groupApiService: GroupApiService, public dialog: MatDialog,
+                private store: Store<fromCreate.State>) {
     }
 
     onCategorySelected(category: Category) {

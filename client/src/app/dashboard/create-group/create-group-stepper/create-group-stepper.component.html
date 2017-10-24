@@ -14,6 +14,7 @@
         <form [formGroup]="category" name="category">
             <ng-template matStepLabel>Pick A Group Category</ng-template>
             <asm-category-selection-grid [stepper]="stepper"
+                                         [categories] = "categories$ | async"
                                          (onCategorySelected)="onCategorySelected($event)">
             </asm-category-selection-grid>
             <div>
