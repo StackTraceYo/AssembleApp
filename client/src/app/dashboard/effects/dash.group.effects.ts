@@ -4,15 +4,14 @@ import 'rxjs/add/operator/exhaustMap';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
 import {Injectable} from '@angular/core';
-import {Router} from '@angular/router';
 import {Actions, Effect} from '@ngrx/effects';
 import {of} from 'rxjs/observable/of';
 import * as Dash from '../actions/dashboard-actions';
 import {GroupApiService} from '../../group/group-api/group-api.service';
-import * as _ from "lodash";
-import {AssembleGroup} from "../../group/model/assemble-group";
-import {AssembleApiGroup} from "../../group/group-api/assemble-api-group";
-import {GroupListResponse} from "../../group/group-api/response/group-list-response";
+import * as lo from 'lodash';
+import {AssembleGroup} from '../../group/model/assemble-group';
+import {AssembleApiGroup} from '../../group/group-api/assemble-api-group';
+import {GroupListResponse} from '../../group/group-api/response/group-list-response';
 
 @Injectable()
 export class DashGroupEffects {
@@ -27,7 +26,7 @@ export class DashGroupEffects {
                 .map(resp => {
                     const response: GroupListResponse = resp.json();
                     const groups = response.list;
-                    return _.map(groups, function apiToModel(apiGroup: AssembleApiGroup) {
+                    return lo.map(groups, function apiToModel(apiGroup: AssembleApiGroup) {
                         return new AssembleGroup(apiGroup);
                     });
                 })
@@ -40,7 +39,6 @@ export class DashGroupEffects {
         );
 
     constructor(private actions$: Actions,
-                private groupService: GroupApiService,
-                private router: Router) {
+                private groupService: GroupApiService) {
     }
 }
