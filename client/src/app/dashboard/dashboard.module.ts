@@ -12,10 +12,11 @@ import {CreateGroupSuccessDialogComponent} from './create-group/create-group-suc
 import {AppRoutingModule} from '../app-routing/app-routing.module';
 import {ContentModule} from '../content/content.module';
 import {CategorySelectionGridComponent} from './category-selection/category-selection-grid/category-selection-grid.component';
-import { CreateGroupReviewComponent } from './create-group/create-group-review/create-group-review.component';
+import {CreateGroupReviewComponent} from './create-group/create-group-review/create-group-review.component';
 import {reducers} from './reducers/reducers';
 import {StoreModule} from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
+import {EffectsModule} from '@ngrx/effects';
+import {NgrxFormsModule} from 'ngrx-forms';
 import {DashGroupEffects} from './effects/dash.group.effects';
 
 @NgModule({
@@ -27,6 +28,7 @@ import {DashGroupEffects} from './effects/dash.group.effects';
         GroupModule,
         AppRoutingModule,
         ContentModule,
+        NgrxFormsModule,
         StoreModule,
         StoreModule.forFeature('dash', reducers),
         EffectsModule.forFeature([DashGroupEffects])

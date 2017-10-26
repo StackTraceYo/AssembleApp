@@ -16,6 +16,7 @@ import {AppStorageService} from './app-storage/app-storage.service';
 import {ToolbarModule} from './toolbar/toolbar.module';
 import {ContentModule} from './content/content.module';
 import {StoreModule} from '@ngrx/store';
+import {NgrxFormsModule} from 'ngrx-forms';
 import {metaReducers, reducers} from './core/reducers/app-reducers';
 import {EffectsModule} from '@ngrx/effects';
 
@@ -35,6 +36,7 @@ import {EffectsModule} from '@ngrx/effects';
         DashboardModule,
         ToolbarModule,
         ContentModule,
+        NgrxFormsModule,
         StoreModule,
         StoreModule.forRoot(reducers, {metaReducers}),
         EffectsModule.forRoot([])

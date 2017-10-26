@@ -53,3 +53,8 @@ export const selectCategories = createSelector(
     selectCreateState,
     fromCreate.getCategories
 );
+
+export const selectCreateGroup = createSelector(
+    selectCreateState,
+    fromCreate.getCreateForm
+);

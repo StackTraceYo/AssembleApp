@@ -1,4 +1,11 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import * as fromCreate from '../../reducers/create-group-reducers';
+import {CreateGroupForm} from '../../reducers/create-group-reducers';
+import * as fromAuth from '../../../user-auth/reducers/reducers';
+import {Store} from '@ngrx/store';
+import {Observable} from "rxjs/Observable";
+import {FormGroupState} from "ngrx-forms";
+
 
 @Component({
     selector: 'asm-create-group-review',
@@ -7,12 +14,13 @@ import {Component, OnInit, Input} from '@angular/core';
 })
 export class CreateGroupReviewComponent implements OnInit {
 
-    @Input() review: any;
+    review$: Observable<FormGroupState<CreateGroupForm>>;
 
-    constructor() {
+    constructor(private store: Store<fromCreate.State>, private authStore: Store<fromAuth.State>) {
     }
 
     ngOnInit() {
+        this.review$ = this.store.select(s => s.createGroup)
     }
 
 }
