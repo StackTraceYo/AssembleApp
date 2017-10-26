@@ -1,8 +1,6 @@
 import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
-import {FormBuilder} from '@angular/forms';
 import {MatDialog, MatStepper} from '@angular/material/';
 import {CreateGroupSuccessDialogComponent} from '../create-group-success-dialog/create-group-success-dialog.component';
-import {Category} from '../../../content/model/category';
 import {Store} from '@ngrx/store';
 import * as fromCreate from '../../reducers/create-group-reducers';
 import {CreateGroupForm} from '../../reducers/create-group-reducers';
@@ -18,30 +16,24 @@ import {FormGroupState} from 'ngrx-forms';
 })
 export class CreateGroupStepperComponent implements OnInit {
 
-    categories$ = this.store.select(dash.selectCategories);
     createGroupForm$: Observable<FormGroupState<CreateGroupForm>>;
     @Output() onCreateFinished = new EventEmitter<string>();
     @ViewChild(MatStepper) stepper: MatStepper;
 
 
-    constructor(private _formBuilder: FormBuilder, public dialog: MatDialog,
-                private store: Store<fromCreate.State>, private authStore: Store<fromAuth.State>) {
-    }
-
-    onCategorySelected(category: Category) {
-        // this.category.value.categoryName = category.categoryName;
+    constructor(public dialog: MatDialog, private store: Store<fromCreate.State>, private authStore: Store<fromAuth.State>) {
     }
 
     ngOnInit() {
-        this.createGroupForm$ = this.store.select(dash.selectCreateGroup)
+        this.createGroupForm$ = this.store.select(dash.selectCreateGroup);
     }
 
     create() {
         // this.authStore.select(selectAuthStatusState).subscribe(state => {
         //         if (state.authenticated) {
         //             const request = new CreateRequest();
-        //             request.groupName = this.basicInfo.value.groupName;
-        //             request.categoryName = this.category.value.categoryName;
+        //             request.groupName = this.basicInfo.category.groupName;
+        //             request.categoryName = this.category.category.categoryName;
         //             this.store.dispatch(new CreateGroup({request: request, token: state.token}));
         //         }
         //     }
@@ -49,7 +41,7 @@ export class CreateGroupStepperComponent implements OnInit {
     }
 
     next() {
-        this.stepper.next()
+        this.stepper.next();
     }
 
     showSuccess(): void {

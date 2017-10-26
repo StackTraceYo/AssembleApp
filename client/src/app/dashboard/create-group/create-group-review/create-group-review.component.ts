@@ -1,10 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import * as fromCreate from '../../reducers/create-group-reducers';
-import {CreateGroupForm} from '../../reducers/create-group-reducers';
 import * as fromAuth from '../../../user-auth/reducers/reducers';
 import {Store} from '@ngrx/store';
-import {Observable} from "rxjs/Observable";
-import {FormGroupState} from "ngrx-forms";
+import {selectCreateGroup} from "../../reducers/reducers";
 
 
 @Component({
@@ -14,13 +12,23 @@ import {FormGroupState} from "ngrx-forms";
 })
 export class CreateGroupReviewComponent implements OnInit {
 
-    review$: Observable<FormGroupState<CreateGroupForm>>;
+    review$ = this.store.select(selectCreateGroup);
 
     constructor(private store: Store<fromCreate.State>, private authStore: Store<fromAuth.State>) {
     }
 
     ngOnInit() {
-        this.review$ = this.store.select(s => s.createGroup)
+        // this.review$ = Observable.combineLatest(
+        //     this.store.select(fromCreate.getCreateForm),
+        //     this.store.select(fromCreate.getSelectedCategoryStatus),
+        //     (form, stat) => {
+        //         return {
+        //             groupName: form.value.groupName,
+        //             categoryName: stat.categoryName
+        //         };
+        //     }
+        // );
+
     }
 
 }

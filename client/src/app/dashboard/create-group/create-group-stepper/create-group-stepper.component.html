@@ -11,17 +11,12 @@
             </div>
         </form>
     </mat-step>
-    <mat-step>
+    <mat-step [stepControl]="(createGroupForm$ | async).controls.categoryName">
         <form name="category">
             <ng-template matStepLabel>Pick A Group Category</ng-template>
             <asm-category-selection-grid [stepper]="stepper"
-                                         [categories] = "categories$ | async"
                                          (onCategorySelected)="onCategorySelected($event)">
             </asm-category-selection-grid>
-            <div>
-                <button mat-button color="primary" matStepperPrevious>Back</button>
-                <button mat-button color="primary" matStepperNext>Next</button>
-            </div>
         </form>
     </mat-step>
     <mat-step>

@@ -54,6 +54,11 @@ export const selectCategories = createSelector(
     fromCreate.getCategories
 );
 
+export const selectCurrentCategoryStatus = createSelector(
+    selectCreateState,
+    fromCreate.getSelectedCategoryStatus
+);
+
 export const selectCreateGroup = createSelector(
     selectCreateState,
     fromCreate.getCreateForm

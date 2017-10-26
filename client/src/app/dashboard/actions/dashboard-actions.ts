@@ -14,6 +14,7 @@ export const FAILED_TO_RETRIEVE = '[Dash] Failed To Retrieve';
 export const CREATE_START = '[Dash] Starting Create Group';
 export const BACK_TO_DASH = '[Dash] Back To Dash';
 export const CREATE_GROUP = '[Dash] Creating Group';
+export const UPDATE_CATEGORY = '[Create Dash] Update Category';
 
 
 export class RetrieveMyGroups implements Action {
@@ -80,6 +81,16 @@ export class CreateGroup implements Action {
     }
 }
 
+export class UpdateCategory implements Action {
+    readonly type = UPDATE_CATEGORY;
+
+    constructor(public payload: {
+        category: Category,
+        categoryStatus: any
+    }) {
+    }
+}
+
 
 export type DashActions =
     | RetrieveMyGroups
@@ -88,7 +99,8 @@ export type DashActions =
     | CategoriesRetrieved
     | RetrievalFailure
     | CreateGroupStart
-    | BackToDash;
+    | BackToDash
+    | UpdateCategory;
 
 
 

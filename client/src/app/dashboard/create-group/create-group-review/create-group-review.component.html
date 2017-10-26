@@ -1,12 +1,14 @@
 <mat-card class="review-card">
     <mat-card-header>
-        <mat-card-title>{{review$}}</mat-card-title>
         <mat-card-subtitle>New Group</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
         Group Information:
         <p>
-            <!--Category: {{(review$ | async)}}-->
+            Group Name: {{(review$ | async).value.groupName}}
+        </p>
+        <p>
+            Category: {{(review$ | async).value.categoryName}}
         </p>
     </mat-card-content>
     <mat-card-actions>
