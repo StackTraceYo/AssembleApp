@@ -1,4 +1,10 @@
-import {CATEGORIES_RETRIEVED, DashActions, UPDATE_CATEGORY} from '../actions/dashboard-actions';
+import {
+    CATEGORIES_RETRIEVED,
+    CREATE_END,
+    DashActions,
+    GROUP_CREATED,
+    UPDATE_CATEGORY
+} from '../actions/dashboard-actions';
 import {Category} from '../../content/model/category';
 import {createFormGroupState, formGroupReducer, FormGroupState} from 'ngrx-forms';
 
@@ -16,6 +22,7 @@ export interface State {
         isFinal: boolean;
         categoryName: string;
     };
+    successDialog: boolean;
 }
 
 const initialFormState = createFormGroupState<CreateGroupForm>(FORM_ID, {
@@ -29,7 +36,8 @@ export const initialState: State = {
     categoryStatus: {
         isFinal: false,
         categoryName: ''
-    }
+    },
+    successDialog: false
 };
 
 export function reducer(state = initialState, action: DashActions): State {
@@ -52,6 +60,25 @@ export function reducer(state = initialState, action: DashActions): State {
             };
         }
 
+        case CREATE_END: {
+            return {
+                ...state,
+                createGroup: initialFormState,
+                categoryStatus: {
+                    isFinal: false,
+                    categoryName: ''
+                },
+                successDialog: false
+            };
+        }
+
+        case GROUP_CREATED: {
+            return {
+                ...state,
+                successDialog: true
+            };
+        }
+
         default: {
             return state;
         }
@@ -60,4 +87,5 @@ export function reducer(state = initialState, action: DashActions): State {
 
 export const getCategories = (state: State) => state.categories;
 export const getCreateForm = (state: State) => state.createGroup;
+export const getSuccessDialog = (state: State) => state.successDialog;
 export const getSelectedCategoryStatus = (state: State) => state.categoryStatus;

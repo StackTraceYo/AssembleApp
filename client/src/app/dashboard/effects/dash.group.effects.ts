@@ -13,7 +13,9 @@ import {GroupApiService} from '../../group/group-api/group-api.service';
 import {GroupListResponse} from '../../group/group-api/response/group-list-response';
 import {ContentService} from '../../content/content-api/content.service';
 import {ContentRequest} from '../../content/content-api/request/content-request';
-import {Category} from "../../content/model/category";
+import {Category} from '../../content/model/category';
+import {UserAuthState} from '../../user-auth/reducers/reducers';
+import {Store} from '@ngrx/store';
 
 @Injectable()
 export class DashGroupEffects {
@@ -43,6 +45,12 @@ export class DashGroupEffects {
         .map(x => {
             return new RetrieveCategories({request: new ContentRequest('CATEGORY')});
         });
+
+    // @Effect()
+    // createGroupEnd$ = this.actions$
+    //     .ofType(Dash.CREATE_END)
+    //     .withLatestFrom(this.store$.select(selectAuthStatusState))
+    //
 
     @Effect()
     myCategories$ = this.actions$
@@ -77,6 +85,7 @@ export class DashGroupEffects {
 
     constructor(private actions$: Actions,
                 private groupService: GroupApiService,
-                private contentService: ContentService) {
+                private contentService: ContentService,
+                private store$: Store<UserAuthState>) {
     }
 }

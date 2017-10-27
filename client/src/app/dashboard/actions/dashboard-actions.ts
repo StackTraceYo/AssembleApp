@@ -12,9 +12,10 @@ export const CATEGORIES_RETRIEVED = '[Dash] Retrieved Categories';
 export const RETRIEVE_MY_GROUPS = '[Dash] My Groups';
 export const MY_GROUPS_RETRIEVED = '[Dash] Retrieved My Groups';
 export const FAILED_TO_RETRIEVE = '[Dash] Failed To Retrieve';
-export const CREATE_START = '[Dash] Starting Create Group';
 export const BACK_TO_DASH = '[Dash] Back To Dash';
 
+export const CREATE_START = '[Dash] Starting Create Group';
+export const CREATE_END = '[Dash] Create Group Ended Successfully';
 export const CREATE_GROUP = '[Create] Creating Group';
 export const FAILED_TO_CREATE = '[Create] Failed To Create';
 export const GROUP_CREATED = '[Create] Created Group';
@@ -100,6 +101,13 @@ export class CreationFailure implements Action {
     }
 }
 
+export class CreationCompleted implements Action {
+    readonly type = CREATE_END;
+
+    constructor(public payload: { msg: string }) {
+    }
+}
+
 export class UpdateCategory implements Action {
     readonly type = UPDATE_CATEGORY;
 
@@ -121,6 +129,7 @@ export type DashActions =
     | BackToDash
     | GroupCreated
     | CreationFailure
+    | CreationCompleted
     | UpdateCategory;
 
 

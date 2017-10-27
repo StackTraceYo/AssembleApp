@@ -11,7 +11,7 @@ import {selectAuthStatusState} from '../../../user-auth/reducers/reducers';
 import {Observable} from 'rxjs/';
 import {FormGroupState} from 'ngrx-forms';
 import {CreateRequest} from '../../../group/group-api/request/create-request';
-import {CreateGroup} from '../../actions/dashboard-actions';
+import {CreateGroup, CreationCompleted} from '../../actions/dashboard-actions';
 
 @Component({
     selector: 'asm-create-group-stepper',
@@ -23,6 +23,7 @@ export class CreateGroupStepperComponent implements OnInit {
     createGroupForm$: Observable<FormGroupState<CreateGroupForm>>;
     @Output() onCreateFinished = new EventEmitter<string>();
     @ViewChild(MatStepper) stepper: MatStepper;
+    showDialog$ = this.store.select(dash.selectDialog);
 
 
     constructor(public dialog: MatDialog, private store: Store<fromCreate.State>, private authStore: Store<fromAuth.State>) {
@@ -30,10 +31,14 @@ export class CreateGroupStepperComponent implements OnInit {
 
     ngOnInit() {
         this.createGroupForm$ = this.store.select(dash.selectCreateGroup);
+        this.showDialog$.subscribe(show => {
+            if (show) {
+                this.showSuccess();
+            }
+        });
     }
 
     create() {
-
         Observable.combineLatest(
             this.store.select(selectCreateGroup),
             this.authStore.select(selectAuthStatusState),
@@ -48,6 +53,10 @@ export class CreateGroupStepperComponent implements OnInit {
         this.stepper.next();
     }
 
+    back() {
+        this.stepper.previous();
+    }
+
     showSuccess(): void {
         const dialogRef = this.dialog.open(CreateGroupSuccessDialogComponent, {
             width: '250px',
@@ -55,7 +64,7 @@ export class CreateGroupStepperComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            this.onCreateFinished.emit('create');
+            this.store.dispatch(new CreationCompleted({msg: ''}));
         });
     }
 }

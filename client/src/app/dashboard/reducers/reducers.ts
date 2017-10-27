@@ -33,6 +33,11 @@ export const selectCreateState = createSelector(
     (state: DashboardState) => state.createGroup
 );
 
+export const selectMyGroupsState = createSelector(
+    selectDashState,
+    (state: DashboardState) => state.myGroups
+);
+
 export const selectViewName = createSelector(
     selectDashboardState,
     fromMainDash.getViewName
@@ -62,4 +67,14 @@ export const selectCurrentCategoryStatus = createSelector(
 export const selectCreateGroup = createSelector(
     selectCreateState,
     fromCreate.getCreateForm
+);
+
+export const selectDialog = createSelector(
+    selectCreateState,
+    fromCreate.getSuccessDialog
+);
+
+export const selectMyGroups = createSelector(
+    selectMyGroupsState,
+    fromMyGroups.getMyGroups
 );
