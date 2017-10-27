@@ -7,7 +7,7 @@ import {Injectable} from '@angular/core';
 import {Actions, Effect} from '@ngrx/effects';
 import {of} from 'rxjs/observable/of';
 import * as Dash from '../actions/dashboard-actions';
-import {CategoriesRetrieved, RetrieveCategories} from '../actions/dashboard-actions';
+import {CategoriesRetrieved, GroupCreated, RetrieveCategories} from '../actions/dashboard-actions';
 import {GroupApiService} from '../../group/group-api/group-api.service';
 // import * as lo from 'lodash';
 import {GroupListResponse} from '../../group/group-api/response/group-list-response';
@@ -55,6 +55,23 @@ export class DashGroupEffects {
                     return new CategoriesRetrieved({categories: cat});
                 })
                 .catch(error => of(new Dash.RetrievalFailure(error)))
+        );
+
+    @Effect()
+    createGroup$ = this.actions$
+        .ofType(Dash.CREATE_GROUP)
+        .map((action: Dash.CreateGroup) => action.payload)
+        .exhaustMap(req =>
+            this.groupService.create(req.request, req.token)
+                .map(resp => {
+                    const res = resp.json();
+                    if (res.success) {
+                        return new GroupCreated({group: res});
+                    } else {
+                        return new Dash.CreationFailure(res.msg);
+                    }
+                })
+                .catch(error => of(new Dash.CreationFailure(error)))
         );
 
 

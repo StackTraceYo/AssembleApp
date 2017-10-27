@@ -4,6 +4,7 @@ import {AssembleApiGroup} from '../../group/group-api/assemble-api-group';
 import {ContentRequest} from '../../content/content-api/request/content-request';
 import {Category} from '../../content/model/category';
 import {CreateRequest} from "../../group/group-api/request/create-request";
+import {CreateResponse} from "../../group/group-api/response/create-response";
 
 
 export const RETRIEVE_CATEGORIES = '[Dash] Get Categories';
@@ -13,7 +14,11 @@ export const MY_GROUPS_RETRIEVED = '[Dash] Retrieved My Groups';
 export const FAILED_TO_RETRIEVE = '[Dash] Failed To Retrieve';
 export const CREATE_START = '[Dash] Starting Create Group';
 export const BACK_TO_DASH = '[Dash] Back To Dash';
-export const CREATE_GROUP = '[Dash] Creating Group';
+
+export const CREATE_GROUP = '[Create] Creating Group';
+export const FAILED_TO_CREATE = '[Create] Failed To Create';
+export const GROUP_CREATED = '[Create] Created Group';
+
 export const UPDATE_CATEGORY = '[Create Dash] Update Category';
 
 
@@ -81,6 +86,20 @@ export class CreateGroup implements Action {
     }
 }
 
+export class GroupCreated implements Action {
+    readonly type = GROUP_CREATED;
+
+    constructor(public payload: { group: CreateResponse }) {
+    }
+}
+
+export class CreationFailure implements Action {
+    readonly type = FAILED_TO_CREATE;
+
+    constructor(public payload: { msg: string }) {
+    }
+}
+
 export class UpdateCategory implements Action {
     readonly type = UPDATE_CATEGORY;
 
@@ -100,6 +119,8 @@ export type DashActions =
     | RetrievalFailure
     | CreateGroupStart
     | BackToDash
+    | GroupCreated
+    | CreationFailure
     | UpdateCategory;
 
 

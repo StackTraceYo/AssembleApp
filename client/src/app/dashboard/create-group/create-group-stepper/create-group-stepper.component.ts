@@ -5,9 +5,13 @@ import {Store} from '@ngrx/store';
 import * as fromCreate from '../../reducers/create-group-reducers';
 import {CreateGroupForm} from '../../reducers/create-group-reducers';
 import * as dash from '../../reducers/reducers';
+import {selectCreateGroup} from '../../reducers/reducers';
 import * as fromAuth from '../../../user-auth/reducers/reducers';
-import {Observable} from 'rxjs/Observable';
+import {selectAuthStatusState} from '../../../user-auth/reducers/reducers';
+import {Observable} from 'rxjs/';
 import {FormGroupState} from 'ngrx-forms';
+import {CreateRequest} from '../../../group/group-api/request/create-request';
+import {CreateGroup} from '../../actions/dashboard-actions';
 
 @Component({
     selector: 'asm-create-group-stepper',
@@ -29,15 +33,15 @@ export class CreateGroupStepperComponent implements OnInit {
     }
 
     create() {
-        // this.authStore.select(selectAuthStatusState).subscribe(state => {
-        //         if (state.authenticated) {
-        //             const request = new CreateRequest();
-        //             request.groupName = this.basicInfo.category.groupName;
-        //             request.categoryName = this.category.category.categoryName;
-        //             this.store.dispatch(new CreateGroup({request: request, token: state.token}));
-        //         }
-        //     }
-        // );
+
+        Observable.combineLatest(
+            this.store.select(selectCreateGroup),
+            this.authStore.select(selectAuthStatusState),
+            (form, auth) => {
+                const create = new CreateRequest(form.value);
+                return new CreateGroup({request: create, token: auth.token});
+            }
+        ).take(1).subscribe(action => this.store.dispatch(action));
     }
 
     next() {
