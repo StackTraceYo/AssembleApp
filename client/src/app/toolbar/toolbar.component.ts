@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {UserService} from '../user-auth/user-service';
 import {Router} from '@angular/router';
+import {Store} from '@ngrx/store';
+import * as auth from '../user-auth/reducers/reducers';
+import {Login, Logout} from '../user-auth/actions/auth-actions';
 
 @Component({
     selector: 'asm-toolbar',
@@ -9,39 +11,28 @@ import {Router} from '@angular/router';
 })
 export class ToolbarComponent implements OnInit {
 
-    loginOrOut = 'Login';
-    loggedIn = false;
+    LOGGED_IN = 'Logout';
+    LOGGED_OUT = 'Login';
+    loggedIn$ = this.store.select(auth.getLoggedIn);
     assembleLink = '/login';
 
-    constructor(private userService: UserService, private router: Router) {
+    constructor(private router: Router, private store: Store<auth.State>) {
     }
 
     ngOnInit() {
+    }
 
-        this.userService.getUser()
-            .subscribe(user => {
-                    if (user.isAuthenticated()) {
-                        this.loginOrOut = 'Logout';
-                        this.loggedIn = true;
-                    } else {
-                        this.loginOrOut = 'Login';
-                        this.loggedIn = false;
-                    }
-                },
-                err => {
-                    this.loginOrOut = 'Logout';
-                    this.loggedIn = false;
-                    console.log(err);
-                });
+    loggedInOrOut() {
+        const text =  this.loggedIn$ ? this.LOGGED_IN : this.LOGGED_OUT;
+        return text;
     }
 
     toggleUserSignedIn() {
-        this.loggedIn ? this.logout() : this.login();
+        this.loggedIn$ ? this.logout() : this.login();
     }
 
     logout() {
-        this.userService.removeUser();
-        this.gotoLogin();
+        this.store.dispatch(new Logout());
     }
 
     login() {

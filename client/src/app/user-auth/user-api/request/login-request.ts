@@ -1,10 +1,8 @@
-import {LoginFormModel} from '../../login-form/model/login-form-model';
-
 export class LoginRequest {
 
   email: string;
 
-  constructor(formModel: LoginFormModel) {
+    constructor(formModel: any) {
     this.email = formModel.email;
   }
 

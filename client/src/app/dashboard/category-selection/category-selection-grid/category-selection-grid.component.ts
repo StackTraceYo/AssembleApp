@@ -1,7 +1,12 @@
-import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Category} from '../../../content/model/category';
-import {ContentService} from '../../../content/content-api/content.service';
 import {MatStepper} from '@angular/material';
+import {Store} from '@ngrx/store';
+import * as fromCreate from '../../reducers/create-group-reducers';
+import {FORM_ID} from '../../reducers/create-group-reducers';
+import * as dash from '../../reducers/reducers';
+import {UpdateCategory} from '../../actions/dashboard-actions';
+import {SetValueAction} from 'ngrx-forms';
 
 @Component({
     selector: 'asm-category-selection-grid',
@@ -11,27 +16,42 @@ import {MatStepper} from '@angular/material';
 export class CategorySelectionGridComponent implements OnInit {
 
     @Input() stepper: MatStepper;
-    @Output() onCategorySelected = new EventEmitter<Category>();
-    categories: Category;
+    categories$ = this.store.select(dash.selectCategories);
+    selectedCategoryData$ = this.store.select(dash.selectCurrentCategoryStatus);
 
-    constructor(private contentService: ContentService) {
+
+    constructor(private store: Store<fromCreate.State>) {
     }
 
     traverse(category: Category) {
+        this.selectedCategoryData$.take(1).subscribe(status => {
+            if (status.isFinal) {
+                this.stepper.next();
+            } else {
+                this.store.dispatch(new UpdateCategory({
+                    category: category,
+                    categoryStatus: {
+                        isFinal: category.isFinal,
+                        categoryName: category.categoryName
+                    }
+                }));
+            }
+        });
+    }
 
-        if (!category.isFinal) {
-            this.categories = category;
-        } else {
-            this.onCategorySelected.emit(category);
-            this.stepper.next();
-        }
+    back() {
+        this.stepper.previous();
+    }
+
+    next() {
+        this.stepper.next();
     }
 
     ngOnInit() {
-        this.contentService.getCategories()
-            .subscribe(c => {
-                this.categories = c;
-            });
+        this.selectedCategoryData$.subscribe(statusChange => {
+            this.store.dispatch(new SetValueAction(FORM_ID + '.categoryName', statusChange.categoryName));
+        });
+
     }
 
 }

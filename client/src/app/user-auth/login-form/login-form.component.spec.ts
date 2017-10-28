@@ -81,7 +81,7 @@ describe('LoginFormComponent', () => {
             // make sure ui changes based on model
             expect(el.value).toContain('test@gmail.com');
 
-            // change ui value and fire event for input
+            // change ui category and fire event for input
             el.value = 'change@email.com';
             el.dispatchEvent(new Event('input'));
 

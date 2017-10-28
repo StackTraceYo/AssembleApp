@@ -15,6 +15,10 @@ import {AuthGuard} from './user-auth/auth-guard/auth.guard';
 import {AppStorageService} from './app-storage/app-storage.service';
 import {ToolbarModule} from './toolbar/toolbar.module';
 import {ContentModule} from './content/content.module';
+import {StoreModule} from '@ngrx/store';
+import {NgrxFormsModule} from 'ngrx-forms';
+import {metaReducers, reducers} from './core/reducers/app-reducers';
+import {EffectsModule} from '@ngrx/effects';
 
 @NgModule({
     declarations: [
@@ -31,7 +35,11 @@ import {ContentModule} from './content/content.module';
         UserModule,
         DashboardModule,
         ToolbarModule,
-        ContentModule
+        ContentModule,
+        NgrxFormsModule,
+        StoreModule,
+        StoreModule.forRoot(reducers, {metaReducers}),
+        EffectsModule.forRoot([])
     ],
     providers: [HttpClient, AuthGuard, AppStorageService],
     bootstrap: [AppComponent],

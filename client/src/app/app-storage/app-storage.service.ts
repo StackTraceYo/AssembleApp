@@ -6,8 +6,8 @@ export class AppStorageService {
     constructor() {
     }
 
-    store(key: string, content: Object) {
-        localStorage.setItem(key, JSON.stringify(content));
+    store(key: string, content: string) {
+        localStorage.setItem(key, content);
     }
 
     retrieve(key: string) {

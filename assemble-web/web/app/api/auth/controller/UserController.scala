@@ -29,7 +29,7 @@ class UserController @Inject()(cc: ControllerComponents, userService: UserServic
       })
       .recover {
         case e =>
-          Ok(Json.toJson(FailedToCreate(request.body, e.getMessage, success = false)))
+          Ok(Json.toJson(FailedToCreate(request.body, "Failed To Register", success = false)))
       }
   }
 
@@ -52,7 +52,7 @@ class UserController @Inject()(cc: ControllerComponents, userService: UserServic
           Ok(Json.toJson(UserRetrieved(userAndToken._1, success = true)))
             .withHeaders(("X-Asm-Auth", userAndToken._2.id.toString))
         case None =>
-          Ok(Json.toJson(FailedToSignIn(retrieval, "-1", success = false)))
+          Ok(Json.toJson(FailedToSignIn(retrieval, "Invalid Email or Password", success = false)))
       }
   }
 

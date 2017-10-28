@@ -1,4 +1,9 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import * as fromCreate from '../../reducers/create-group-reducers';
+import * as fromAuth from '../../../user-auth/reducers/reducers';
+import {Store} from '@ngrx/store';
+import {selectCreateGroup} from "../../reducers/reducers";
+
 
 @Component({
     selector: 'asm-create-group-review',
@@ -7,12 +12,23 @@ import {Component, OnInit, Input} from '@angular/core';
 })
 export class CreateGroupReviewComponent implements OnInit {
 
-    @Input() review: any;
+    review$ = this.store.select(selectCreateGroup);
 
-    constructor() {
+    constructor(private store: Store<fromCreate.State>, private authStore: Store<fromAuth.State>) {
     }
 
     ngOnInit() {
+        // this.review$ = Observable.combineLatest(
+        //     this.store.select(fromCreate.getCreateForm),
+        //     this.store.select(fromCreate.getSelectedCategoryStatus),
+        //     (form, stat) => {
+        //         return {
+        //             groupName: form.value.groupName,
+        //             categoryName: stat.categoryName
+        //         };
+        //     }
+        // );
+
     }
 
 }

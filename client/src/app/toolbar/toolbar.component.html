@@ -3,9 +3,12 @@
         <button mat-menu-item> My Account</button>
         <button mat-menu-item> Settings</button>
         <button mat-menu-item> Help</button>
-        <button mat-menu-item [(ngModel)]="loginOrOut" name="loginOrOut" ngDefaultControl (click)="toggleUserSignedIn()">
-            <div class="toolbar-user-status-link">
-                {{loginOrOut}}
+        <button mat-menu-item name="login-logout-button" ngDefaultControl (click)="toggleUserSignedIn()">
+            <div *ngIf="!(loggedIn$ | async)" class="toolbar-user-status-link">
+                Login
+            </div>
+            <div *ngIf="(loggedIn$ | async)" class="toolbar-user-status-link">
+                Logout
             </div>
         </button>
     </mat-menu>
