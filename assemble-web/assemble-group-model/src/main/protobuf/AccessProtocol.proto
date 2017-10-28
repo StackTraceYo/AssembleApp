@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+// Brought in from scalapb-runtime
+import "scalapb/scalapb.proto";
+
+package com.stacktrace.yo.assemble.access;
+option java_package = "com.stacktrace.yo.assemble.access";
+
+message GroupAccessState {
+    option (scalapb.message).extends = "com.stacktrace.yo.assemble.group.Protocol.AccessState";
+    map<string, AccessReference> groups = 1;
+}
+
+message AccessReference {
+    repeated string host = 1;
+    repeated string guest = 2;
+}
+
+message CreatedAccess {
+    option (scalapb.message).extends = "com.stacktrace.yo.assemble.group.Protocol.AccessEvent";
+    string host = 1;
+    string group = 2;
+}

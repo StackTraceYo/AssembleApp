@@ -2,7 +2,8 @@ package org.stacktrace.yo.user.auth.service
 
 import java.util.UUID
 
-import org.stacktrace.yo.user.auth.model.{AssembleUser, AuthToken}
+import org.stacktrace.yo.user.auth.model.AuthToken
+import org.stacktrace.yo.user.model.AssembleUser
 
 import scala.concurrent.Future
 import scala.concurrent.duration.{FiniteDuration, _}

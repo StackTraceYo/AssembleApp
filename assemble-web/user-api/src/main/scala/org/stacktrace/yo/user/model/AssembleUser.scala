@@ -1,4 +1,4 @@
-package org.stacktrace.yo.user.auth.model
+package org.stacktrace.yo.user.model
 
 import play.api.libs.json.{Json, OFormat}
 

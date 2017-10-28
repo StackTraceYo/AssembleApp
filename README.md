@@ -2,25 +2,24 @@
 
 ## Importing and Running
 To Import the project
-* To Import this project import the top level build.sbt
+* To Import web,  import the build.sbt in '/assemble-web'
+* Client also needs imported.
 
-
-To Run application in Dev Mode with Docker:
-* TODO
+To Run web and client in Dev Mode with Docker:
+* use 'docker-compose up'
 
 To Run application in Dev Mode without Docker:
 * ./run-assemble.sh -r to run the web app (web project)
-* do something for client
+* go into client directory and run 'ng serve' or 'npm start'
 
 
 ## AssembleApp Sub-Projects
 Splitting projects up to decouple them from one another as much as possible
-###Client
+### Client
 * <b>client</b> project houses the client tier
-    * currently outside of the sbt run task (have to bring up manually)
-    * later we can have scripts that bring up the client stuff along with the web tier
+    * ngrx/angular application
     
-###Aasemble-web
+### Assemble-web
 * <b>web</b> project is the REST API
     * Houses the rest interface for the app
     * dependent on below projects.

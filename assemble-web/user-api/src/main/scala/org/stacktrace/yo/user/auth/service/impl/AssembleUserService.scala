@@ -2,9 +2,10 @@ package org.stacktrace.yo.user.auth.service.impl
 
 import javax.inject.{Inject, Singleton}
 
-import org.stacktrace.yo.user.auth.model.{AssembleUser, AuthToken, LoginData}
+import org.stacktrace.yo.user.auth.model.{AuthToken, LoginData}
 import org.stacktrace.yo.user.auth.service.{AuthTokenService, UserService}
 import org.stacktrace.yo.user.auth.store.UserStore
+import org.stacktrace.yo.user.model.AssembleUser
 
 import scala.concurrent.{ExecutionContext, Future}
 

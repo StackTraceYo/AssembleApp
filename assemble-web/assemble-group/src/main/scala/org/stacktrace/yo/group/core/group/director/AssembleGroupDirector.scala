@@ -10,8 +10,7 @@ import com.stacktrace.yo.assemble.group.Protocol
 import com.stacktrace.yo.assemble.group.Protocol.{CreateGroup, GetState, GroupCreatedFor}
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, FindAssembleGroup, GroupCreated, ListAssembleGroup}
 import org.stacktrace.yo.group.core.api.handler.GroupResponseHandler
-import org.stacktrace.yo.group.core.group.lookup.PersistentActorLookup
-import org.stacktrace.yo.group.core.group.retrieval.GroupSearchActor
+import org.stacktrace.yo.group.core.group.retrieval.{GroupSearchActor, PersistentActorLookup}
 import org.stacktrace.yo.group.core.group.supervisor.AssembleGroupSupervisor
 import org.stacktrace.yo.group.core.group.supervisor.AssembleGroupSupervisor.CreateGroupAndReturnTo
 
@@ -19,7 +18,6 @@ import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
 class AssembleGroupDirector(directorId: String = "1")(implicit ec: ExecutionContext) extends PersistentActor with ActorLogging with PersistentActorLookup {
-
 
   override def receiveCommand: Receive = receive
 
@@ -59,7 +57,8 @@ class AssembleGroupDirector(directorId: String = "1")(implicit ec: ExecutionCont
       val searcher = createSearcher()
       searcher.tell(find, createGroupHandler(api))
 
-    case find@ListAssembleGroup() =>
+    case find@ListAssembleGroup(ids) =>
+      log.info(s"Finding $ids")
       val api = sender()
       val searcher = createSearcher()
       searcher.tell(find, createGroupHandler(api))

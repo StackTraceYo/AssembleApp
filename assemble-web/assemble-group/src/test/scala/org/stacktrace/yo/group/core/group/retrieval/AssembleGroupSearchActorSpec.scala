@@ -58,7 +58,7 @@ class AssembleGroupSearchActorSpec extends WordSpecLike with Matchers {
       val map = scala.collection.mutable.HashMap[String, ActorRef]()
       val context = TestActorRef(new AvailableContextActor("test-list-context-1")).underlyingActor.context
       val classToTest = TestActorRef(new GroupSearchActor(context, map.toMap))
-      classToTest ! ListAssembleGroup()
+      classToTest ! ListAssembleGroup(Seq("test-list-context-1"))
       val message = expectMsgType[GroupsRetrieved]
       //one in context and 3 in ref
       message.groupsInformation.size shouldBe 1
@@ -75,13 +75,13 @@ class AssembleGroupSearchActorSpec extends WordSpecLike with Matchers {
       map.put("test-list3", reference3)
       val context = TestActorRef(new AvailableEmptyContextActor()).underlyingActor.context
       val classToTest = TestActorRef(new GroupSearchActor(context, map.toMap))
-      classToTest ! ListAssembleGroup()
+      classToTest ! ListAssembleGroup(Seq("test-list", "test-list2", "test-list3"))
       val message = expectMsgType[GroupsRetrieved]
       //one in context and 3 in ref
       message.groupsInformation.size shouldBe 3
     }
 
-    "find groups in both ref map" in new TestContext {
+    "find groups in both context and ref map" in new TestContext {
 
       val map = scala.collection.mutable.HashMap[String, ActorRef]()
       val reference = TestActorRef(new TestGroupActor())
@@ -90,9 +90,9 @@ class AssembleGroupSearchActorSpec extends WordSpecLike with Matchers {
       map.put("test-list", reference)
       map.put("test-list2", reference2)
       map.put("test-list3", reference3)
-      val context = TestActorRef(new AvailableContextActor("test-list-context-3")).underlyingActor.context
+      val context = TestActorRef(new AvailableContextActor("assemble-group-supervisor-test-list-context-3")).underlyingActor.context
       val classToTest = TestActorRef(new GroupSearchActor(context, map.toMap))
-      classToTest ! ListAssembleGroup()
+      classToTest ! ListAssembleGroup(Seq("test-list", "test-list2", "test-list3", "test-list-context-3"))
       val message = expectMsgType[GroupsRetrieved]
       //one in context and 3 in ref
       message.groupsInformation.size shouldBe 4
