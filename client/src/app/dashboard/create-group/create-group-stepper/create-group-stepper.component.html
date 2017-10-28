@@ -1,31 +1,28 @@
 <mat-horizontal-stepper [linear]="true" #stepper>
-    <mat-step [stepControl]="basicInfo" class="stepper-content">
-        <form [formGroup]="basicInfo" name="basicInfo">
+    <mat-step class="stepper-content" [stepControl]="(createGroupForm$ | async).controls.groupName">
+        <form [ngrxFormState]="(createGroupForm$ | async)" name="createForm">
             <ng-template matStepLabel>Basic Information</ng-template>
             <mat-form-field>
-                <input matInput placeholder="Group Name" formControlName="groupName" required>
+                <input matInput placeholder="Group Name" type="text"
+                       [ngrxFormControlState]="(createGroupForm$ | async).controls.groupName">
             </mat-form-field>
             <div>
-                <button mat-button color="primary" matStepperNext>Next</button>
+                <button mat-button color="primary" (click)="next()">Next</button>
             </div>
         </form>
     </mat-step>
-    <mat-step [stepControl]="category">
-        <form [formGroup]="category" name="category">
+    <mat-step [stepControl]="(createGroupForm$ | async).controls.categoryName">
+        <form name="category">
             <ng-template matStepLabel>Pick A Group Category</ng-template>
             <asm-category-selection-grid [stepper]="stepper"
                                          (onCategorySelected)="onCategorySelected($event)">
             </asm-category-selection-grid>
-            <div>
-                <button mat-button color="primary" matStepperPrevious>Back</button>
-                <button mat-button color="primary" matStepperNext>Next</button>
-            </div>
         </form>
     </mat-step>
     <mat-step>
         <ng-template matStepLabel>Review</ng-template>
         <div class="create-group-review-content">
-            <asm-create-group-review [review]="groupModel()"></asm-create-group-review>
+            <asm-create-group-review></asm-create-group-review>
         </div>
         <div>
             <button mat-button color="primary" matStepperPrevious>Back</button>

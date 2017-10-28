@@ -1,6 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {AssembleGroup} from '../../group/model/assemble-group';
-import {GroupService} from '../../group/group.service';
+import {Store} from '@ngrx/store';
+import * as fromDash from '../reducers/dash-reducers';
+import * as dash from '../reducers/reducers';
+import * as fromAuth from '../../user-auth/reducers/reducers';
+import {selectAuthStatusState} from '../../user-auth/reducers/reducers';
+import {BackToDash, RetrieveMyGroups} from '../actions/dashboard-actions';
+import {GroupListRequest} from '../../group/group-api/request/group-list-request';
 
 @Component({
     selector: 'asm-dashboard-main',
@@ -9,35 +14,25 @@ import {GroupService} from '../../group/group.service';
 })
 export class DashboardMainComponent implements OnInit {
 
-    currentView = 'Dashboard';
-    viewName = 'Dashboard';
-    showBackToDash = true;
-    myGroups: AssembleGroup[];
+    showBackToDash$ = this.store.select(dash.selectShowBack);
+    currentView$ = this.store.select(dash.selectCurrentView);
+    viewName$ = this.store.select(dash.selectViewName);
 
-    constructor(private groupService: GroupService) {
-    }
 
-    onViewChange(viewName: string) {
-        this.currentView = viewName;
-        this.viewName = viewName;
-        this.showBackToDash = viewName === 'Dashboard';
-    }
-
-    onGroupCreated(name: String) {
-        this.onViewChange('Dashboard');
-    }
-
-    backToDash() {
-        this.showBackToDash = true;
-        this.viewName = 'Dashboard';
-        this.currentView = 'Dashboard';
+    constructor(private store: Store<fromDash.State>, private authStore: Store<fromAuth.State>) {
     }
 
     ngOnInit() {
-        this.groupService.getMyGroups()
-            .subscribe(groups => {
-                this.myGroups = groups;
-            });
+        this.authStore.select(selectAuthStatusState).subscribe(state => {
+                if (state.authenticated) {
+                    this.store.dispatch(new RetrieveMyGroups({request: new GroupListRequest(), token: state.token}));
+                }
+            }
+        );
+    }
+
+    backToDash() {
+        this.store.dispatch(new BackToDash());
     }
 
 

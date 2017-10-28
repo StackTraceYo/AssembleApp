@@ -1,10 +1,17 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CreateRequest} from '../../../group/group-api/request/create-request';
-import {GroupApiService} from '../../../group/group-api/group-api.service';
-import {MatDialog} from '@angular/material/';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {MatDialog, MatStepper} from '@angular/material/';
 import {CreateGroupSuccessDialogComponent} from '../create-group-success-dialog/create-group-success-dialog.component';
-import {Category} from '../../../content/model/category';
+import {Store} from '@ngrx/store';
+import * as fromCreate from '../../reducers/create-group-reducers';
+import {CreateGroupForm} from '../../reducers/create-group-reducers';
+import * as dash from '../../reducers/reducers';
+import {selectCreateGroup} from '../../reducers/reducers';
+import * as fromAuth from '../../../user-auth/reducers/reducers';
+import {selectAuthStatusState} from '../../../user-auth/reducers/reducers';
+import {Observable} from 'rxjs/';
+import {FormGroupState} from 'ngrx-forms';
+import {CreateRequest} from '../../../group/group-api/request/create-request';
+import {CreateGroup, CreationCompleted} from '../../actions/dashboard-actions';
 
 @Component({
     selector: 'asm-create-group-stepper',
@@ -13,46 +20,41 @@ import {Category} from '../../../content/model/category';
 })
 export class CreateGroupStepperComponent implements OnInit {
 
-    @Input() categories: Category;
+    createGroupForm$: Observable<FormGroupState<CreateGroupForm>>;
     @Output() onCreateFinished = new EventEmitter<string>();
+    @ViewChild(MatStepper) stepper: MatStepper;
+    showDialog$ = this.store.select(dash.selectDialog);
 
-    basicInfo: FormGroup;
-    category: FormGroup;
 
-    // additionalInfo: FormGroup;
-
-    constructor(private _formBuilder: FormBuilder, private groupApiService: GroupApiService, public dialog: MatDialog) {
-    }
-
-    onCategorySelected(category: Category) {
-        this.category.value.categoryName = category.categoryName;
+    constructor(public dialog: MatDialog, private store: Store<fromCreate.State>, private authStore: Store<fromAuth.State>) {
     }
 
     ngOnInit() {
-        this.basicInfo = this._formBuilder.group({
-            groupName: ['', Validators.required]
+        this.createGroupForm$ = this.store.select(dash.selectCreateGroup);
+        this.showDialog$.subscribe(show => {
+            if (show) {
+                this.showSuccess();
+            }
         });
-        this.category = this._formBuilder.group({
-            categoryName: ['']
-        });
-        // this.additionalInfo = this._formBuilder.group({
-        //     category: ['', Validators.required]
-        // });
     }
 
     create() {
-        const request = new CreateRequest();
-        request.groupName = this.basicInfo.value.groupName;
-        request.categoryName = this.category.value.categoryName;
-        const createOp = this.groupApiService.create(request);
-        createOp.subscribe(
-            created => {
-                console.log(created.groupId);
-                this.showSuccess();
-            },
-            err => {
-                console.log(err);
-            });
+        Observable.combineLatest(
+            this.store.select(selectCreateGroup),
+            this.authStore.select(selectAuthStatusState),
+            (form, auth) => {
+                const create = new CreateRequest(form.value);
+                return new CreateGroup({request: create, token: auth.token});
+            }
+        ).take(1).subscribe(action => this.store.dispatch(action));
+    }
+
+    next() {
+        this.stepper.next();
+    }
+
+    back() {
+        this.stepper.previous();
     }
 
     showSuccess(): void {
@@ -62,14 +64,7 @@ export class CreateGroupStepperComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            this.onCreateFinished.emit('create');
+            this.store.dispatch(new CreationCompleted({msg: ''}));
         });
-    }
-
-    groupModel() {
-        return {
-            groupName: this.basicInfo.value.groupName,
-            categoryName: this.category.value.categoryName
-        };
     }
 }

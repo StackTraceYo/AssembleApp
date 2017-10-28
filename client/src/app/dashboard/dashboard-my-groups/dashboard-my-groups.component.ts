@@ -1,5 +1,7 @@
-import {Component, Input} from '@angular/core';
-import {AssembleGroup} from '../../group/model/assemble-group';
+import {Component} from '@angular/core';
+import {Store} from '@ngrx/store';
+import * as fromDash from '../reducers/dash-reducers';
+import {selectMyGroups} from '../reducers/reducers';
 
 @Component({
     selector: 'asm-dashboard-my-groups',
@@ -8,8 +10,8 @@ import {AssembleGroup} from '../../group/model/assemble-group';
 })
 export class DashboardMyGroupsComponent {
 
-    @Input() groups: AssembleGroup[];
+    groups$ = this.store.select(selectMyGroups);
 
-    constructor() {
+    constructor(private store: Store<fromDash.State>) {
     }
 }

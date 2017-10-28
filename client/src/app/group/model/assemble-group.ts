@@ -1,3 +1,5 @@
+import {AssembleApiGroup} from "../group-api/assemble-api-group";
+
 export class AssembleGroup {
 
     groupId: string;
@@ -5,9 +7,9 @@ export class AssembleGroup {
     category: string;
 
 
-    constructor(groupId: string, name: string, category: string) {
-        this.groupId = groupId;
-        this.category = category;
-        this.name = name;
+    constructor(group: AssembleApiGroup) {
+        this.groupId = group.groupId;
+        this.category = group.category;
+        this.name = group.name;
     }
 }
