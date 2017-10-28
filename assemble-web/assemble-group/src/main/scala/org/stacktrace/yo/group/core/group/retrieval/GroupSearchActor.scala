@@ -83,7 +83,7 @@ class GroupSearchActor(searchContext: ActorContext, refs: Map[String, ActorRef])
       timer.cancel()
       self ! PoisonPill
     case Timeout() =>
-      log.warning("Timeout")
+      log.info("Timeout No Groups")
       respondTo ! Option.empty
       self ! PoisonPill
   }
@@ -101,7 +101,7 @@ class GroupSearchActor(searchContext: ActorContext, refs: Map[String, ActorRef])
         finish()
       }
     case Timeout() =>
-      log.warning("Timeout {}", pending.size)
+      log.warning("Timeout {} did not return", pending.size)
       finish()
   }
 

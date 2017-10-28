@@ -21,8 +21,6 @@ class GroupAccessActor(director: ActorRef, id: String = "1") extends PersistentA
       saveSnapshot(state)
     case ListUserAssembleGroup(userId) =>
       val access = getAccess(userId)
-      log.info("GOT ACCESS")
-      log.info(access.toString)
       val list = access.host ++ access.guest
       director.tell(ListAssembleGroup(list), sender())
     case GetAccessForUser(id: String) =>
