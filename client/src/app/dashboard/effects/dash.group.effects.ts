@@ -7,15 +7,17 @@ import {Injectable} from '@angular/core';
 import {Actions, Effect} from '@ngrx/effects';
 import {of} from 'rxjs/observable/of';
 import * as Dash from '../actions/dashboard-actions';
-import {CategoriesRetrieved, GroupCreated, RetrieveCategories} from '../actions/dashboard-actions';
+import {CategoriesRetrieved, GroupCreated, RetrieveCategories, RetrieveMyGroups} from '../actions/dashboard-actions';
 import {GroupApiService} from '../../group/group-api/group-api.service';
 // import * as lo from 'lodash';
 import {GroupListResponse} from '../../group/group-api/response/group-list-response';
 import {ContentService} from '../../content/content-api/content.service';
 import {ContentRequest} from '../../content/content-api/request/content-request';
 import {Category} from '../../content/model/category';
-import {UserAuthState} from '../../user-auth/reducers/reducers';
+import {selectAuthStatusState, UserAuthState} from '../../user-auth/reducers/reducers';
 import {Store} from '@ngrx/store';
+import {GroupListRequest} from "../../group/group-api/request/group-list-request";
+import 'rxjs/add/operator/withLatestFrom'
 
 @Injectable()
 export class DashGroupEffects {
@@ -46,11 +48,15 @@ export class DashGroupEffects {
             return new RetrieveCategories({request: new ContentRequest('CATEGORY')});
         });
 
-    // @Effect()
-    // createGroupEnd$ = this.actions$
-    //     .ofType(Dash.CREATE_END)
-    //     .withLatestFrom(this.store$.select(selectAuthStatusState))
-    //
+    @Effect()
+    createGroupEnd$ = this.actions$
+        .ofType(Dash.CREATE_END)
+        .map((action: Dash.CreationCompleted) => action.payload)
+        .withLatestFrom(this.store$.select(selectAuthStatusState))
+        .map(([action, state]) => {
+                return new RetrieveMyGroups({request: new GroupListRequest(), token: state.token});
+        });
+
 
     @Effect()
     myCategories$ = this.actions$
