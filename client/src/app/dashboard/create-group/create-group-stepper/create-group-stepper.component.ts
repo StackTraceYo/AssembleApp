@@ -63,7 +63,7 @@ export class CreateGroupStepperComponent implements OnInit {
             data: {title: 'Congrats'}
         });
 
-        dialogRef.afterClosed().subscribe(result => {
+        dialogRef.afterClosed().take(1).subscribe(result => {
             this.store.dispatch(new CreationCompleted({msg: ''}));
         });
     }
