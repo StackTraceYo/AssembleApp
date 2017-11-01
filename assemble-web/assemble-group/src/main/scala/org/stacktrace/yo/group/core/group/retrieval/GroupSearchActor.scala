@@ -4,7 +4,7 @@ import akka.actor.{Actor, ActorContext, ActorLogging, ActorRef, Cancellable, Poi
 import com.stacktrace.yo.assemble.group.GroupProtocol.AssembleGroupState
 import com.stacktrace.yo.assemble.group.Protocol.GetState
 import org.stacktrace.yo.group.core.api.GroupAPIModel.AssembledGroup
-import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{FindAssembleGroup, GroupRetrieved, GroupsRetrieved, ListAssembleGroup}
+import org.stacktrace.yo.group.core.api.GroupAPIProtocol._
 import org.stacktrace.yo.group.core.group.retrieval.GroupSearchActor.Timeout
 
 import scala.collection.mutable
@@ -14,9 +14,10 @@ import scala.language.postfixOps
 
 class GroupSearchActor(searchContext: ActorContext, refs: Map[String, ActorRef])(implicit ec: ExecutionContext) extends Actor with ActorLogging {
 
+  type GroupPair = (String, String)
   var respondTo: ActorRef = _
-  val pending: mutable.HashSet[String] = scala.collection.mutable.HashSet[String]()
-  val aggregator: mutable.HashMap[String, AssembledGroup] = scala.collection.mutable.HashMap[String, AssembledGroup]()
+  val pending: mutable.HashSet[GroupPair] = scala.collection.mutable.HashSet[GroupPair]()
+  val aggregator: mutable.HashMap[GroupPair, AssembledGroup] = scala.collection.mutable.HashMap[GroupPair, AssembledGroup]()
   var timer: Cancellable = _
 
   override def receive: PartialFunction[Any, Unit] = {
@@ -48,16 +49,21 @@ class GroupSearchActor(searchContext: ActorContext, refs: Map[String, ActorRef])
           }
       }
 
-    case ListAssembleGroup(ids) =>
+    case ListNamedAssembleGroups(hosted, guest) =>
       respondTo = sender()
       context.become(aggregateAnswers)
       refs.foreach(
         tuple => {
           val key = tuple._1
           val ref = tuple._2
-          if (ids.contains(key)) {
-            log.info(s"Found Ref $key")
-            pending += s"assemble-group-supervisor-$key"
+          if (hosted.contains(key)) {
+            log.info(s"Found Ref $key for hosted")
+            pending += new GroupPair(s"assemble-group-supervisor-$key", GroupSearchActor.HOSTED)
+            ref ! GetState()
+          }
+          else if (guest.contains(key)) {
+            log.info(s"Found Ref $key for guest")
+            pending += new GroupPair(s"assemble-group-supervisor-$key", GroupSearchActor.JOINED)
             ref ! GetState()
           }
         }
@@ -65,10 +71,18 @@ class GroupSearchActor(searchContext: ActorContext, refs: Map[String, ActorRef])
       searchContext.children
         .foreach(child => {
           val name = child.path.name
-          if (name.contains("assemble-group-supervisor") && !pending.contains(name) && ids.contains(name.replace("assemble-group-supervisor-",""))) {
-            log.info(s"Found $name")
-            pending += child.path.name
-            child ! GetState()
+          val all = hosted ++ guest
+          if (name.contains("assemble-group-supervisor") && !pending.exists(gpair => gpair._1.equals(name))) {
+            if (hosted.contains(name.replace("assemble-group-supervisor-", ""))) {
+              log.info(s"Found $name host")
+              pending += new GroupPair(child.path.name, GroupSearchActor.HOSTED)
+              child ! GetState()
+            }
+            else if (guest.contains(name.replace("assemble-group-supervisor-", ""))) {
+              log.info(s"Found $name guest")
+              pending += new GroupPair(child.path.name, GroupSearchActor.JOINED)
+              child ! GetState()
+            }
           }
         })
       start()
@@ -93,9 +107,13 @@ class GroupSearchActor(searchContext: ActorContext, refs: Map[String, ActorRef])
       val left = pending.size - 1
       log.info(s"Waiting on : $left")
       log.info(s"Removing: $gi")
-      pending.remove(s"assemble-group-supervisor-$gi")
+      pending.find(pend => pend._1.equals(s"assemble-group-supervisor-$gi")) match {
+        case Some(groupPair) =>
+          pending.remove(groupPair)
+          aggregator.put(groupPair, AssembledGroup(gi, gn, c))
+        case None =>
+      }
       log.info(s"Pending: [$pending]")
-      aggregator.put(gi, AssembledGroup(gi, gn, c))
       if (pending.size <= 0) {
         timer.cancel()
         finish()
@@ -111,11 +129,11 @@ class GroupSearchActor(searchContext: ActorContext, refs: Map[String, ActorRef])
 
   private def finish(): Unit = {
     if (aggregator.nonEmpty) {
-      val answer = aggregator.values.toList
-      val retrieved = GroupsRetrieved(answer)
+      val answers = aggregator.partition(answer => answer._1._2.equals(GroupSearchActor.HOSTED))
+      val retrieved = NamedGroupsRetrieved(answers._1.values.toList, answers._2.values.toList)
       respondTo ! retrieved
     } else {
-      val retrieved = GroupsRetrieved(List())
+      val retrieved = NamedGroupsRetrieved(List(), List())
       respondTo ! retrieved
     }
     self ! PoisonPill
@@ -126,5 +144,9 @@ class GroupSearchActor(searchContext: ActorContext, refs: Map[String, ActorRef])
 object GroupSearchActor {
 
   case class Timeout()
+
+  val HOSTED = "HOSTED"
+  val JOINED = "JOINED"
+  val ANY = "ANY"
 
 }

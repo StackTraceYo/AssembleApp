@@ -46,7 +46,7 @@ class AssembleGroupServiceSpec extends WordSpecLike
 
       Thread.sleep(1000)
       val result = Await.result(classUnderTest.listGroups(user, ListGroupRequest()), 1 seconds)
-      result.groupsInformation.size shouldBe 4
+      result.hosted.size shouldBe 4
     }
 
   }

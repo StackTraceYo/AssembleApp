@@ -19,11 +19,15 @@ object TestActors {
 
   }
 
-  class TestGroupActor extends Actor {
+  class TestGroupActor(gi : String = UUID.randomUUID().toString) extends Actor {
+
+    def id: String = {
+      gi
+    }
 
     def receive: Receive = {
       case _ =>
-        sender() ! AssembleGroupState("host", UUID.randomUUID().toString)
+        sender() ! AssembleGroupState("host", gi)
 
     }
 
@@ -32,7 +36,7 @@ object TestActors {
 
   class AvailableContextActor(childName: String) extends Actor {
 
-    val child: ActorRef = context.actorOf(Props(new TestGroupActor), s"assemble-group-supervisor-$childName")
+    val child: ActorRef = context.actorOf(Props(new TestGroupActor(childName)), s"assemble-group-supervisor-$childName")
 
     def getContext: ActorContext = {
       context

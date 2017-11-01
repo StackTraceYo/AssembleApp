@@ -102,7 +102,7 @@ class GroupApiSpec extends PlaySpec with GuiceOneAppPerTest with BeforeAndAfterE
       val listr = Json.fromJson[GroupListResponse](contentAsJson(list)).get
 
       listr shouldBe a[GroupListResponse]
-      listr.list.size shouldBe 3
+      listr.host.size shouldBe 3
       print(listr)
 
     }

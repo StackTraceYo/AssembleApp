@@ -54,12 +54,12 @@ class BaseGroupClientSpec extends WordSpecLike with Matchers with BeforeAndAfter
       response3.groupId should not be empty
 
 
-      val fResponse4 = classUnderTest.getGroupList(ListAssembleGroup(Seq(response.groupId, response2.groupId, response3.groupId)))
+      val fResponse4 = classUnderTest.getGroupList(ListNamedAssembleGroups(Seq(response.groupId, response2.groupId, response3.groupId)))
       val response4 = Await.result(fResponse4, 5 seconds)
 
-      response4.groupsInformation.size shouldBe 3
+      response4.hosted.size shouldBe 3
 
-      response4.groupsInformation should contain theSameElementsAs
+      response4.hosted should contain theSameElementsAs
         List(
           AssembledGroup(response.groupId, "group-name", "category"),
           AssembledGroup(response2.groupId, "group-name-2", "category"),
@@ -87,9 +87,10 @@ class BaseGroupClientSpec extends WordSpecLike with Matchers with BeforeAndAfter
       val fResponse4 = classUnderTest.getGroupListForUser(ListUserAssembleGroup("host-name"))
       val response4 = Await.result(fResponse4, 5 seconds)
 
-      response4.groupsInformation.size shouldBe 2
+      response4.hosted.size shouldBe 2
+      response4.joined.size shouldBe 0
 
-      response4.groupsInformation should contain theSameElementsAs
+      response4.hosted should contain theSameElementsAs
         List(
           AssembledGroup(response.groupId, "group-name", "category"),
           AssembledGroup(response2.groupId, "group-name-2", "category")

@@ -9,7 +9,7 @@ object Response {
 
   case class GroupCreatedResponse(groupId: String, success: Boolean) extends AssembleResponse
 
-  case class GroupListResponse(list : List[AssembledGroup]) extends AssembleResponse
+  case class GroupListResponse(host: List[AssembledGroup], guest: List[AssembledGroup]) extends AssembleResponse
 
   implicit val createGroupResponseFormats: OFormat[GroupCreatedResponse] = Json.format[GroupCreatedResponse]
 
