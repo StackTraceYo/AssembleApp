@@ -2,11 +2,13 @@ import {AssembleApiGroup} from '../assemble-api-group';
 
 export class GroupListResponse {
 
-    list: AssembleApiGroup[];
+    host: AssembleApiGroup[];
+    guest: AssembleApiGroup[];
 
 
-    constructor(list: AssembleApiGroup[]) {
-        this.list = list;
+    constructor(host: AssembleApiGroup[], guest: AssembleApiGroup[]) {
+        this.host = host;
+        this.guest = guest;
     }
 
 

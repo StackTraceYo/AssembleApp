@@ -97,7 +97,7 @@ class GroupSearchActor(searchContext: ActorContext, refs: Map[String, ActorRef])
       timer.cancel()
       self ! PoisonPill
     case Timeout() =>
-      log.info("Timeout No Groups")
+      log.info("Timeout No Group Found")
       respondTo ! Option.empty
       self ! PoisonPill
   }
