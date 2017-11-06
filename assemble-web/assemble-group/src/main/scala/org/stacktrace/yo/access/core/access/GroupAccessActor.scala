@@ -5,7 +5,7 @@ import akka.persistence.PersistentActor
 import com.stacktrace.yo.assemble.access.AccessProtocol.CreatedAccess
 import com.stacktrace.yo.assemble.group.Protocol.{CreateGroupAccess, GetState}
 import org.stacktrace.yo.access.core.access.GroupAccessActor.{GetAccessForUser, GetGuestAccessForUser, GetHostAccessForUser, GroupTypeAccess}
-import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{ListAssembleGroup, ListUserAssembleGroup}
+import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{ListNamedAssembleGroups, ListUserAssembleGroup}
 
 /**
   * Created by Stacktraceyo on 10/16/17.
@@ -21,8 +21,7 @@ class GroupAccessActor(director: ActorRef, id: String = "1") extends PersistentA
       saveSnapshot(state)
     case ListUserAssembleGroup(userId) =>
       val access = getAccess(userId)
-      val list = access.host ++ access.guest
-      director.tell(ListAssembleGroup(list), sender())
+      director.tell(ListNamedAssembleGroups(access.host, access.guest), sender())
     case GetAccessForUser(id: String) =>
       val access = getAccess(id)
       sender() ! access

@@ -28,14 +28,14 @@ object GroupAPIProtocol {
   case class FindAssembleGroup(groupID: String) extends APIMessage
 
   /**
-    * Message used to request to list groups
+    * Message used to request to named list groups
     */
-  case class ListAssembleGroup(ids : Seq[String]) extends APIMessage
+  case class ListNamedAssembleGroups(hosted: Seq[String] = Seq(), joined: Seq[String] = Seq()) extends APIMessage
 
   /**
-    * Message used to request to list groups
+    * Message used to request to list groups for a user
     */
-  case class ListUserAssembleGroup(id : String) extends APIMessage
+  case class ListUserAssembleGroup(id: String) extends APIMessage
 
 
   /**
@@ -43,9 +43,6 @@ object GroupAPIProtocol {
     */
   case class GroupRetrieved(groupInformation: AssembledGroup) extends APIMessage
 
-  /**
-    * Message used to respond that a group has been retrieved
-    */
-  case class GroupsRetrieved(groupsInformation: List[AssembledGroup]) extends APIMessage
+  case class NamedGroupsRetrieved(hosted: List[AssembledGroup], joined: List[AssembledGroup]) extends APIMessage
 
 }

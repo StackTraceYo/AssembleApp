@@ -6,7 +6,7 @@ import com.stacktrace.yo.assemble.group.GroupProtocol.AssembleGroupState
 import com.stacktrace.yo.assemble.group.Protocol.GetState
 import org.scalatest.{Matchers, WordSpecLike}
 import org.stacktrace.yo.TestActors.{AvailableContextActor, AvailableEmptyContextActor, TestContext, TestGroupActor}
-import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{FindAssembleGroup, GroupRetrieved, GroupsRetrieved, ListAssembleGroup}
+import org.stacktrace.yo.group.core.api.GroupAPIProtocol._
 
 import scala.language.postfixOps
 
@@ -58,10 +58,10 @@ class AssembleGroupSearchActorSpec extends WordSpecLike with Matchers {
       val map = scala.collection.mutable.HashMap[String, ActorRef]()
       val context = TestActorRef(new AvailableContextActor("test-list-context-1")).underlyingActor.context
       val classToTest = TestActorRef(new GroupSearchActor(context, map.toMap))
-      classToTest ! ListAssembleGroup(Seq("test-list-context-1"))
-      val message = expectMsgType[GroupsRetrieved]
+      classToTest ! ListNamedAssembleGroups(Seq("test-list-context-1"))
+      val message = expectMsgType[NamedGroupsRetrieved]
       //one in context and 3 in ref
-      message.groupsInformation.size shouldBe 1
+      message.hosted.size shouldBe 1
     }
 
     "find groups in ref map" in new TestContext {
@@ -70,15 +70,15 @@ class AssembleGroupSearchActorSpec extends WordSpecLike with Matchers {
       val reference = TestActorRef(new TestGroupActor())
       val reference2 = TestActorRef(new TestGroupActor())
       val reference3 = TestActorRef(new TestGroupActor())
-      map.put("test-list", reference)
-      map.put("test-list2", reference2)
-      map.put("test-list3", reference3)
+      map.put(reference.underlyingActor.id, reference)
+      map.put(reference2.underlyingActor.id, reference2)
+      map.put(reference3.underlyingActor.id, reference3)
       val context = TestActorRef(new AvailableEmptyContextActor()).underlyingActor.context
       val classToTest = TestActorRef(new GroupSearchActor(context, map.toMap))
-      classToTest ! ListAssembleGroup(Seq("test-list", "test-list2", "test-list3"))
-      val message = expectMsgType[GroupsRetrieved]
+      classToTest ! ListNamedAssembleGroups(Seq(reference.underlyingActor.id, reference2.underlyingActor.id, reference3.underlyingActor.id))
+      val message = expectMsgType[NamedGroupsRetrieved]
       //one in context and 3 in ref
-      message.groupsInformation.size shouldBe 3
+      message.hosted.size shouldBe 3
     }
 
     "find groups in both context and ref map" in new TestContext {
@@ -87,15 +87,15 @@ class AssembleGroupSearchActorSpec extends WordSpecLike with Matchers {
       val reference = TestActorRef(new TestGroupActor())
       val reference2 = TestActorRef(new TestGroupActor())
       val reference3 = TestActorRef(new TestGroupActor())
-      map.put("test-list", reference)
-      map.put("test-list2", reference2)
-      map.put("test-list3", reference3)
-      val context = TestActorRef(new AvailableContextActor("assemble-group-supervisor-test-list-context-3")).underlyingActor.context
+      map.put(reference.underlyingActor.id, reference)
+      map.put(reference2.underlyingActor.id, reference2)
+      map.put(reference3.underlyingActor.id, reference3)
+      val context = TestActorRef(new AvailableContextActor("test-list-context-1")).underlyingActor.context
       val classToTest = TestActorRef(new GroupSearchActor(context, map.toMap))
-      classToTest ! ListAssembleGroup(Seq("test-list", "test-list2", "test-list3", "test-list-context-3"))
-      val message = expectMsgType[GroupsRetrieved]
+      classToTest ! ListNamedAssembleGroups(Seq("test-list-context-1", reference.underlyingActor.id, reference2.underlyingActor.id, reference3.underlyingActor.id))
+      val message = expectMsgType[NamedGroupsRetrieved]
       //one in context and 3 in ref
-      message.groupsInformation.size shouldBe 4
+      message.hosted.size shouldBe 4
     }
 
   }

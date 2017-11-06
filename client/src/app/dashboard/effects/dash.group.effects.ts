@@ -16,8 +16,8 @@ import {ContentRequest} from '../../content/content-api/request/content-request'
 import {Category} from '../../content/model/category';
 import {selectAuthStatusState, UserAuthState} from '../../user-auth/reducers/reducers';
 import {Store} from '@ngrx/store';
-import {GroupListRequest} from "../../group/group-api/request/group-list-request";
-import 'rxjs/add/operator/withLatestFrom'
+import {GroupListRequest} from '../../group/group-api/request/group-list-request';
+import 'rxjs/add/operator/withLatestFrom';
 
 @Injectable()
 export class DashGroupEffects {
@@ -31,7 +31,7 @@ export class DashGroupEffects {
             this.groupService.list(req.request, req.token)
                 .map(resp => {
                     const response: GroupListResponse = resp.json();
-                    return response.list;
+                    return response.host;
                 })
                 .map(groups => {
                     return new Dash.MyGroupsRetrieved({

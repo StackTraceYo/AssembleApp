@@ -52,7 +52,7 @@ class AssembleGroupController @Inject()(cc: ControllerComponents, tokenService: 
           case Some(user) =>
             groupService.listGroups(user, listRequest)
               .map(answer => {
-                Ok(Json.toJson(GroupListResponse(answer.groupsInformation)))
+                Ok(Json.toJson(GroupListResponse(answer.hosted , answer.joined)))
               })
           case _ =>
             Future {
