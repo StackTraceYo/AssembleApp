@@ -12,6 +12,7 @@ message AssembleGroupState {
     string groupid = 2;
     string groupName = 3;
     string category = 4;
+    int32 max = 5;
 }
 
 message AssembleGroupUserState {
@@ -44,6 +45,7 @@ message Created {
     string groupid = 2;
     string groupName = 3;
     string category = 4;
+    int32 max = 5;
 }
 
 message Joined {

@@ -7,7 +7,7 @@ import akka.event.LoggingReceive
 import akka.persistence.{PersistentActor, SaveSnapshotFailure, SaveSnapshotSuccess}
 import com.stacktrace.yo.assemble.group.GroupProtocol.{DirectorReferenceState, GroupReference, GroupReferenceCreated}
 import com.stacktrace.yo.assemble.group.Protocol
-import com.stacktrace.yo.assemble.group.Protocol.{CreateGroup, GetState, GroupCreatedFor}
+import com.stacktrace.yo.assemble.group.Protocol.{CreateDetails, CreateGroup, GetState, GroupCreatedFor}
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, FindAssembleGroup, GroupCreated, ListNamedAssembleGroups}
 import org.stacktrace.yo.group.core.api.handler.GroupResponseHandler
 import org.stacktrace.yo.group.core.group.retrieval.{GroupSearchActor, PersistentActorLookup}
@@ -30,7 +30,7 @@ class AssembleGroupDirector(directorId: String = "1")(implicit ec: ExecutionCont
     case SaveSnapshotFailure(metadata, reason) =>
       log.debug("SnapShot Failed: {}", reason.getMessage)
 
-    case msg@CreateAssembleGroup(hostId, groupName, groupCategory) =>
+    case msg@CreateAssembleGroup(hostId, groupName, groupCategory, detail) =>
       //get a reference to the original sender
       val api = sender()
       //generate a name for the new supervisor
@@ -38,7 +38,7 @@ class AssembleGroupDirector(directorId: String = "1")(implicit ec: ExecutionCont
       //create this new group
       log.debug("Creating Group Actor Supervisor {}", groupActorId)
       val supervisor = createGroupSupervisor(self, groupActorId)
-      supervisor ! CreateGroupAndReturnTo(CreateGroup(hostId, groupName, groupCategory), createGroupHandler(api))
+      supervisor ! CreateGroupAndReturnTo(CreateGroup(hostId, groupName, groupCategory, CreateDetails(detail.max)), createGroupHandler(api))
 
     case GroupCreatedFor(groupId, respondTo) =>
       log.info("Group {} Created: Storing Reference", groupId)

@@ -10,7 +10,7 @@ import play.api.libs.json.{Json, OFormat}
   */
 object GroupAPIModel {
 
-  case class AssembledGroup(groupId: String, name: String, category: String)
+  case class AssembledGroup(groupId: String, name: String, category: String, max: Int)
 
   implicit val assembleGroupResponse: OFormat[AssembledGroup] = Json.format[AssembledGroup]
 

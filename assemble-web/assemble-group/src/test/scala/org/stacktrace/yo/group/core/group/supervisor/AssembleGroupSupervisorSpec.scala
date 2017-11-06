@@ -5,7 +5,7 @@ import java.util.UUID
 import akka.actor.ActorSystem
 import akka.testkit.{TestActorRef, TestProbe}
 import com.stacktrace.yo.assemble.group.GroupProtocol.AssembleGroupState
-import com.stacktrace.yo.assemble.group.Protocol.{CreateGroup, GetState, GroupCreatedFor}
+import com.stacktrace.yo.assemble.group.Protocol.{CreateDetails, CreateGroup, GetState, GroupCreatedFor}
 import org.stacktrace.yo.group.AssemblePersistenceSpec
 import org.stacktrace.yo.group.core.api.GroupAPIProtocol.GroupCreated
 import org.stacktrace.yo.group.core.group.director.AssembleGroupDirector
@@ -25,7 +25,7 @@ class AssembleGroupSupervisorSpec extends AssemblePersistenceSpec(ActorSystem("t
       val hostid = UUID.randomUUID().toString
 
       val supervisor = TestActorRef(new AssembleGroupSupervisor(director, id))
-      supervisor ! CreateGroupAndReturnTo(CreateGroup(hostid, "group-name", "category"), respondTo.ref)
+      supervisor ! CreateGroupAndReturnTo(CreateGroup(hostid, "group-name", "category", CreateDetails(2)), respondTo.ref)
 
       respondTo.expectMsgType[GroupCreated] //sender gets a group created back
 
@@ -45,7 +45,7 @@ class AssembleGroupSupervisorSpec extends AssemblePersistenceSpec(ActorSystem("t
       val hostid = UUID.randomUUID().toString
 
       val supervisor = TestActorRef(new AssembleGroupSupervisor(director.ref, id))
-      supervisor ! CreateGroupAndReturnTo(CreateGroup(hostid, "group-name", "category"), respondTo.ref)
+      supervisor ! CreateGroupAndReturnTo(CreateGroup(hostid, "group-name", "category", CreateDetails(2)), respondTo.ref)
 
       director.expectMsgType[GroupCreatedFor] //director gets a reference
     }

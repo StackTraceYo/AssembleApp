@@ -89,10 +89,10 @@ class GroupSearchActor(searchContext: ActorContext, refs: Map[String, ActorRef])
   }
 
   def waitForSingleAnswer: PartialFunction[Any, Unit] = {
-    case state@AssembleGroupState(hi, gi, gn, c) =>
+    case state@AssembleGroupState(hi, gi, gn, c, max) =>
       log.info(s"Found state $state")
       respondTo ! Some(GroupRetrieved(
-        AssembledGroup(gi, gn, c))
+        AssembledGroup(gi, gn, c, max))
       )
       timer.cancel()
       self ! PoisonPill
@@ -103,14 +103,14 @@ class GroupSearchActor(searchContext: ActorContext, refs: Map[String, ActorRef])
   }
 
   def aggregateAnswers: PartialFunction[Any, Unit] = {
-    case state@AssembleGroupState(hi, gi, gn, c) =>
+    case state@AssembleGroupState(hi, gi, gn, c, max) =>
       val left = pending.size - 1
       log.info(s"Waiting on : $left")
       log.info(s"Removing: $gi")
       pending.find(pend => pend._1.equals(s"assemble-group-supervisor-$gi")) match {
         case Some(groupPair) =>
           pending.remove(groupPair)
-          aggregator.put(groupPair, AssembledGroup(gi, gn, c))
+          aggregator.put(groupPair, AssembledGroup(gi, gn, c, max))
         case None =>
       }
       log.info(s"Pending: [$pending]")

@@ -4,7 +4,7 @@ import java.io.File
 import java.util.UUID
 
 import api.auth.Request.CreateUser
-import api.group.Request.{CreateGroupRequest, ListGroupRequest}
+import api.group.Request.{CreateGroupDetails, CreateGroupRequest, ListGroupRequest}
 import api.group.Response.{GroupCreatedResponse, GroupListResponse}
 import org.apache.commons.io.FileUtils
 import org.scalatest.BeforeAndAfterEach
@@ -41,7 +41,7 @@ class GroupApiSpec extends PlaySpec with GuiceOneAppPerTest with BeforeAndAfterE
       val headerVal = res.header.headers("X-Asm-Auth")
 
       val create = route(app, FakeRequest(POST, "/api/group/create")
-        .withBody(Json.toJson(CreateGroupRequest("test-group-name", "test-group-category")))
+        .withBody(Json.toJson(CreateGroupRequest("test-group-name", "test-group-category", CreateGroupDetails(2))))
         .withHeaders("X-Asm-Auth" -> headerVal))
         .get
 
@@ -54,7 +54,7 @@ class GroupApiSpec extends PlaySpec with GuiceOneAppPerTest with BeforeAndAfterE
 
     "not authorized user can not create a group" in {
       val create = route(app, FakeRequest(POST, "/api/group/create")
-        .withBody(Json.toJson(CreateGroupRequest("test-group-name", "test-group-category")))
+        .withBody(Json.toJson(CreateGroupRequest("test-group-name", "test-group-category", CreateGroupDetails(2))))
         .withHeaders("X-Asm-Auth" -> UUID.randomUUID().toString))
         .get
 
@@ -63,7 +63,7 @@ class GroupApiSpec extends PlaySpec with GuiceOneAppPerTest with BeforeAndAfterE
 
     "not authorized user can not create a group without header" in {
       val create = route(app, FakeRequest(POST, "/api/group/create")
-        .withBody(Json.toJson(CreateGroupRequest("test-group-name", "test-group-category"))))
+        .withBody(Json.toJson(CreateGroupRequest("test-group-name", "test-group-category", CreateGroupDetails(2)))))
         .get
 
       status(create) mustBe Status.UNAUTHORIZED
@@ -76,17 +76,17 @@ class GroupApiSpec extends PlaySpec with GuiceOneAppPerTest with BeforeAndAfterE
       val headerVal = res.header.headers("X-Asm-Auth")
 
       val create = route(app, FakeRequest(POST, "/api/group/create")
-        .withBody(Json.toJson(CreateGroupRequest("test-group-name", "test-group-category")))
+        .withBody(Json.toJson(CreateGroupRequest("test-group-name", "test-group-category", CreateGroupDetails(2))))
         .withHeaders("X-Asm-Auth" -> headerVal))
         .get
 
       val create2 = route(app, FakeRequest(POST, "/api/group/create")
-        .withBody(Json.toJson(CreateGroupRequest("test-group-name", "test-group-category")))
+        .withBody(Json.toJson(CreateGroupRequest("test-group-name", "test-group-category", CreateGroupDetails(2))))
         .withHeaders("X-Asm-Auth" -> headerVal))
         .get
 
       val create3 = route(app, FakeRequest(POST, "/api/group/create")
-        .withBody(Json.toJson(CreateGroupRequest("test-group-name", "test-group-category")))
+        .withBody(Json.toJson(CreateGroupRequest("test-group-name", "test-group-category", CreateGroupDetails(2))))
         .withHeaders("X-Asm-Auth" -> headerVal))
         .get
 
