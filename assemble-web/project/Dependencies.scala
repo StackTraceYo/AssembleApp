@@ -51,7 +51,11 @@ object Dependencies {
 
   val geoDeps: Seq[ModuleID] =
     test ++
+      akka ++
       Seq(
+        "com.github.davidmoten" % "rtree" % "0.8.0.2",
+        "org.apache.commons" % "commons-math3" % "3.0",
+        "io.reactivex" %% "rxscala" % "0.26.5"
       )
 
   val userDependencies: Seq[ModuleID] =
