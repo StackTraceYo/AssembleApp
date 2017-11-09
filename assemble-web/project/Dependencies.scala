@@ -55,7 +55,8 @@ object Dependencies {
       Seq(
         "com.github.davidmoten" % "rtree" % "0.8.0.2",
         "org.apache.commons" % "commons-math3" % "3.0",
-        "io.reactivex" %% "rxscala" % "0.26.5"
+        "io.reactivex" %% "rxscala" % "0.26.5",
+        "com.google.guava" % "guava" % "23.3-jre"
       )
 
   val userDependencies: Seq[ModuleID] =

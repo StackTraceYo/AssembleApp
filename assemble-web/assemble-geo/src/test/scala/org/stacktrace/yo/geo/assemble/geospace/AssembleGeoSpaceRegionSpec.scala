@@ -1,4 +1,4 @@
-package org.stacktrace.yo.geo.assemble.service
+package org.stacktrace.yo.geo.assemble.geospace
 
 import com.github.davidmoten.rtree.geometry.{Geometries, Point}
 import org.scalatest.{FlatSpec, Matchers}
@@ -7,7 +7,7 @@ import org.stacktrace.yo.geo.assemble.api.GeoProtocol.{AddGroupLocation, FindNea
 /**
   * Created by Stacktraceyo on 11/8/17.
   */
-class AssembleGeoServiceSpec extends FlatSpec with Matchers {
+class AssembleGeoSpaceRegionSpec extends FlatSpec with Matchers {
 
 
   "AssembleGeoServiceSpec" should
@@ -18,7 +18,7 @@ class AssembleGeoServiceSpec extends FlatSpec with Matchers {
     val brisbane: Point = Geometries.point(153.0278, -27.4679)
     val bungendore: Point = Geometries.point(149.4500, -35.2500)
 
-    val service = new AssembleGeoService()
+    val service = new AssembleGeoSpaceRegion("region-1")
 
     service.addGroup(AddGroupLocation("sydney", sydney.x(), sydney.y()))
     service.addGroup(AddGroupLocation("canberra", canberra.x(), canberra.y()))
