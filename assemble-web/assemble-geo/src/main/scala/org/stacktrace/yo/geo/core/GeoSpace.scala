@@ -9,9 +9,14 @@ import rx.lang.scala.Observable
   */
 abstract class GeoSpace[K, V <: Geometry] {
 
-  var rTree: RTree[K, V] = RTree.star().create[K, V]()
+  var rTree: RTree[K, V] = RTree.maxChildren(4).create[K, V]()
+  var swapped = false
 
   def addToGeoSpace(c: K, v: V): Unit = {
+    if (!swapped && rTree.size() >= 10000) {
+      rTree = RTree.star().create(rTree.entries().toList.toBlocking.single())
+      swapped = true
+    }
     rTree = rTree.add(c, v)
   }
 
@@ -50,8 +55,8 @@ abstract class GeoSpace[K, V <: Geometry] {
 
     val splitter = new SplitterRStar()
     val pair = splitter.split(rTree.entries().toList.toBlocking.single(), 1)
-    var tree1 = RTree.star().create[K, V]()
-    var tree2 = RTree.star().create[K, V]()
+    var tree1 = RTree.maxChildren(4).create[K, V]()
+    var tree2 = RTree.maxChildren(4).create[K, V]()
 
     asScalaBuffer(pair.group1().list()).toList
       .foreach(entry => {
