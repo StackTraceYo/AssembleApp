@@ -2,10 +2,10 @@ package org.stacktrace.yo.geo.assemble.service
 
 import com.github.davidmoten.rtree.Entry
 import com.github.davidmoten.rtree.geometry.Point
-import org.stacktrace.yo.geo.core.{AbstractRTree, Position}
+import org.stacktrace.yo.geo.core.{GeoSpace, Position}
 import rx.lang.scala.Observable
 
-class GroupRTree extends AbstractRTree[String, Point] {
+class AssembleGeoSpace extends GeoSpace[String, Point] {
 
 
   override def boundedRectangleSearch(geometry: Point, distance: Double): Observable[Entry[String, Point]] = {

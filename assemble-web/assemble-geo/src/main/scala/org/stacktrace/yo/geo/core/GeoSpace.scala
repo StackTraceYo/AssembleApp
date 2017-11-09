@@ -7,15 +7,15 @@ import rx.lang.scala.Observable
 /**
   * Created by Stacktraceyo on 11/8/17.
   */
-abstract class AbstractRTree[K, V <: Geometry] {
+abstract class GeoSpace[K, V <: Geometry] {
 
   protected var rTree: RTree[K, V] = RTree.star().create[K, V]()
 
-  def addToTree(c: K, v: V): Unit = {
+  def addToGeoSpace(c: K, v: V): Unit = {
     rTree = rTree.add(c, v)
   }
 
-  def removeFromTree(c: K, v: V): Unit = {
+  def removeFromGeoSpace(c: K, v: V): Unit = {
     rTree = rTree.delete(c, v)
   }
 

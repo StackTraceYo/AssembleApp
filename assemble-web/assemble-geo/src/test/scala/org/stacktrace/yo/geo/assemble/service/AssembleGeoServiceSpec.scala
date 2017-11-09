@@ -10,7 +10,7 @@ import org.stacktrace.yo.geo.assemble.api.GeoProtocol.{AddGroupLocation, FindNea
 class AssembleGeoServiceSpec extends FlatSpec with Matchers {
 
 
-  "A AssembleGeoServiceSpec" should
+  "AssembleGeoServiceSpec" should
     "search by lat and long" in {
 
     val sydney: Point = Geometries.point(151.2094, -33.86)

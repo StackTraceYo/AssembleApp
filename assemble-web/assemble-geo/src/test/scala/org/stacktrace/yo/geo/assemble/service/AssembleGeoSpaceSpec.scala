@@ -6,10 +6,10 @@ import org.scalatest.{FlatSpec, Matchers}
 /**
   * Created by Stacktraceyo on 11/8/17.
   */
-class GroupRTreeSpec extends FlatSpec with Matchers {
+class AssembleGeoSpaceSpec extends FlatSpec with Matchers {
 
 
-  "A GroupRTree" should
+  "AssembleGeoSpac" should
     "search by lat and long" in {
 
     val sydney: Point = Geometries.point(151.2094, -33.86)
@@ -17,9 +17,9 @@ class GroupRTreeSpec extends FlatSpec with Matchers {
     val brisbane: Point = Geometries.point(153.0278, -27.4679)
     val bungendore: Point = Geometries.point(149.4500, -35.2500)
 
-    val groupRTree = new GroupRTree()
-    groupRTree.addToTree("Sydney", sydney)
-    groupRTree.addToTree("Brisbane", brisbane)
+    val groupRTree = new AssembleGeoSpace()
+    groupRTree.addToGeoSpace("Sydney", sydney)
+    groupRTree.addToGeoSpace("Brisbane", brisbane)
 
     val list = groupRTree.boundedRectangleSearch(canberra, 300)
       .toList.toBlocking.single
