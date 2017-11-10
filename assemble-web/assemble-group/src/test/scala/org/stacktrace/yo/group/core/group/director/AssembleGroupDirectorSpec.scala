@@ -7,7 +7,7 @@ import com.stacktrace.yo.assemble.group.Protocol.{GetState, GroupCreatedFor}
 import org.scalatest.MustMatchers._
 import org.stacktrace.yo.group.AssemblePersistenceSpec
 import org.stacktrace.yo.group.core.api.GroupAPIModel.AssembledGroup
-import org.stacktrace.yo.group.core.api.GroupAPIProtocol.{CreateAssembleGroup, FindAssembleGroup, GroupCreated, GroupRetrieved}
+import org.stacktrace.yo.group.core.api.GroupAPIProtocol._
 
 import scala.concurrent.duration._
 import scala.language.postfixOps
@@ -19,18 +19,18 @@ class AssembleGroupDirectorSpec extends AssemblePersistenceSpec(ActorSystem("dir
 
     "create a group" in {
       val director = newDirector("new")
-      director ! CreateAssembleGroup("test-user-id", "test-group-name", "test-group-category")
+      director ! CreateAssembleGroup("test-user-id", "test-group-name", "test-group-category", CreateAssembleGroupDetails(2))
       val message = expectMsgType[GroupCreated] //sender gets a group created back
     }
 
     "retrieve a group that was created" in {
       val director = newDirector("2")
-      director ! CreateAssembleGroup("test-user-id", "test-group-name", "test-group-category")
+      director ! CreateAssembleGroup("test-user-id", "test-group-name", "test-group-category", CreateAssembleGroupDetails(50))
       val message = expectMsgType[GroupCreated] //sender gets a group created back
       director ! FindAssembleGroup(message.groupId)
       //      Thread.sleep(1500)
       val message2 = expectMsgType[Option[GroupRetrieved]]
-      message2 mustBe Some(GroupRetrieved(AssembledGroup(message.groupId, "test-group-name", "test-group-category")))
+      message2 mustBe Some(GroupRetrieved(AssembledGroup(message.groupId, "test-group-name", "test-group-category", 50)))
     }
 
     "return an empty option when no group is found" in {
@@ -78,13 +78,13 @@ class AssembleGroupDirectorSpec extends AssemblePersistenceSpec(ActorSystem("dir
   "director state is persisted as is transient to its children" in {
     val director = newDirector("director")
 
-    director ! CreateAssembleGroup("test-host-id", "test-name", "test-category")
+    director ! CreateAssembleGroup("test-host-id", "test-name", "test-category", CreateAssembleGroupDetails(2))
     val id1 = expectMsgType[GroupCreated].groupId
-    director ! CreateAssembleGroup("test-host-id2", "test-name2", "test-category")
+    director ! CreateAssembleGroup("test-host-id2", "test-name2", "test-category", CreateAssembleGroupDetails(2))
     val id2 = expectMsgType[GroupCreated].groupId
-    director ! CreateAssembleGroup("test-host-id3", "test-name3", "test-category")
+    director ! CreateAssembleGroup("test-host-id3", "test-name3", "test-category", CreateAssembleGroupDetails(2))
     val id3 = expectMsgType[GroupCreated].groupId
-    director ! CreateAssembleGroup("test-host-id4", "test-name4", "test-category")
+    director ! CreateAssembleGroup("test-host-id4", "test-name4", "test-category", CreateAssembleGroupDetails(2))
     val id4 = expectMsgType[GroupCreated].groupId
 
     def pollForState(): Boolean = {

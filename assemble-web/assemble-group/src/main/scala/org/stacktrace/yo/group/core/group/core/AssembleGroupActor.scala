@@ -28,8 +28,8 @@ class AssembleGroupActor(supervisor: ActorRef, groupId: String) extends Persiste
   }
 
   override def receiveCommand: PartialFunction[Any, Unit] = {
-    case msg@CreateGroup(hostId, name, category) =>
-      val event = Created(hostId, groupId, name, category)
+    case msg@CreateGroup(hostId, name, category, details) =>
+      val event = Created(hostId, groupId, name, category, details.max)
       persist(event)(updateState)
     case st@GetState() =>
       sender() ! state
@@ -43,9 +43,9 @@ class AssembleGroupActor(supervisor: ActorRef, groupId: String) extends Persiste
   }
 
   val updateState: Event => Unit = {
-    case evt@Created(hostId, groupid, name, category) =>
+    case evt@Created(hostId, groupid, name, category, max) =>
       log.debug("Created Group State {}", groupid)
-      state = state.update(_.groupid := groupid, _.hostid := hostId, _.groupName := name, _.category := category)
+      state = state.update(_.groupid := groupid, _.hostid := hostId, _.groupName := name, _.category := category, _.max := max)
       log.info("Group {} Ready to Recieve Messages", groupId)
       supervisor ! GroupReady(groupId)
       ready = true

@@ -15,7 +15,9 @@ object GroupAPIProtocol {
   /**
     * Message used to request a group to be created
     */
-  case class CreateAssembleGroup(hostId: String, groupName: String, groupCategory: String) extends APIMessage
+  case class CreateAssembleGroupDetails(max: Int)
+
+  case class CreateAssembleGroup(hostId: String, groupName: String, groupCategory: String, details: CreateAssembleGroupDetails) extends APIMessage
 
   /**
     * Message used to respond that a group has been created

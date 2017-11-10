@@ -10,7 +10,9 @@ object Protocol {
   //Commands: Do this action
   sealed trait Command
 
-  case class CreateGroup(hostId: String, groupName: String, category: String) extends Command
+  case class CreateDetails(max: Int)
+
+  case class CreateGroup(hostId: String, groupName: String, category: String, details: CreateDetails) extends Command
 
   case class Join() extends Command
 
